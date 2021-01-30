@@ -1,0 +1,6 @@
+.idea/**
+build/**
+dist/**
+resources/**
+src/DatasetsEvaluation.egg-info/**
+**/__pycache__/**
