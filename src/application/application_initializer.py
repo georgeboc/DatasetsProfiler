@@ -7,7 +7,6 @@ from processors.string_processor import StringProcessor
 from processors.timestamp_processor import TimestampProcessor
 from reader.csv_reader import CSVReader
 from schema_transformer.log_schema_transformer import LogDataFrameTransformer
-from pyspark.sql.types import IntegerType, StringType, TimestampType
 
 
 class ApplicationInitializer:
@@ -21,9 +20,9 @@ class ApplicationInitializer:
         string_processor = StringProcessor(column_statistics_calculator)
         timestamp_processor = TimestampProcessor(column_statistics_calculator)
         type_processors = {
-            IntegerType: integer_processor,
-            StringType: string_processor,
-            TimestampType: timestamp_processor
+            "LongType": integer_processor,
+            "StringType": string_processor,
+            "TimestampType": timestamp_processor
         }
         field_dispatcher = FieldDispatcher(type_processors)
         row_dispatcher = RowDispatcher(field_dispatcher)

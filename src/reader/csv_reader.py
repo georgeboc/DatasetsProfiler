@@ -11,4 +11,4 @@ class CSVReader:
                                        format="csv",
                                        sep=separator,
                                        inferSchema="true",
-                                       header=str(header))
+                                       header=str(header).lower())

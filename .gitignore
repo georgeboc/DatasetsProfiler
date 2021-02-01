@@ -4,3 +4,4 @@ dist/**
 resources/**
 src/DatasetsEvaluation.egg-info/**
 **/__pycache__/**
+test/**

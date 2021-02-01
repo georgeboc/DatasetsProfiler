@@ -10,4 +10,4 @@ class FieldDispatcher:
     def dispatch(self, column_rdd):
         column_data_frame = column_rdd.toDF()
         field = column_data_frame.schema.fields[0]
-        return self._type_processors[field.dataType].process(column_rdd)
+        return self._type_processors[str(field.dataType)].process(column_rdd)

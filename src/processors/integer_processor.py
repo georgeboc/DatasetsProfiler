@@ -7,8 +7,7 @@ class IntegerProcessor(Processor):
         self._column_statistics_calculator = column_statistics_calculator
 
     def process(self, column_rdd):
-        key_value_rdd_cached = column_rdd.map(lambda value: (1, value)).cache
+        key_value_rdd_cached = column_rdd.map(lambda value: (1, value[0])).cache()
         number_statistics = self._column_statistics_calculator.calculate(key_value_rdd_cached)
-        count_distinct = self._column_statistics_calculator.count_distinct(key_value_rdd_cached)
         return IntegerResults(number_statistics=number_statistics,
-                              count_distinct=count_distinct)
+                              count_distinct=key_value_rdd_cached.distinct().count())
