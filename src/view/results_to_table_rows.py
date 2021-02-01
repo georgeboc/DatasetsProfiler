@@ -1,17 +1,13 @@
 from dataclasses import asdict
 from functools import reduce
-from prettytable import PrettyTable
 from collections import OrderedDict
 
 
-class ResultsViewer:
-    def print_results(self, results, attributes_names):
-        table = PrettyTable(['', *attributes_names])
+class ResultsToTableRows:
+    def get_table_rows(self, results):
         flattened_dictionaries = self._flatten_results_into_dictionaries(results)
         dictionary = self._merge_dictionaries(flattened_dictionaries)
-        table_rows = map(lambda tuple: [tuple[0], *tuple[1]], dictionary.items())
-        table.add_rows(table_rows)
-        print(table)
+        return map(lambda tuple: [tuple[0], *tuple[1]], dictionary.items())
 
     def _flatten_results_into_dictionaries(self, results):
         dictionaries = [asdict(result) for result in results]

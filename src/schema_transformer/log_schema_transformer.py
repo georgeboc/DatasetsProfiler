@@ -1,5 +1,5 @@
 from datetime import datetime
-from pyspark.sql.types import StringType, TimestampType, LongType
+from pyspark.sql.types import StringType, TimestampType
 
 
 class LogDataFrameTransformer:
@@ -11,7 +11,7 @@ class LogDataFrameTransformer:
             "_1": (TimestampType, "DateTime"),
             "_2": (StringType, "LogLevel"),
             "_3": (StringType, "ClassName"),
-            "_4": (LongType, "Message")
+            "_4": (StringType, "Message")
         })
 
     def _rename_data_frame_columns(self, data_frame, columns: dict):
@@ -24,8 +24,8 @@ class LogDataFrameTransformer:
 
     def _split_header(self, row):
         header = row[0]
-        #messages = [message for message in row[1:] if message]
-        message = row[1] #": ".join(messages)
+        messages = [message for message in row[1:] if message]
+        message = ": ".join(messages)
         try:
             date, time, log_level, class_name = header.split(' ')
             date_time = datetime.strptime(f"{date} {time}", '%Y-%m-%d %H:%M:%S,%f')
