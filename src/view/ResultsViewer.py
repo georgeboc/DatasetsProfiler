@@ -7,13 +7,27 @@ from collections import OrderedDict
 class ResultsViewer:
     def print_results(self, results, attributes_names):
         table = PrettyTable(['', *attributes_names])
-        dictionaries = [asdict(result) for result in results]
-        dictionary = self.merge_dictionaries(dictionaries)
+        flattened_dictionaries = self._flatten_results_into_dictionaries(results)
+        dictionary = self._merge_dictionaries(flattened_dictionaries)
         table_rows = map(lambda tuple: [tuple[0], *tuple[1]], dictionary.items())
         table.add_rows(table_rows)
         print(table)
 
-    def merge_dictionaries(self, dictionaries):
+    def _flatten_results_into_dictionaries(self, results):
+        dictionaries = [asdict(result) for result in results]
+        flattened_dictionaries = []
+        for dictionary in dictionaries:
+            flattened_dictionary = OrderedDict()
+            for key, value in dictionary.items():
+                if type(value) == dict:
+                    for key_sub_dict, value_sub_dict in value.items():
+                        flattened_dictionary[f"{key}_{key_sub_dict}"] = value_sub_dict
+                else:
+                    flattened_dictionary[key] = value
+            flattened_dictionaries.append(flattened_dictionary)
+        return flattened_dictionaries
+
+    def _merge_dictionaries(self, dictionaries):
         keys_super_set = self._get_keys_super_set(dictionaries)
         result = OrderedDict()
         for dictionary in dictionaries:
