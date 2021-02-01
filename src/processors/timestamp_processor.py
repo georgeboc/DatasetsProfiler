@@ -19,17 +19,23 @@ class TimestampProcessor(Processor):
 
     def process(self, column_rdd):
         key_value_rdd_cached = column_rdd.map(lambda value: (1, value[0])).cache()
-        count_distinct = key_value_rdd_cached.distinct().count()
-        oldest_date, newest_date = self._column_statistics_calculator.calculate_min_max(key_value_rdd_cached)
-        delta_time_in_seconds_rdd_cached = self._get_delta_time_in_seconds(key_value_rdd_cached).cache()
+        if key_value_rdd_cached.isEmpty():
+            return TimestampResults()
+        count_null = key_value_rdd_cached.filter(lambda row: row[1] is None).count()
+        not_null_key_value_rdd_cached = key_value_rdd_cached.filter(lambda row: row[1] is not None).cache()
+
+        count_distinct = not_null_key_value_rdd_cached.distinct().count()
+        oldest_date, newest_date = self._column_statistics_calculator.calculate_min_max(not_null_key_value_rdd_cached)
+        delta_time_in_seconds_rdd_cached = self._get_delta_time_in_seconds(not_null_key_value_rdd_cached).cache()
         delta_time_in_seconds_statistics=self._column_statistics_calculator.calculate_number_statistics(delta_time_in_seconds_rdd_cached)
         return TimestampResults(delta_time_in_seconds_statistics=delta_time_in_seconds_statistics,
                                 count_distinct=count_distinct,
                                 newest_date=newest_date,
                                 oldest_date=oldest_date,
-                                count=key_value_rdd_cached.count(),
-                                timestamp_entropy=self._column_statistics_calculator.calculate_entropy(key_value_rdd_cached),
-                                delta_time_in_seconds_entropy=self._column_statistics_calculator.calculate_entropy(delta_time_in_seconds_rdd_cached))
+                                timestamp_entropy=self._column_statistics_calculator.calculate_entropy(not_null_key_value_rdd_cached),
+                                delta_time_in_seconds_entropy=self._column_statistics_calculator.calculate_entropy(delta_time_in_seconds_rdd_cached),
+                                count_null=count_null,
+                                count_not_null=not_null_key_value_rdd_cached.count())
 
     def _get_delta_time_in_seconds(self, rdd_cached):
         data_frame = rdd_cached.toDF()
@@ -41,12 +47,15 @@ class TimestampProcessor(Processor):
         delta_time = added_previous_value_data_frame.withColumn(self.DIFF_IN_SECONDS_FIELD,
                                                                    when(
                                                                        isnull(
-                                                                           added_previous_value_data_frame.value.cast(self.DATETIME_CAST) -
-                                                                           added_previous_value_data_frame.previous_value.cast(self.DATETIME_CAST)
+                                                                           self._timestamp_diff(added_previous_value_data_frame.value,
+                                                                                                added_previous_value_data_frame.previous_value)
                                                                        ),
                                                                        0)
-                                                                   .otherwise(added_previous_value_data_frame.value.cast(self.DATETIME_CAST) -
-                                                                              added_previous_value_data_frame.previous_value.cast(self.DATETIME_CAST))
+                                                                   .otherwise(self._timestamp_diff(added_previous_value_data_frame.value,
+                                                                              added_previous_value_data_frame.previous_value))
                                                                 )
         delta_time_only = delta_time.select(self.DEFAULT_FIRST_COL_NAME, self.DIFF_IN_SECONDS_FIELD)
         return delta_time_only.rdd
+
+    def _timestamp_diff(self, time1, time2):
+        return time1.cast(self.DATETIME_CAST) - time2.cast(self.DATETIME_CAST)

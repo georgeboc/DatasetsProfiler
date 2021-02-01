@@ -7,7 +7,7 @@ class ResultsToTableRows:
     def get_table_rows(self, results):
         flattened_dictionaries = self._flatten_results_into_dictionaries(results)
         dictionary = self._merge_dictionaries(flattened_dictionaries)
-        return map(lambda tuple: [tuple[0], *tuple[1]], dictionary.items())
+        return map(lambda tuple: [tuple[0].capitalize().replace('_', ' '), *tuple[1]], dictionary.items())
 
     def _flatten_results_into_dictionaries(self, results):
         dictionaries = [asdict(result) for result in results]

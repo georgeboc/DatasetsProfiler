@@ -8,12 +8,13 @@ class ColumnStatisticsCalculator:
 
     def calculate_number_statistics(self, key_value_rdd):
         key_value_rdd_cached = key_value_rdd.cache()
+        if key_value_rdd_cached.isEmpty():
+            return None
         average, count = self.calculate_average_count(key_value_rdd_cached)
         min, max = self.calculate_min_max(key_value_rdd_cached)
         variance = self.calculate_variance(key_value_rdd_cached, average, count)
         standard_deviation = math.sqrt(variance)
         return NumberStatistics(average=average,
-                                count=count,
                                 min=min,
                                 max=max,
                                 variance=variance,
@@ -43,6 +44,8 @@ class ColumnStatisticsCalculator:
         return variance
 
     def calculate_entropy(self, key_value_rdd_cached):
+        if key_value_rdd_cached.isEmpty():
+            return None
         frequencies = key_value_rdd_cached.countByValue().values()
         rows_count = key_value_rdd_cached.count()
         probabilites = map(lambda frequency: frequency/rows_count, frequencies)

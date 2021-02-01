@@ -1,0 +1,41 @@
+Execution pipeline:
+JOB: 0
+
+STATE: FINISHED
+
+COMMAND: python __main__.py > ../output/test.csv
+
+INPUT:
+Introduce dataset filename in resources folder to describe: (default Datasets/Test/test.log) Datasets/HDFS_2/test.log
+Introduce schema transformer class name to use: (default LogDataFrameTransformerWithInteger) LogDataFrameTransformerWithInteger
+-----------------------------------------------------------------------------------------------------------------------------------------------
+JOB: 1
+
+STATE: FINISHED
+
+COMMAND: python __main__.py > ../output/hadoop-hdfs-datanode-mesos-01.csv
+
+INPUT:
+Introduce dataset filename in resources folder to describe: (default Datasets/Test/test.log) Datasets/HDFS_2/hadoop-hdfs-datanode-mesos-01.log
+Introduce schema transformer class name to use: (default LogDataFrameTransformerWithInteger) LogDataFrameTransformer
+-----------------------------------------------------------------------------------------------------------------------------------------------
+JOB: 2
+
+STATE: FINISHED
+
+COMMAND: python __main__.py > ../output/hadoop-hdfs-datanode-mesos-02.csv
+
+INPUT:
+Introduce dataset filename in resources folder to describe: (default Datasets/Test/test.log) Datasets/HDFS_2/hadoop-hdfs-datanode-mesos-02.log
+Introduce schema transformer class name to use: (default LogDataFrameTransformerWithInteger) LogDataFrameTransformer
+-----------------------------------------------------------------------------------------------------------------------------------------------
+JOB: 3
+
+STATE: FINISHED
+
+COMMAND: python __main__.py > ../output/hadoop-hdfs-datanode-mesos-03.csv
+
+INPUT:
+Introduce dataset filename in resources folder to describe: (default Datasets/Test/test.log) Datasets/HDFS_2/hadoop-hdfs-datanode-mesos-03.log
+Introduce schema transformer class name to use: (default LogDataFrameTransformerWithInteger) LogDataFrameTransformer
+-----------------------------------------------------------------------------------------------------------------------------------------------

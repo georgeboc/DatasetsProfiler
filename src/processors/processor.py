@@ -1,3 +1,3 @@
 class Processor:
-    def process(self, column_rdd):
+    def process(self, rdd):
         pass

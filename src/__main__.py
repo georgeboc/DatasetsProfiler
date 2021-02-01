@@ -1,9 +1,9 @@
-from application.application_initializer import ApplicationInitializer
+from application.repetitive_execution import RepetitiveExecution
+from dependency_injection.containers import ApplicationProviders
 
 
 def main():
-    application = ApplicationInitializer().initialize()
-    application.run()
+    ApplicationProviders.application().run()
 
 
 if __name__ == "__main__":

@@ -6,7 +6,8 @@ setup(
     packages=find_packages(where="./src"),
     install_requires=[
         "prettytable>=2.0.0",
-        "pyspark>=3.0.1"
+        "pyspark>=3.0.1",
+        "dependency-injector>=4.19.0"
     ],
     package_dir={
         '': 'src',
