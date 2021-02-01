@@ -5,6 +5,7 @@ setup(
     version="1.0",
     packages=find_packages(where="./src"),
     install_requires=[
+        "prettytable>=2.0.0",
         "pyspark>=3.0.1"
     ],
     package_dir={

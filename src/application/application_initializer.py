@@ -7,6 +7,7 @@ from processors.string_processor import StringProcessor
 from processors.timestamp_processor import TimestampProcessor
 from readers.csv_reader import CSVReader
 from schema_transformers.log_schema_transformer import LogDataFrameTransformer
+from view.ResultsViewer import ResultsViewer
 
 
 class ApplicationInitializer:
@@ -29,4 +30,5 @@ class ApplicationInitializer:
         field_dispatcher = FieldDispatcher(type_processors)
         row_dispatcher = RowDispatcher(field_dispatcher)
 
-        return Application(reader, data_frame_transformer, row_dispatcher, column_statistics_calculator)
+        results_viewer = ResultsViewer()
+        return Application(reader, data_frame_transformer, row_dispatcher, column_statistics_calculator, results_viewer)
