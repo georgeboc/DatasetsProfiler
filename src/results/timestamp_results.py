@@ -8,6 +8,8 @@ from results.number_statistics import NumberStatistics
 class TimestampResults:
     oldest_date: datetime
     newest_date: datetime
-    consecutive_rows_diff_in_seconds: NumberStatistics
     count: int
     count_distinct: int
+    timestamp_entropy: float
+    delta_time_in_seconds_statistics: NumberStatistics
+    delta_time_in_seconds_entropy: float

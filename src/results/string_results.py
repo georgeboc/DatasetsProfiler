@@ -11,3 +11,6 @@ class StringResults:
     count_distinct_messages: int
     count_distinct_words: int
     count_distinct_characters: int
+    messages_entropy: float
+    words_entropy: float
+    characters_entropy: float
