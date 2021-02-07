@@ -15,8 +15,8 @@ class Application:
 
     def run(self):
         source_dataset_path = self._get_source_dataset_path()
-        source_rdd = self._get_source_rdd(source_dataset_path)
         parser = self._get_parser()
+        source_rdd = self._get_source_rdd(source_dataset_path)
         parser_result = parser.parse(source_rdd)
         self._emit_parser_statistics(parser_result.parser_statistics)
         dataset_rdd_cached = parser_result.parsed_rdd.cache()

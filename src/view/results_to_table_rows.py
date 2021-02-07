@@ -1,44 +1,77 @@
 from dataclasses import asdict
-from functools import reduce
 from collections import OrderedDict
+from functools import reduce
 
 
 class ResultsToTableRows:
-    def get_table_rows(self, results):
-        flattened_dictionaries = self._flatten_results_into_dictionaries(results)
-        dictionary = self._merge_dictionaries(flattened_dictionaries)
-        return map(lambda tuple: [tuple[0].capitalize().replace('_', ' '), *tuple[1]], dictionary.items())
+    WORD_SEPARATOR = '_'
+    NOT_APPLICABLE = '-'
+    SECTION_SEPARATOR = "******"
+    EMPTY = ''
+    DESCRIPTOR_TITLE_LEN = 1
 
-    def _flatten_results_into_dictionaries(self, results):
-        dictionaries = [asdict(result) for result in results]
-        flattened_dictionaries = []
-        for dictionary in dictionaries:
-            flattened_dictionary = OrderedDict()
-            for key, value in dictionary.items():
-                if type(value) == dict:
-                    for key_sub_dict, value_sub_dict in value.items():
-                        flattened_dictionary[f"{key}_{key_sub_dict}"] = value_sub_dict
-                else:
-                    flattened_dictionary[key] = value
-            flattened_dictionaries.append(flattened_dictionary)
-        return flattened_dictionaries
+    def get_table_rows(self, results):
+        type_dict_list = list((result.__class__.__name__, self._flatten_dictionary(asdict(result))) for result in results)
+        type_multidict = self._create_multidict(type_dict_list)
+        types_dict = dict((type_element, self._merge_dictionaries(dictionaries)) for type_element, dictionaries in type_multidict.items())
+        results_type = [result.__class__.__name__ for result in results]
+        return self._render_rows_by_types(types_dict, results_type)
+
+    def _create_multidict(self, key_value_iterable):
+        type_multidict = OrderedDict()
+        for key, value in key_value_iterable:
+            type_multidict.setdefault(key, []).append(value)
+        return type_multidict
+
+    def _flatten_dictionary(self, dictionary, prefix=None):
+        result_dictionary = OrderedDict()
+        for key, value in dictionary.items():
+            if type(value) == dict:
+                new_prefix = self._add_prefix(prefix, key)
+                result_dictionary = {**result_dictionary, **self._flatten_dictionary(value, prefix=new_prefix)}
+            else:
+                result_dictionary[self._add_prefix(prefix, key)] = value
+        return result_dictionary
+
+    def _add_prefix(self, prefix, key):
+        if prefix is None:
+            return key
+        return prefix + self.WORD_SEPARATOR + key
 
     def _merge_dictionaries(self, dictionaries):
         keys_super_set = self._get_keys_super_set(dictionaries)
         result = OrderedDict()
         for dictionary in dictionaries:
             for key in keys_super_set:
-                result.setdefault(key, []).append(dictionary[key] if key in dictionary else '-')
+                result.setdefault(key, []).append(dictionary[key] if key in dictionary else self.NOT_APPLICABLE)
         return result
 
     def _get_keys_super_set(self, dictionaries):
-        unordered_key_sets = [set(dictionary.keys()) for dictionary in dictionaries]
-        unordered_remaining_distinct_keys = reduce(lambda first_set, second_set: first_set.union(second_set), unordered_key_sets)
-        ordered_key_lists = [list(dictionary.keys()) for dictionary in dictionaries]
-        result = []
-        for ordered_key_list in ordered_key_lists:
-            for key in ordered_key_list:
-                if key in unordered_remaining_distinct_keys:
-                    result.append(key)
-                    unordered_remaining_distinct_keys.remove(key)
-        return result
+        return sorted(reduce(lambda set1, set2: set1.union(set2), [set(dictionary.keys()) for dictionary in dictionaries]))
+
+    def _render_rows_by_types(self, types_dict, results_type):
+        types_position = self._create_multidict([(result_type, position) for position, result_type in enumerate(results_type)])
+        attributes_count = len(results_type)
+        rows = []
+        for type_element, descriptors in types_dict.items():
+            if len(results_type) > 1:
+                rows.append(self._get_header_row(type_element, attributes_count))
+            rows.extend(self._dict_to_table_rows_with_position(descriptors, types_position[type_element], attributes_count))
+        return rows
+
+    def _dict_to_table_rows_with_position(self, descriptors, positions, columns_count):
+        rows = []
+        for descriptor, values in descriptors.items():
+            row = [self.NOT_APPLICABLE] * columns_count
+            for i in range(len(positions)):
+                row[positions[i]] = values[i]
+            rows.append([self._prettify_descriptor(descriptor), *row])
+        return rows
+
+    def _get_header_row(self, title, columns_count):
+        row = [self.SECTION_SEPARATOR] * (self.DESCRIPTOR_TITLE_LEN + columns_count)
+        row[0] = title
+        return row
+
+    def _prettify_descriptor(self, descriptor):
+        return descriptor.capitalize().replace(self.WORD_SEPARATOR, ' ')
