@@ -1,4 +1,7 @@
+from dataclasses import asdict
 from pathlib import Path
+
+from results_formatters.result import Result
 from utils.files import get_full_path
 
 
@@ -16,11 +19,12 @@ class Application:
     def run(self):
         source_dataset_path = self._get_source_dataset_path()
         parser = self._get_parser()
+        formatters = self._get_formatters()
         source_rdd = self._get_source_rdd(source_dataset_path)
         parser_result = parser.parse(source_rdd)
         self._emit_parser_statistics(parser_result.parser_statistics)
         dataset_rdd_cached = parser_result.parsed_rdd.cache()
-        self._emit_columnar_statistics(dataset_rdd_cached, parser_result.parsed_rdd)
+        self._emit_columnar_statistics(dataset_rdd_cached, parser_result.parsed_rdd, formatters)
         self._emit_table_statistics(dataset_rdd_cached)
 
     def _get_source_rdd(self, source_dataset_path):
@@ -40,16 +44,25 @@ class Application:
             self._application_initialization.interface.get_path_or_default(self.DEFAULT_DATA_SOURCE_PATH)))
         return source_dataset_path
 
+    def _get_formatters(self):
+        formatters_names = self._application_initialization.interface.get_formatters_or_default(None)
+        return None if formatters_names is None else [self._application_initialization.formatter_providers.providers[formatter]()
+                                                      for formatter in formatters_names.split(' ')]
+
     def _emit_parser_statistics(self, parser_statistics):
-        self._application_initialization.results_viewer.print_result(parser_statistics, self.PARSER_STATISTICS)
+        result = Result(dictionary=asdict(parser_statistics))
+        self._application_initialization.results_viewer.print_result(result, self.PARSER_STATISTICS)
 
     def _emit_table_statistics(self, dataset_rdd_cached):
         dataset_results = self._application_initialization.tuple_processor.process(dataset_rdd_cached)
-        self._application_initialization.results_viewer.print_result(dataset_results, self.TABLE_RESULTS)
+        result = Result(dictionary=asdict(dataset_results))
+        self._application_initialization.results_viewer.print_result(result, self.TABLE_RESULTS)
 
-    def _emit_columnar_statistics(self, dataset_rdd_cached, parsed_rdd):
+    def _emit_columnar_statistics(self, dataset_rdd_cached, parsed_rdd, formatters):
         parsed_data_frame = parsed_rdd.toDF()
         column_types = [type for field_name, type in parsed_data_frame.dtypes]
-        results = self._application_initialization.row_dispatcher.dispatch(dataset_rdd_cached,
-                                                                           column_types)
-        self._application_initialization.results_viewer.print_results(results, self.STATISTICAL_PROFILE, parsed_data_frame.schema.names)
+        results = self._application_initialization.row_dispatcher.dispatch(dataset_rdd_cached, column_types)
+        formatted_results = self._application_initialization.results_formatter.format_results(results, formatters)
+        self._application_initialization.results_viewer.print_results(formatted_results,
+                                                                      self.STATISTICAL_PROFILE,
+                                                                      parsed_data_frame.schema.names)

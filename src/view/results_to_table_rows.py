@@ -1,4 +1,3 @@
-from dataclasses import asdict
 from collections import OrderedDict
 from functools import reduce
 
@@ -11,11 +10,12 @@ class ResultsToTableRows:
     DESCRIPTOR_TITLE_LEN = 1
 
     def get_table_rows(self, results):
-        type_dict_list = list((result.__class__.__name__, self._flatten_dictionary(asdict(result))) for result in results)
-        type_multidict = self._create_multidict(type_dict_list)
-        types_dict = dict((type_element, self._merge_dictionaries(dictionaries)) for type_element, dictionaries in type_multidict.items())
-        results_type = [result.__class__.__name__ for result in results]
-        return self._render_rows_by_types(types_dict, results_type)
+        flattened_results = list((result.type, self._flatten_dictionary(result.dictionary)) for result in results)
+        type_multidict = self._create_multidict(flattened_results)
+        types_dict = dict((type_element, self._merge_dictionaries(dictionaries))
+                          for type_element, dictionaries in type_multidict.items())
+        result_types = [result.type for result in results]
+        return self._render_rows_by_types(types_dict, result_types)
 
     def _create_multidict(self, key_value_iterable):
         type_multidict = OrderedDict()
@@ -49,12 +49,12 @@ class ResultsToTableRows:
     def _get_keys_super_set(self, dictionaries):
         return sorted(reduce(lambda set1, set2: set1.union(set2), [set(dictionary.keys()) for dictionary in dictionaries]))
 
-    def _render_rows_by_types(self, types_dict, results_type):
-        types_position = self._create_multidict([(result_type, position) for position, result_type in enumerate(results_type)])
-        attributes_count = len(results_type)
+    def _render_rows_by_types(self, types_dict, result_types):
+        types_position = self._create_multidict([(result_type, position) for position, result_type in enumerate(result_types)])
+        attributes_count = len(result_types)
         rows = []
         for type_element, descriptors in types_dict.items():
-            if len(results_type) > 1:
+            if len(result_types) > 1:
                 rows.append(self._get_header_row(type_element, attributes_count))
             rows.extend(self._dict_to_table_rows_with_position(descriptors, types_position[type_element], attributes_count))
         return rows

@@ -1,11 +1,14 @@
 from dependency_injector.containers import DeclarativeContainer
-from dependency_injector.providers import Singleton
+from dependency_injector.providers import Singleton, Factory
 
 from application.application import Application
 from application.application_initialization import ApplicationInitialization
 from configuration.spark_configuration import SparkConfiguration
 from dispatchers.field_dispatcher import FieldDispatcher
 from dispatchers.row_dispatcher import RowDispatcher
+from results_formatters.default_formatter import DefaultFormatter
+from results_formatters.no_year_datetime_formatter import NoYearDatetimeFormatter
+from results_formatters.results_formatter import DictionaryFormatter, ResultsFormatter
 from parsers.android_log_parser_strategy import AndroidLogParserStrategy
 from parsers.bgl_log_parser_strategy import BGLLogParserStrategy
 from parsers.edgar_log_parser_strategy import EdgarLogParserStrategy
@@ -53,6 +56,11 @@ class ParserProviders(DeclarativeContainer):
 
 class ColumnStatisticsCalculatorProviders(DeclarativeContainer):
     column_statistics_calculator = Singleton(ColumnStatisticsCalculator)
+
+
+class FormatterProviders(DeclarativeContainer):
+    default_formatter = Singleton(DefaultFormatter)
+    no_year_datetime_formatter = Singleton(NoYearDatetimeFormatter)
 
 
 class ProcessorsProviders(DeclarativeContainer):
@@ -104,6 +112,14 @@ class ResultsViewerProviders(DeclarativeContainer):
     pretty_table_viewer = Singleton(PrettyTableViewer, ResultsToTableRowsProviders.results_to_table_rows(), InterfaceProviders.command_line_interface())
 
 
+class DictionaryFormatterProviders(DeclarativeContainer):
+    dictionary_formatter = Singleton(DictionaryFormatter)
+
+
+class ResultsFormatterProviders(DeclarativeContainer):
+    results_formatter = Singleton(ResultsFormatter, DictionaryFormatterProviders.dictionary_formatter())
+
+
 class ApplicationInitializationProviders(DeclarativeContainer):
     application_initialization = Singleton(ApplicationInitialization,
                                            spark_configuration=SparkConfigurationProviders.spark_configuration(),
@@ -113,7 +129,9 @@ class ApplicationInitializationProviders(DeclarativeContainer):
                                            column_statistics_calculator=ColumnStatisticsCalculatorProviders.column_statistics_calculator(),
                                            results_viewer=ResultsViewerProviders.csv_viewer(),
                                            interface=InterfaceProviders.command_line_interface(),
-                                           parser_providers=ParserProviders)
+                                           parser_providers=ParserProviders,
+                                           formatter_providers=FormatterProviders,
+                                           results_formatter=ResultsFormatterProviders.results_formatter())
 
 
 class ApplicationProviders(DeclarativeContainer):

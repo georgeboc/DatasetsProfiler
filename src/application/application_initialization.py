@@ -12,3 +12,5 @@ class ApplicationInitialization:
     results_viewer: Any
     interface: Any
     parser_providers: Any
+    formatter_providers: Any
+    results_formatter: Any
