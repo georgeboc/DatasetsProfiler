@@ -1,0 +1,7 @@
+Execution call tracker
+;Value
+Columnstatisticscalculator.calculate number statistics;CallStatistics(execution_times=[datetime.timedelta(microseconds=49478), datetime.timedelta(microseconds=51432)], call_count=2)
+Numericprocessor.process;CallStatistics(execution_times=[datetime.timedelta(microseconds=116399), datetime.timedelta(microseconds=116104)], call_count=2)
+Stringprocessor.process;CallStatistics(execution_times=[datetime.timedelta(microseconds=77856), datetime.timedelta(microseconds=82589), datetime.timedelta(microseconds=91133)], call_count=3)
+Timestampprocessor.process;CallStatistics(execution_times=[datetime.timedelta(microseconds=479312)], call_count=1)
+Tupleprocessor.process;CallStatistics(execution_times=[datetime.timedelta(microseconds=277)], call_count=1)

@@ -3,13 +3,15 @@ import sys
 
 class CommandLineInterface:
     def get_path_or_default(self, default):
-        return self._input_or_default(f"Introduce dataset filename in resources folder to describe: (default is {default}) ", default)
+        return self._input_or_default(
+            f"Introduce dataset filename in resources folder to describe: (default is {default}) ", default)
 
-    def get_schema_transformer_or_default(self, default):
-        return self._input_or_default(f"Introduce schema transformer class name to use: (default is {default}) ", default)
+    def get_parser_or_default(self, default):
+        return self._input_or_default(f"Introduce parser class name to use: (default is {default}) ", default)
 
     def get_formatters_or_default(self, default):
-        return self._input_or_default(f"Introduce formatters separated by a space or press Enter to use defaults) ", default)
+        return self._input_or_default(
+            f"Introduce formatter class names separated by a space or press Enter to use defaults) ", default)
 
     def print_string(self, *string):
         print(*string)

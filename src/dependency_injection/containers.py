@@ -1,13 +1,15 @@
 from dependency_injector.containers import DeclarativeContainer
-from dependency_injector.providers import Singleton, Factory
+from dependency_injector.providers import Singleton
 
 from application.application import Application
 from application.application_initialization import ApplicationInitialization
+from configuration.processors_operations_flags import ProcessorsOperationsFlags
 from configuration.spark_configuration import SparkConfiguration
 from dispatchers.field_dispatcher import FieldDispatcher
 from dispatchers.row_dispatcher import RowDispatcher
-from results_formatters.default_formatter import DefaultFormatter
-from results_formatters.no_year_datetime_formatter import NoYearDatetimeFormatter
+from instrumentation.call_tracker import StatefulCallTracker
+from results_formatters.formatters.default_formatter import DefaultFormatter
+from results_formatters.formatters.no_year_datetime_formatter import NoYearDatetimeFormatter
 from results_formatters.results_formatter import DictionaryFormatter, ResultsFormatter
 from parsers.android_log_parser_strategy import AndroidLogParserStrategy
 from parsers.bgl_log_parser_strategy import BGLLogParserStrategy
@@ -54,8 +56,8 @@ class ParserProviders(DeclarativeContainer):
         return Singleton(Parser, ParserStrategyProviders.providers[parser_strategy]())()
 
 
-class ColumnStatisticsCalculatorProviders(DeclarativeContainer):
-    column_statistics_calculator = Singleton(ColumnStatisticsCalculator)
+class CallTrackerProviders(DeclarativeContainer):
+    stateful_call_tracker = Singleton(StatefulCallTracker)
 
 
 class FormatterProviders(DeclarativeContainer):
@@ -63,13 +65,34 @@ class FormatterProviders(DeclarativeContainer):
     no_year_datetime_formatter = Singleton(NoYearDatetimeFormatter)
 
 
-class ProcessorsProviders(DeclarativeContainer):
-    numeric_processor = Singleton(NumericProcessor, ColumnStatisticsCalculatorProviders.column_statistics_calculator())
-    string_processor = Singleton(StringProcessor, ColumnStatisticsCalculatorProviders.column_statistics_calculator())
-    timestamp_processor = Singleton(TimestampProcessor,
-                                    ColumnStatisticsCalculatorProviders.column_statistics_calculator())
+class ProcessorsOperationsFlagsProviders(DeclarativeContainer):
+    processors_operations_flags = Singleton(ProcessorsOperationsFlags)
 
-    tuple_processor = Singleton(TupleProcessor, ColumnStatisticsCalculatorProviders.column_statistics_calculator())
+
+class ColumnStatisticsCalculatorProviders(DeclarativeContainer):
+    column_statistics_calculator = Singleton(ColumnStatisticsCalculator,
+                                             CallTrackerProviders.stateful_call_tracker(),
+                                             ProcessorsOperationsFlagsProviders.processors_operations_flags())
+
+
+class ProcessorsProviders(DeclarativeContainer):
+    numeric_processor = Singleton(NumericProcessor,
+                                  ColumnStatisticsCalculatorProviders.column_statistics_calculator(),
+                                  CallTrackerProviders.stateful_call_tracker(),
+                                  ProcessorsOperationsFlagsProviders.processors_operations_flags())
+    string_processor = Singleton(StringProcessor,
+                                 ColumnStatisticsCalculatorProviders.column_statistics_calculator(),
+                                 CallTrackerProviders.stateful_call_tracker(),
+                                 ProcessorsOperationsFlagsProviders.processors_operations_flags())
+    timestamp_processor = Singleton(TimestampProcessor,
+                                    ColumnStatisticsCalculatorProviders.column_statistics_calculator(),
+                                    CallTrackerProviders.stateful_call_tracker(),
+                                    ProcessorsOperationsFlagsProviders.processors_operations_flags())
+
+    tuple_processor = Singleton(TupleProcessor,
+                                ColumnStatisticsCalculatorProviders.column_statistics_calculator(),
+                                CallTrackerProviders.stateful_call_tracker(),
+                                ProcessorsOperationsFlagsProviders.processors_operations_flags())
 
 
 class SparkConfigurationProviders(DeclarativeContainer):
@@ -135,4 +158,6 @@ class ApplicationInitializationProviders(DeclarativeContainer):
 
 
 class ApplicationProviders(DeclarativeContainer):
-    application = Singleton(Application, ApplicationInitializationProviders.application_initialization())
+    application = Singleton(Application,
+                            ApplicationInitializationProviders.application_initialization(),
+                            CallTrackerProviders.stateful_call_tracker())

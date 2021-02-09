@@ -1,25 +1,42 @@
 import math
 
+from configuration.execute_if_flag_is_enabled import execute_if_flag_is_enabled
+from instrumentation.call_tracker import instrument_call
 from results.number_statistics import NumberStatistics
 
 
 class ColumnStatisticsCalculator:
     ZERO_PAIR_INITIAL_VALUE = (0, 0)
 
-    def calculate_number_statistics(self, key_value_rdd):
-        key_value_rdd_cached = key_value_rdd.cache()
+    def __init__(self, call_tracker, processors_operations_flags):
+        self._call_tracker = call_tracker
+        self._processors_operations_flags = processors_operations_flags
+
+    @instrument_call
+    def calculate_number_statistics(self, key_value_rdd_cached):
         if key_value_rdd_cached.isEmpty():
             return None
-        average, count = self.calculate_average_count(key_value_rdd_cached)
-        min, max = self.calculate_min_max(key_value_rdd_cached)
+        average_count = self.calculate_average_count(key_value_rdd_cached)
+        average, count = average_count if average_count is not None else (None, None)
+        min_max = self.calculate_min_max(key_value_rdd_cached)
+        min, max = min_max if min_max is not None else (None, None)
         variance = self.calculate_variance(key_value_rdd_cached, average, count)
-        standard_deviation = math.sqrt(variance)
+        standard_deviation = self._calculate_standard_deviation(variance)
         return NumberStatistics(average=average,
                                 min=min,
                                 max=max,
                                 variance=variance,
                                 standard_deviation=standard_deviation)
 
+    @execute_if_flag_is_enabled("column_statistics_calculate_standard_deviation_is_enabled")
+    @instrument_call
+    def _calculate_standard_deviation(self, variance):
+        if variance is None:
+            return None
+        return math.sqrt(variance)
+
+    @execute_if_flag_is_enabled("column_statistics_calculate_min_max_is_enabled")
+    @instrument_call
     def calculate_min_max(self, key_value_rdd_cached):
         min_max_rdd = key_value_rdd_cached.aggregateByKey(self.ZERO_PAIR_INITIAL_VALUE,
                                                           self._min_max_combiner,
@@ -27,6 +44,8 @@ class ColumnStatisticsCalculator:
         _, min_max = min_max_rdd.first()
         return min_max
 
+    @execute_if_flag_is_enabled("column_statistics_calculate_average_count_is_enabled")
+    @instrument_call
     def calculate_average_count(self, key_value_rdd_cached):
         sum_count_rdd = key_value_rdd_cached.aggregateByKey(self.ZERO_PAIR_INITIAL_VALUE,
                                                             self._sum_count_combiner,
@@ -35,7 +54,11 @@ class ColumnStatisticsCalculator:
         _, average_count = average_count_rdd.first()
         return average_count
 
+    @execute_if_flag_is_enabled("column_statistics_calculate_variance_is_enabled")
+    @instrument_call
     def calculate_variance(self, key_value_rdd_cached, average, count):
+        if average is None or count is None:
+            return None
         squared_deviation_rdd = key_value_rdd_cached.mapValues(lambda value: self._squared_deviation(value, average))
         added_squared_deviations_rdd = squared_deviation_rdd.reduceByKey(lambda a, b: a + b)
         variance_rdd = added_squared_deviations_rdd.mapValues(lambda added_squared_deviations:
@@ -43,6 +66,8 @@ class ColumnStatisticsCalculator:
         _, variance = variance_rdd.first()
         return variance
 
+    @execute_if_flag_is_enabled("column_statistics_calculate_entropy_is_enabled")
+    @instrument_call
     def calculate_entropy(self, key_value_rdd_cached):
         if key_value_rdd_cached.isEmpty():
             return None
