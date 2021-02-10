@@ -1,11 +1,12 @@
+from pyspark import SQLContext
 from pyspark.sql import SparkSession
 
 
 class SparkConfiguration:
     def get_spark_context(self):
-        return self._get_spark_session().sparkContext
+        return self.get_spark_session().sparkContext
 
-    def _get_spark_session(self):
+    def get_spark_session(self):
         return SparkSession.builder\
             .master("local[*]") \
             .config("spark.driver.maxResultSize", "10g") \

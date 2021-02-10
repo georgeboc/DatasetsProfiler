@@ -14,3 +14,4 @@ class ApplicationInitialization:
     parser_providers: Any
     formatter_providers: Any
     results_formatter: Any
+    checkpointer: Any

@@ -28,11 +28,13 @@ class Application:
         source_rdd = self._get_source_rdd(source_dataset_path)
         parser_result = parser.parse(source_rdd)
         self._emit_parser_statistics(parser_result.parser_statistics)
-        dataset_rdd_cached = parser_result.parsed_rdd.cache()
-        self._emit_columnar_statistics(dataset_rdd_cached, parser_result.parsed_rdd, formatters)
-        self._emit_table_statistics(dataset_rdd_cached)
+        checkpointed_parsed_data_frame = self._application_initialization.checkpointer.checkpoint(parser_result.parsed_data_frame)
+        self._emit_columnar_statistics(checkpointed_parsed_data_frame, formatters)
+        self._emit_table_statistics(checkpointed_parsed_data_frame)
 
         self._emit_execution_statistics()
+
+        self._application_initialization.checkpointer.clean_all_checkpoints()
 
     def _get_source_rdd(self, source_dataset_path):
         spark_context = self._application_initialization.spark_configuration.get_spark_context()
@@ -59,20 +61,20 @@ class Application:
         result = Result(dictionary=asdict(parser_statistics))
         self._application_initialization.results_viewer.print_result(result, self.PARSER_STATISTICS)
 
-    def _emit_table_statistics(self, dataset_rdd_cached):
-        dataset_results = self._application_initialization.tuple_processor.process(dataset_rdd_cached)
+    def _emit_table_statistics(self, data_frame):
+        rdd = data_frame.rdd
+        dataset_results = self._application_initialization.tuple_processor.process(rdd)
         result = Result(dictionary=asdict(dataset_results))
         self._application_initialization.results_viewer.print_result(result, self.TABLE_RESULTS)
 
     @instrument_call
-    def _emit_columnar_statistics(self, dataset_rdd_cached, parsed_rdd, formatters):
-        parsed_data_frame = parsed_rdd.toDF()
-        column_types = [type for field_name, type in parsed_data_frame.dtypes]
-        results = self._application_initialization.row_dispatcher.dispatch(dataset_rdd_cached, column_types)
+    def _emit_columnar_statistics(self, data_frame, formatters):
+        column_types = [type for field_name, type in data_frame.dtypes]
+        results = self._application_initialization.row_dispatcher.dispatch(data_frame, column_types)
         formatted_results = self._application_initialization.results_formatter.format_results(results, formatters)
         self._application_initialization.results_viewer.print_results(formatted_results,
                                                                       self.STATISTICAL_PROFILE,
-                                                                      parsed_data_frame.schema.names)
+                                                                      data_frame.schema.names)
 
     def _emit_execution_statistics(self):
         call_trackers_dictionary = self._call_tracker.get_call_trackers_dictionary()

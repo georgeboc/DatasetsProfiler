@@ -14,7 +14,7 @@ class ParserStatistics:
 
 @dataclass
 class ParserResult:
-    parsed_rdd: Any
+    parsed_data_frame: Any
     parser_statistics: ParserStatistics
 
 
@@ -29,14 +29,14 @@ class Parser:
             else source_rdd_cached
         split_rdd = skip_if_present_header.map(self._parser_exception_wrapper(self._parser_strategy.parse))
         parseable_rows_rdd_cached = split_rdd.filter(bool).cache()
-        return ParserResult(parsed_rdd=self._assign_schema(parseable_rows_rdd_cached,
-                                                           self._parser_strategy.get_schema()).rdd,
+        return ParserResult(parsed_data_frame=self._assign_schema(parseable_rows_rdd_cached,
+                                                                  self._parser_strategy.get_schema()),
                             parser_statistics=self._gather_parser_statistics(parseable_rows_rdd_cached,
                                                                              source_rdd_cached))
 
     def _filter_out_header(self, rdd_cached):
         header = rdd_cached.first()
-        return rdd_cached.filter(lambda row: not row[0] == header)
+        return rdd_cached.filter(lambda row: row != header)
 
     def _parser_exception_wrapper(self, function):
         def wrapper(*args, **kwargs):

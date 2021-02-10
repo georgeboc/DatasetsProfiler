@@ -7,3 +7,5 @@ src/DatasetsEvaluation.egg-info/**
 test/**
 input/**
 output/**
+output_lf/**
+src/temporal/**

@@ -3,6 +3,9 @@ from dependency_injector.providers import Singleton
 
 from application.application import Application
 from application.application_initialization import ApplicationInitialization
+from application.repetitive_execution import RepetitiveExecution
+from checkpointers.persistent_checkpointer import PersistentCheckpointer
+from checkpointers.workflow_breaker_checkpointer import StatefulWorkflowBreakerCheckpointer
 from configuration.processors_operations_flags import ProcessorsOperationsFlags
 from configuration.spark_configuration import SparkConfiguration
 from dispatchers.field_dispatcher import FieldDispatcher
@@ -143,6 +146,12 @@ class ResultsFormatterProviders(DeclarativeContainer):
     results_formatter = Singleton(ResultsFormatter, DictionaryFormatterProviders.dictionary_formatter())
 
 
+class CheckpointerProviders(DeclarativeContainer):
+    persistent_checkpointer = Singleton(PersistentCheckpointer)
+    stateful_workflow_breaker_checkpointer = Singleton(StatefulWorkflowBreakerCheckpointer,
+                                                       SparkConfigurationProviders.spark_configuration())
+
+
 class ApplicationInitializationProviders(DeclarativeContainer):
     application_initialization = Singleton(ApplicationInitialization,
                                            spark_configuration=SparkConfigurationProviders.spark_configuration(),
@@ -154,10 +163,15 @@ class ApplicationInitializationProviders(DeclarativeContainer):
                                            interface=InterfaceProviders.command_line_interface(),
                                            parser_providers=ParserProviders,
                                            formatter_providers=FormatterProviders,
-                                           results_formatter=ResultsFormatterProviders.results_formatter())
+                                           results_formatter=ResultsFormatterProviders.results_formatter(),
+                                           checkpointer=CheckpointerProviders.stateful_workflow_breaker_checkpointer())
 
 
 class ApplicationProviders(DeclarativeContainer):
     application = Singleton(Application,
                             ApplicationInitializationProviders.application_initialization(),
                             CallTrackerProviders.stateful_call_tracker())
+
+
+class RepetitiveExecutionProviders(DeclarativeContainer):
+    repetitive_execution = Singleton(RepetitiveExecution, ApplicationProviders.application())
