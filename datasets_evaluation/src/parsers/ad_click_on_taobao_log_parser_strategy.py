@@ -6,7 +6,7 @@ from datasets_evaluation.src.parsers.parser_commons import NULLABLE
 from datasets_evaluation.src.parsers.parser_strategy import ParserStrategy
 
 
-class TaobaoClickLogParserStrategy(ParserStrategy):
+class AdClickOnTaobaoLogParserStrategy(ParserStrategy):
     def __init__(self, parser_commons):
         self._parser_commons = parser_commons
 
