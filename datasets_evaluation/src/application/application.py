@@ -47,7 +47,7 @@ class Application:
 
     def _get_formatters(self, parameters):
         return None if parameters.formatters is None else [self._application_initialization.formatter_providers.providers[formatter]()
-                                                           for formatter in parameters.formatters.split(' ')]
+                                                           for formatter in parameters.formatters]
 
     def _emit_parser_statistics(self, parser_statistics, data_writer_interface):
         result = Result(dictionary=asdict(parser_statistics))

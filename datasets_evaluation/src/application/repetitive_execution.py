@@ -30,10 +30,15 @@ class RepetitiveExecution:
         parameters_list = self._parameters_reader.get_parameters_list(data_reader_interface)
         for parameters in parameters_list:
             control_writer_interface.write_line(
-                self._paint(f"Running application for {parameters.input_path}", self.BLUE_COLOR))
+                self._paint(f"Running application with input path: {parameters.input_path}", self.BLUE_COLOR))
             exception_raised = self._try_run_application(parameters)
             if exception_raised:
+                control_writer_interface.write_line(
+                    self._paint(f"Application finished with errors: {exception_raised}", self.RED_COLOR))
                 exceptions_raised.append(exception_raised)
+            else:
+                control_writer_interface.write_line(
+                    self._paint(f"Application finished successfully", self.GREEN_COLOR))
         self._print_raised_exceptions(control_writer_interface, exceptions_raised)
 
     def _print_raised_exceptions(self, control_writer_interface, exceptions_raised):

@@ -14,10 +14,8 @@ class AndroidLogParserStrategy(ParserStrategy):
 
     def parse(self, row):
         row_string = row[0]
-        tabbed_row_date_time = re.sub(' ', '\t', row_string, count=1)
-        tabbed_row_pid_tid = re.sub(' +', '\t', tabbed_row_date_time, count=2)
-        tabbed_row_priority = re.sub(' ', '\t', tabbed_row_pid_tid, count=2)
-        tabbed_row_tag = re.sub(': ', '\t', tabbed_row_priority, count=1)
+        tabbed_row = re.sub(' +', '\t', row_string, count=5)
+        tabbed_row_tag = re.sub(': ', '\t', tabbed_row, count=1)
         date_s, time_s, pid_s, tid_s, priority_s, tag_s, message_s = \
             self._parser_commons.nullify_missing_fields(tabbed_row_tag.split('\t'))
         date_time = datetime.strptime(f"{date_s} {time_s}", self.DATE_TIME_FORMAT) if date_s and time_s else None
