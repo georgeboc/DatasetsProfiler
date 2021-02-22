@@ -51,7 +51,7 @@ class RepetitiveExecution:
                 control_writer_interface.write_line(
                     self._paint(f"\t- Exception raised: {str(exception_raised)} ", self.RED_COLOR))
         else:
-            control_writer_interface.write_line(self._paint("Jobs completed successfully!", self.GREEN_COLOR))
+            control_writer_interface.write_line(self._paint("All executions were successfully!", self.GREEN_COLOR))
 
     def _paint(self, string, color):
         return f"{color}{string}{self.END_COLOR}"

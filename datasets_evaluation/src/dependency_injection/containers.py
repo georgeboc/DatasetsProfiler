@@ -28,13 +28,13 @@ from datasets_evaluation.src.parsers.obama_visitor_log_parser_strategy import Ob
 from datasets_evaluation.src.parsers.parser import Parser
 from datasets_evaluation.src.parsers.parser_commons import ParserCommons
 from datasets_evaluation.src.parsers.seattle_coban_log_parser_strategy import SeattleCobanLogParserStreategy
-from datasets_evaluation.src.parsers.sowiport_recommender_log_parser_strategy import SowiportRecommenderLogParserStrategy
+from datasets_evaluation.src.parsers.recommender_click_logs_sowiport_log_parser_strategy import RecommenderClickLogsSowiportLogParserStrategy
 from datasets_evaluation.src.parsers.spark_log_parser_strategy import SparkLogParserStrategy
-from datasets_evaluation.src.parsers.taobao_click_log_parser_strategy import TaobaoClickLogParserStrategy
+from datasets_evaluation.src.parsers.ad_click_on_taobao_log_parser_strategy import AdClickOnTaobaoLogParserStrategy
 from datasets_evaluation.src.parsers.test_log_parser_strategy import TestLogParserStrategy
 from datasets_evaluation.src.parsers.thunderbird_log_parser_strategy import ThunderbirdLogParserStrategy
-from datasets_evaluation.src.parsers.ubuntu_dialogue_log_parser_strategy import UbuntuDialogueLogParserStrategy
-from datasets_evaluation.src.parsers.user_log_parser_strategy import UserLogParserStrategy
+from datasets_evaluation.src.parsers.ubuntu_dialogue_corpus_log_parser_strategy import UbuntuDialogueCorpusLogParserStrategy
+from datasets_evaluation.src.parsers.user_logs_v2_log_parser_strategy import UserLogsV2LogParserStrategy
 from datasets_evaluation.src.parsers.windows_log_parser_strategy import WindowsLogParserStrategy
 from datasets_evaluation.src.processors.column_statistics_calculator import ColumnStatisticsCalculator
 from datasets_evaluation.src.processors.numeric_processor import NumericProcessor
@@ -65,13 +65,15 @@ class ParserStrategyProviders(DeclarativeContainer):
     test_log_parser_strategy = Singleton(TestLogParserStrategy, ParserCommonsProviders.parser_commons())
     thunderbird_log_parser_strategy = Singleton(ThunderbirdLogParserStrategy, ParserCommonsProviders.parser_commons())
     windows_log_parser_strategy = Singleton(WindowsLogParserStrategy, ParserCommonsProviders.parser_commons())
-    taobao_click_log_parser_strategy = Singleton(TaobaoClickLogParserStrategy, ParserCommonsProviders.parser_commons())
+    ad_click_on_taobao_log_parser_strategy = Singleton(AdClickOnTaobaoLogParserStrategy, ParserCommonsProviders.parser_commons())
     mooc_log_parser_strategy = Singleton(MoocLogParserStrategy, ParserCommonsProviders.parser_commons())
     obama_visitor_log_parser_strategy = Singleton(ObamaVisitorLogParserStrategy, ParserCommonsProviders.parser_commons())
-    sowiport_recommender_log_parser_strategy = Singleton(SowiportRecommenderLogParserStrategy, ParserCommonsProviders.parser_commons())
+    recommender_click_logs_sowiport_log_parser_strategy = \
+        Singleton(RecommenderClickLogsSowiportLogParserStrategy, ParserCommonsProviders.parser_commons())
     seattle_coban_log_parser_strategy = Singleton(SeattleCobanLogParserStreategy, ParserCommonsProviders.parser_commons())
-    ubuntu_dialogue_log_parser_strategy = Singleton(UbuntuDialogueLogParserStrategy, ParserCommonsProviders.parser_commons())
-    user_log_parser_strategy = Singleton(UserLogParserStrategy, ParserCommonsProviders.parser_commons())
+    ubuntu_dialogue_corpus_log_parser_strategy = \
+        Singleton(UbuntuDialogueCorpusLogParserStrategy, ParserCommonsProviders.parser_commons())
+    user_logs_v2_log_parser_strategy = Singleton(UserLogsV2LogParserStrategy, ParserCommonsProviders.parser_commons())
 
 
 class ParserProviders(DeclarativeContainer):
