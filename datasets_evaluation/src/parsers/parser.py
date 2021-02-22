@@ -1,8 +1,11 @@
 from pyspark.sql import SparkSession
 from pyspark.sql.types import StructField, StructType
-from datasets_evaluation.src.utils.error import eprint
 from dataclasses import dataclass
+from logging import getLogger
 from typing import Any
+
+
+LOGGER = getLogger(__name__)
 
 
 @dataclass
@@ -43,7 +46,7 @@ class Parser:
             try:
                 return function(*args, **kwargs)
             except ValueError as e:
-                eprint("Exception:", e, "for parameters_lists:", *args, **kwargs)
+                LOGGER.exception(f"Exception in parser")
         return wrapper
 
     def _assign_schema(self, rdd, columns_params: list):
