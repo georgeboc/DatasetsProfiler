@@ -6,7 +6,7 @@ from typing import Any
 class ApplicationInitialization:
     spark_configuration: Any
     rdd_reader: Any
-    row_dispatcher: Any
+    column_dispatcher: Any
     tuple_processor: Any
     column_statistics_calculator: Any
     results_viewer: Any

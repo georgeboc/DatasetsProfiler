@@ -18,4 +18,4 @@ class TupleProcessor(Processor):
     @execute_if_flag_is_enabled("tuple_processor_calculate_tuple_entropy_is_enabled")
     @instrument_call
     def _calculate_tuple_entropy(self, key_value_rdd):
-        return self._column_statistics_calculator.calculate_entropy(key_value_rdd)
+        return self._column_statistics_calculator.calculate_entropy(key_value_rdd.cache())

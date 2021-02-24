@@ -29,7 +29,7 @@ class RepetitiveExecution:
         logger = getLogger(__name__)
 
         data_reader_interface = self._interface_providers.data_reader_interface(parameters_list_file_path)
-        logger.info("All instances were fully initialized")
+        logger.info("Datasets evaluation application successfully initialized")
 
         exceptions_raised = []
         logger.info("Getting parameters list")
@@ -47,7 +47,7 @@ class RepetitiveExecution:
             else:
                 control_writer_interface.write_line(
                     self._paint(f"Application finished successfully", self.GREEN_COLOR))
-                logger.error(f"Application finished successfully")
+                logger.info(f"Application finished successfully")
         self._print_raised_exceptions(control_writer_interface, exceptions_raised, logger)
 
     def _print_raised_exceptions(self, control_writer_interface, exceptions_raised, logger):
@@ -61,8 +61,8 @@ class RepetitiveExecution:
                     self._paint(f"\t- Exception raised: {str(exception_raised)} ", self.RED_COLOR))
             logger.error(f"Application finished unsuccessfully")
         else:
-            control_writer_interface.write_line(self._paint("All executions were successfully!", self.GREEN_COLOR))
-            logger.info(f"Application finished successfully")
+            control_writer_interface.write_line(self._paint("All executions were successful!", self.GREEN_COLOR))
+            logger.info(f"All executions were successful")
 
     def _paint(self, string, color):
         return f"{color}{string}{self.END_COLOR}"

@@ -4,7 +4,7 @@ import os
 
 
 class LoggerInitializer:
-    FORMAT = '%(asctime)-15s line %(lineno)d in %(filename)s [%(levelname)s] %(module)s: %(message)s'
+    FORMAT = '%(asctime)-15s [%(levelname)s] line %(lineno)d in %(filename)s %(module)s: %(message)s'
     FILENAME_PREFIX = "datasets_evaluation"
 
     def initialize(self, log_folder):

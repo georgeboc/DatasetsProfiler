@@ -20,9 +20,6 @@ class Application:
         self._call_tracker = call_tracker
 
     def run(self, parameters):
-        LOGGER.info("Clearing call tracker state")
-        self._call_tracker.clear_state()
-
         parser = self._get_parser(parameters)
         formatters = self._get_formatters(parameters)
         input_rdd = self._get_input_rdd(parameters)
@@ -39,7 +36,12 @@ class Application:
 
         self._emit_execution_statistics(data_writer_interface)
 
+        LOGGER.info("Cleaning all checkpoints")
         self._application_initialization.checkpointer.clean_all_checkpoints()
+        LOGGER.info("Clearing spark cache")
+        self._application_initialization.spark_configuration.get_spark_session().catalog.clearCache()
+        LOGGER.info("Clearing call tracker state")
+        self._call_tracker.clear_state()
 
     def _get_data_writer_interface(self, parameters):
         return self._application_initialization.interface_providers.data_writer_interface(parameters.output_path)
@@ -75,8 +77,8 @@ class Application:
     def _emit_columnar_statistics(self, data_frame, formatters, data_writer_interface):
         column_types = [type for field_name, type in data_frame.dtypes]
         LOGGER.info("Calculating columnar statistics")
-        LOGGER.info("Dispatching rows")
-        results = self._application_initialization.row_dispatcher.dispatch(data_frame, column_types)
+        LOGGER.info("Dispatching columns")
+        results = self._application_initialization.column_dispatcher.dispatch(data_frame, column_types)
         LOGGER.info("Formatting results")
         formatted_results = self._application_initialization.results_formatter.format_results(results, formatters)
         LOGGER.info("Sending results to results viewer")
