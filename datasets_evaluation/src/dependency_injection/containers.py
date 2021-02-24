@@ -10,8 +10,8 @@ from datasets_evaluation.src.checkpointers.persistent_checkpointer import Persis
 from datasets_evaluation.src.checkpointers.workflow_breaker_checkpointer import StatefulWorkflowBreakerCheckpointer
 from datasets_evaluation.src.configuration.processors_operations_flags import ProcessorsOperationsFlags
 from datasets_evaluation.src.configuration.spark_configuration import SparkConfiguration
-from datasets_evaluation.src.dispatchers.field_dispatcher import FieldDispatcher
-from datasets_evaluation.src.dispatchers.row_dispatcher import RowDispatcher
+from datasets_evaluation.src.dispatchers.type_dispatcher import TypeDispatcher
+from datasets_evaluation.src.dispatchers.column_dispatcher import ColumnDispatcher
 from datasets_evaluation.src.instrumentation.call_tracker import StatefulCallTracker
 from datasets_evaluation.src.interfaces.readers.cli_reader import CLIReader
 from datasets_evaluation.src.interfaces.readers.file_reader import FileReader
@@ -24,7 +24,6 @@ from datasets_evaluation.src.parsers.bgl_log_parser_strategy import BGLLogParser
 from datasets_evaluation.src.parsers.edgar_log_parser_strategy import EdgarLogParserStrategy
 from datasets_evaluation.src.parsers.hdfs1_log_parser_strategy import HDFS1LogParserStrategy
 from datasets_evaluation.src.parsers.hdfs2_log_parser_strategy import HDFS2LogParserStrategy
-from datasets_evaluation.src.parsers.mooc_log_parser_strategy import MoocLogParserStrategy
 from datasets_evaluation.src.parsers.obama_visitor_log_parser_strategy import ObamaVisitorLogParserStrategy
 from datasets_evaluation.src.parsers.parser import Parser
 from datasets_evaluation.src.parsers.parser_commons import ParserCommons
@@ -67,7 +66,6 @@ class ParserStrategyProviders(DeclarativeContainer):
     thunderbird_log_parser_strategy = Singleton(ThunderbirdLogParserStrategy, ParserCommonsProviders.parser_commons())
     windows_log_parser_strategy = Singleton(WindowsLogParserStrategy, ParserCommonsProviders.parser_commons())
     ad_click_on_taobao_log_parser_strategy = Singleton(AdClickOnTaobaoLogParserStrategy, ParserCommonsProviders.parser_commons())
-    mooc_log_parser_strategy = Singleton(MoocLogParserStrategy, ParserCommonsProviders.parser_commons())
     obama_visitor_log_parser_strategy = Singleton(ObamaVisitorLogParserStrategy, ParserCommonsProviders.parser_commons())
     recommender_click_logs_sowiport_log_parser_strategy = \
         Singleton(RecommenderClickLogsSowiportLogParserStrategy, ParserCommonsProviders.parser_commons())
@@ -159,12 +157,14 @@ class TypeProcessorsProviders(DeclarativeContainer):
     })
 
 
-class FieldDispatcherProviders(DeclarativeContainer):
-    field_dispatcher = Singleton(FieldDispatcher, TypeProcessorsProviders.type_processors())
+class TypeDispatcherProviders(DeclarativeContainer):
+    type_dispatcher = Singleton(TypeDispatcher,
+                                TypeProcessorsProviders.type_processors(),
+                                SparkConfigurationProviders.spark_configuration())
 
 
-class RowDispatcherProviders(DeclarativeContainer):
-    row_dispatcher = Singleton(RowDispatcher, FieldDispatcherProviders.field_dispatcher())
+class ColumnDispatcherProviders(DeclarativeContainer):
+    column_dispatcher = Singleton(ColumnDispatcher, TypeDispatcherProviders.type_dispatcher())
 
 
 class ResultsToTableRowsProviders(DeclarativeContainer):
@@ -185,7 +185,9 @@ class ResultsFormatterProviders(DeclarativeContainer):
 
 
 class CheckpointerProviders(DeclarativeContainer):
-    persistent_checkpointer = Singleton(PersistentCheckpointer, CallTrackerProviders.stateful_call_tracker())
+    persistent_checkpointer = Singleton(PersistentCheckpointer,
+                                        SparkConfigurationProviders.spark_configuration(),
+                                        CallTrackerProviders.stateful_call_tracker())
     stateful_workflow_breaker_checkpointer = Singleton(StatefulWorkflowBreakerCheckpointer,
                                                        SparkConfigurationProviders.spark_configuration(),
                                                        CallTrackerProviders.stateful_call_tracker())
@@ -194,11 +196,12 @@ class CheckpointerProviders(DeclarativeContainer):
 class LoggerProviders(DeclarativeContainer):
     logger_initializer = Singleton(LoggerInitializer)
 
+
 class ApplicationInitializationProviders(DeclarativeContainer):
     application_initialization = Singleton(ApplicationInitialization,
                                            spark_configuration=SparkConfigurationProviders.spark_configuration(),
                                            rdd_reader=RDDReaderProviders.rdd_text_reader(),
-                                           row_dispatcher=RowDispatcherProviders.row_dispatcher(),
+                                           column_dispatcher=ColumnDispatcherProviders.column_dispatcher(),
                                            tuple_processor=ProcessorsProviders.tuple_processor(),
                                            column_statistics_calculator=ColumnStatisticsCalculatorProviders.column_statistics_calculator(),
                                            results_viewer=ResultsViewerProviders.csv_viewer(),
