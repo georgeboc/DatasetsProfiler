@@ -15,4 +15,5 @@ class CSViewer:
         table_rows = self._results_to_table_rows.get_table_rows(results)
         for table_row in table_rows:
             table += self.SEPARATOR.join(str(element) for element in table_row) + self.BREAK_LINE
+        table += self.BREAK_LINE
         data_writer_interface.write_all(table)
