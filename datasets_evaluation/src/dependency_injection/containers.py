@@ -24,6 +24,7 @@ from datasets_evaluation.src.parsers.bgl_log_parser_strategy import BGLLogParser
 from datasets_evaluation.src.parsers.edgar_log_parser_strategy import EdgarLogParserStrategy
 from datasets_evaluation.src.parsers.hdfs1_log_parser_strategy import HDFS1LogParserStrategy
 from datasets_evaluation.src.parsers.hdfs2_log_parser_strategy import HDFS2LogParserStrategy
+from datasets_evaluation.src.parsers.mooc_log_parser_strategy import MoocLogParserStrategy
 from datasets_evaluation.src.parsers.obama_visitor_log_parser_strategy import ObamaVisitorLogParserStrategy
 from datasets_evaluation.src.parsers.parser import Parser
 from datasets_evaluation.src.parsers.parser_commons import ParserCommons
@@ -66,6 +67,7 @@ class ParserStrategyProviders(DeclarativeContainer):
     thunderbird_log_parser_strategy = Singleton(ThunderbirdLogParserStrategy, ParserCommonsProviders.parser_commons())
     windows_log_parser_strategy = Singleton(WindowsLogParserStrategy, ParserCommonsProviders.parser_commons())
     ad_click_on_taobao_log_parser_strategy = Singleton(AdClickOnTaobaoLogParserStrategy, ParserCommonsProviders.parser_commons())
+    mooc_log_parser_strategy = Singleton(MoocLogParserStrategy, ParserCommonsProviders.parser_commons())
     obama_visitor_log_parser_strategy = Singleton(ObamaVisitorLogParserStrategy, ParserCommonsProviders.parser_commons())
     recommender_click_logs_sowiport_log_parser_strategy = \
         Singleton(RecommenderClickLogsSowiportLogParserStrategy, ParserCommonsProviders.parser_commons())
