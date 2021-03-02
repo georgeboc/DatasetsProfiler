@@ -45,7 +45,7 @@ class Parser:
         def wrapper(*args, **kwargs):
             try:
                 return function(*args, **kwargs)
-            except ValueError as e:
+            except ValueError:
                 LOGGER.exception(f"Exception in parser")
         return wrapper
 
