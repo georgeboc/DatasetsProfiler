@@ -32,4 +32,4 @@ class ProcessorsOperationsFlags:
     timestamp_processor_calculate_timestamp_entropy_is_enabled:             bool = True
     timestamp_processor_get_delta_time_in_seconds_statistics_is_enabled:    bool = True
 
-    tuple_processor_calculate_tuple_entropy_is_enabled:                     bool = True
+    tuple_processor_calculate_tuple_entropy_is_enabled:                     bool = False
