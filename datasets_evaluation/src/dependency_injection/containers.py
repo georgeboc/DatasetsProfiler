@@ -17,7 +17,7 @@ from datasets_evaluation.src.interfaces.readers.cli_reader import CLIReader
 from datasets_evaluation.src.interfaces.readers.file_reader import FileReader
 from datasets_evaluation.src.interfaces.writers.cli_writer import CLIWriter
 from datasets_evaluation.src.interfaces.writers.file_writer import FileWriter
-from datasets_evaluation.src.logger.logger_initializer import LoggerInitializer
+from datasets_evaluation.src.logs.log_initializer import LogInitializer
 from datasets_evaluation.src.parameters.parameters_reader import ParametersReader
 from datasets_evaluation.src.parsers.android_log_parser_strategy import AndroidLogParserStrategy
 from datasets_evaluation.src.parsers.bgl_log_parser_strategy import BGLLogParserStrategy
@@ -195,8 +195,8 @@ class CheckpointerProviders(DeclarativeContainer):
                                                        CallTrackerProviders.stateful_call_tracker())
 
 
-class LoggerProviders(DeclarativeContainer):
-    logger_initializer = Singleton(LoggerInitializer)
+class LogProviders(DeclarativeContainer):
+    log_initializer = Singleton(LogInitializer)
 
 
 class ApplicationInitializationProviders(DeclarativeContainer):
@@ -225,4 +225,4 @@ class RepetitiveExecutionProviders(DeclarativeContainer):
                                      ApplicationProviders.application(),
                                      ParametersReaderProviders.parameters_reader_providers(),
                                      InterfaceProviders,
-                                     LoggerProviders.logger_initializer())
+                                     LogProviders.log_initializer())

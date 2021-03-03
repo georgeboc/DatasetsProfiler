@@ -1,7 +1,7 @@
 from logging import getLogger
 
 
-LOGGER = getLogger(__name__)
+LOG = getLogger(__name__)
 
 
 class TypeDispatcher:
@@ -13,9 +13,9 @@ class TypeDispatcher:
 
     def dispatch(self, column_rdd, column_data_type):
         processor = self._type_processors[column_data_type]
-        LOGGER.info(f"Processing column RDD with {column_data_type} type by {processor.__class__.__name__} processor")
+        LOG.info(f"Processing column RDD with {column_data_type} type by {processor.__class__.__name__} processor")
         result = processor.process(column_rdd)
-        LOGGER.info(f"Processing of column RDD with {column_data_type} type by {processor.__class__.__name__} processor has finished")
-        LOGGER.info("Clearing spark cache")
+        LOG.info(f"Processing of column RDD with {column_data_type} type by {processor.__class__.__name__} processor has finished")
+        LOG.info("Clearing spark cache")
         self._spark_configuration.get_spark_session().catalog.clearCache()
         return result

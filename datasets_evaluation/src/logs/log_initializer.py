@@ -3,7 +3,7 @@ from datetime import datetime
 import os
 
 
-class LoggerInitializer:
+class LogInitializer:
     FORMAT = '%(asctime)-15s [%(levelname)s] line %(lineno)d in %(filename)s %(module)s: %(message)s'
     FILENAME_PREFIX = "datasets_evaluation"
 

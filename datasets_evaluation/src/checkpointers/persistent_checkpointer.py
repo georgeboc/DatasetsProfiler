@@ -3,7 +3,7 @@ from datasets_evaluation.src.instrumentation.call_tracker import instrument_call
 
 from logging import getLogger
 
-LOGGER = getLogger(__name__)
+LOG = getLogger(__name__)
 
 
 class PersistentCheckpointer:
@@ -13,9 +13,9 @@ class PersistentCheckpointer:
 
     @instrument_call
     def checkpoint(self, data_frame):
-        LOGGER.info("Clearing spark cache")
+        LOG.info("Clearing spark cache")
         self._spark_configuration.get_spark_session().catalog.clearCache()
-        LOGGER.info("Persisting data frame in memory and disk")
+        LOG.info("Persisting data frame in memory and disk")
         data_frame.rdd.persist(StorageLevel.MEMORY_AND_DISK)
         return data_frame
 

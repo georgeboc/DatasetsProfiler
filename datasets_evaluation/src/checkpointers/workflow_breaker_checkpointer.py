@@ -4,7 +4,7 @@ from datasets_evaluation.src.instrumentation.call_tracker import instrument_call
 
 from logging import getLogger
 
-LOGGER = getLogger(__name__)
+LOG = getLogger(__name__)
 
 
 class StatefulWorkflowBreakerCheckpointer:
@@ -18,12 +18,12 @@ class StatefulWorkflowBreakerCheckpointer:
     @instrument_call
     def checkpoint(self, data_frame):
         checkpoint_name = self._get_filename(data_frame)
-        LOGGER.info("Saving data frame as parquet file and breaking workflow")
+        LOG.info("Saving data frame as parquet file and breaking workflow")
         data_frame.write.save(checkpoint_name, format="parquet", mode="overwrite")
         self._created_checkpoints.append(checkpoint_name)
-        LOGGER.info("Clearing spark cache")
+        LOG.info("Clearing spark cache")
         self._spark_configuration.get_spark_session().catalog.clearCache()
-        LOGGER.info("Reading data frame as parquet file")
+        LOG.info("Reading data frame as parquet file")
         return self._spark_configuration.get_spark_session().read.parquet(checkpoint_name)
 
     def clean_all_checkpoints(self):

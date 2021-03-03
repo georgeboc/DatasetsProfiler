@@ -5,7 +5,7 @@ from logging import getLogger
 from typing import Any
 
 
-LOGGER = getLogger(__name__)
+LOG = getLogger(__name__)
 
 
 @dataclass
@@ -46,7 +46,7 @@ class Parser:
             try:
                 return function(*args, **kwargs)
             except ValueError:
-                LOGGER.exception(f"Exception in parser")
+                LOG.exception(f"Exception in parser for input args={args}, kwargs={kwargs}")
         return wrapper
 
     def _assign_schema(self, rdd, columns_params: list):
