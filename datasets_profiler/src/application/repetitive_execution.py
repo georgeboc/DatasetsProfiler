@@ -19,8 +19,8 @@ class RepetitiveExecution:
         control_writer_interface = self._interface_providers.control_writer_interface()
         control_reader_interface = self._interface_providers.control_reader_interface()
 
-        control_writer_interface.write_line(f"Introduce path of parameters_list file: ")
-        parameters_list_file_path = control_reader_interface.read_line()
+        control_writer_interface.write_line(f"Introduce path of parameters file: ")
+        parameters_file_path = control_reader_interface.read_line()
 
         control_writer_interface.write_line(f"Introduce path of log directory (default is {self.DEFAULT_LOG_FOLDER}): ")
         log_directory_path = control_reader_interface.read_line()
@@ -28,13 +28,13 @@ class RepetitiveExecution:
         self._log_initializer.initialize(log_directory_path if log_directory_path else self.DEFAULT_LOG_FOLDER)
         log = getLogger(__name__)
 
-        data_reader_interface = self._interface_providers.data_reader_interface(parameters_list_file_path)
+        data_reader_interface = self._interface_providers.data_reader_interface(parameters_file_path)
         log.info("Datasets evaluation application successfully initialized")
 
         exceptions_raised = []
         log.info("Getting parameters list")
-        parameters_list = self._parameters_reader.get_parameters_list(data_reader_interface)
-        for parameters in parameters_list:
+        parameters = self._parameters_reader.get_parameters(data_reader_interface)
+        for parameters in parameters:
             control_writer_interface.write_line(
                 self._paint(f"Running application with input path: {parameters.input_path}", self.BLUE_COLOR))
             log.info(f"Running application with following parameters: {parameters}")

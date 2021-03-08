@@ -1,13 +1,11 @@
 .idea/**
 DatasetsProfiler.egg-info/**
 **/__pycache__/**
-test/**
 build/**
 dist/**
 input/**
 output/**
 temporal/**
 scripts/**
-profiles/**
-parameters_lists/**
+parameters/**
 log/**
