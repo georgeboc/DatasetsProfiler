@@ -1,8 +1,7 @@
 class ColumnDispatcher:
-    def __init__(self, type_dispatcher):
-        self._type_dispatcher = type_dispatcher
+    def __init__(self, specific_dispatcher):
+        self._specific_dispatcher = specific_dispatcher
 
-    def dispatch(self, data_frame, column_data_types):
+    def dispatch(self, data_frame):
         columns = data_frame.columns
-        return [self._type_dispatcher.dispatch(data_frame.select(columns[column_number]).rdd, data_type)
-                for column_number, data_type in enumerate(column_data_types)]
+        return [self._specific_dispatcher.dispatch(data_frame.select(column)) for column in columns]

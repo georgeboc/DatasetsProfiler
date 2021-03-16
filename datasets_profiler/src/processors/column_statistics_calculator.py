@@ -75,17 +75,12 @@ class ColumnStatisticsCalculator:
     def calculate_entropy(self, key_value_rdd_cached):
         if key_value_rdd_cached.isEmpty():
             return None
-        count_by_value_rdd = self.count_by_value_rdd(key_value_rdd_cached)
+        count_by_value_rdd = self._count_by_value_rdd(key_value_rdd_cached)
         rows_count = key_value_rdd_cached.count()
         probabilities_rdd = count_by_value_rdd.map(lambda row: self._map_frequencies_to_probabilities(row, rows_count))
         ponderated_information_quantity_rdd = probabilities_rdd.map(self._map_probabilities_to_ponderated_information_quantity)
         _, entropy = ponderated_information_quantity_rdd.reduceByKey(self._sum_reducer).first()
         return entropy
-
-    @instrument_call
-    def count_by_value_rdd(self, key_value_rdd):
-        map_rdd = key_value_rdd.map(lambda row: (row[1], 1))
-        return map_rdd.reduceByKey(self._sum_reducer)
 
     def _sum_count_combiner(self, sum_count, value):
         sum, count = sum_count
@@ -113,6 +108,10 @@ class ColumnStatisticsCalculator:
 
     def _squared_deviation(self, value, average):
         return (value - average) ** 2
+
+    def _count_by_value_rdd(self, key_value_rdd):
+        map_rdd = key_value_rdd.map(lambda row: (row[1], 1))
+        return map_rdd.reduceByKey(self._sum_reducer)
 
     def _sum_reducer(self, value1, value2):
         return value1 + value2

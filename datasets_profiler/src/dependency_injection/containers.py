@@ -44,7 +44,7 @@ from datasets_profiler.src.processors.string_processor import StringProcessor
 from datasets_profiler.src.processors.timestamp_processor import TimestampProcessor
 from datasets_profiler.src.processors.tuple_processor import TupleProcessor
 from datasets_profiler.src.rdd_readers.rdd_text_reader import RDDTextReader
-from datasets_profiler.src.results_formatters.formatters.default_formatter import DefaultFormatter
+from datasets_profiler.src.results_formatters.formatters.string_formatter import StringFormatter
 from datasets_profiler.src.results_formatters.formatters.no_year_datetime_formatter import NoYearDatetimeFormatter
 from datasets_profiler.src.results_formatters.results_formatter import DictionaryFormatter, ResultsFormatter
 from datasets_profiler.src.serializers_deserializers.avro_dataframe_serializer_deserializer import AvroDataFrameSerializerDeserializer
@@ -93,7 +93,7 @@ class CallTrackerProviders(DeclarativeContainer):
 
 
 class FormatterProviders(DeclarativeContainer):
-    default_formatter = Singleton(DefaultFormatter)
+    string_formatter = Singleton(StringFormatter)
     no_year_datetime_formatter = Singleton(NoYearDatetimeFormatter)
 
 

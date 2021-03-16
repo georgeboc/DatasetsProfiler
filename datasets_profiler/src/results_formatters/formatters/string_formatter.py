@@ -1,7 +1,7 @@
 from typing import Any
 
 
-class DefaultFormatter:
+class StringFormatter:
     def format(self, element):
         return str(element)
 
