@@ -13,6 +13,7 @@ from datasets_profiler.src.configuration.spark_configuration import SparkConfigu
 from datasets_profiler.src.dispatchers.type_dispatcher import TypeDispatcher
 from datasets_profiler.src.dispatchers.column_dispatcher import ColumnDispatcher
 from datasets_profiler.src.instrumentation.call_tracker import StatefulCallTracker
+from datasets_profiler.src.interfaces.readers.argument_reader import ArgumentReader
 from datasets_profiler.src.interfaces.readers.cli_reader import CLIReader
 from datasets_profiler.src.interfaces.readers.file_reader import FileReader
 from datasets_profiler.src.interfaces.writers.cli_writer import CLIWriter
@@ -46,7 +47,11 @@ from datasets_profiler.src.rdd_readers.rdd_text_reader import RDDTextReader
 from datasets_profiler.src.results_formatters.formatters.default_formatter import DefaultFormatter
 from datasets_profiler.src.results_formatters.formatters.no_year_datetime_formatter import NoYearDatetimeFormatter
 from datasets_profiler.src.results_formatters.results_formatter import DictionaryFormatter, ResultsFormatter
-from datasets_profiler.src.serializer_deserializer.json_serializer_deserializer import JsonSerializerDeserializer
+from datasets_profiler.src.serializers_deserializers.avro_dataframe_serializer_deserializer import AvroDataFrameSerializerDeserializer
+from datasets_profiler.src.serializers_deserializers.csv_serializer_deserializer import CSVSerializerDeserializer
+from datasets_profiler.src.serializers_deserializers.json_serializer_deserializer import JsonSerializerDeserializer
+from datasets_profiler.src.serializers_deserializers.parquet_dataframe_serializer_deserializer import \
+    ParquetDataframeSerializerDeserializer
 from datasets_profiler.src.view.csviewer import CSViewer
 from datasets_profiler.src.view.pretty_table_viewer import PrettyTableViewer
 from datasets_profiler.src.view.results_to_table_rows import ResultsToTableRows
@@ -133,6 +138,10 @@ class RDDReaderProviders(DeclarativeContainer):
 
 class SerializerDeserializerProviders(DeclarativeContainer):
     json_serializer_deserializer = Singleton(JsonSerializerDeserializer)
+    csv_serializer_deserializer = Singleton(CSVSerializerDeserializer)
+
+    avro_dataframe_serializer_deserializer = Singleton(AvroDataFrameSerializerDeserializer, SparkConfigurationProviders.spark_configuration())
+    parquet_dataframe_serializer_deserializer = Singleton(ParquetDataframeSerializerDeserializer, SparkConfigurationProviders.spark_configuration())
 
 
 class ParametersReaderProviders(DeclarativeContainer):
@@ -141,7 +150,8 @@ class ParametersReaderProviders(DeclarativeContainer):
 
 
 class InterfaceProviders(DeclarativeContainer):
-    control_reader_interface = Factory(CLIReader, sys.stdin)
+    control_reader_interface = Factory(ArgumentReader)
+    # control_reader_interface = Factory(CLIReader, sys.stdin)
     control_writer_interface = Factory(CLIWriter, sys.stderr)
     data_reader_interface = Factory(FileReader)
     data_writer_interface = Factory(FileWriter)
@@ -174,7 +184,8 @@ class ResultsToTableRowsProviders(DeclarativeContainer):
 
 
 class ResultsViewerProviders(DeclarativeContainer):
-    csv_viewer = Singleton(CSViewer, ResultsToTableRowsProviders.results_to_table_rows())
+    csv_viewer = Singleton(CSViewer, ResultsToTableRowsProviders.results_to_table_rows(),
+                           SerializerDeserializerProviders.csv_serializer_deserializer())
     pretty_table_viewer = Singleton(PrettyTableViewer, ResultsToTableRowsProviders.results_to_table_rows())
 
 
@@ -191,7 +202,7 @@ class CheckpointerProviders(DeclarativeContainer):
                                         SparkConfigurationProviders.spark_configuration(),
                                         CallTrackerProviders.stateful_call_tracker())
     stateful_workflow_breaker_checkpointer = Singleton(StatefulWorkflowBreakerCheckpointer,
-                                                       SparkConfigurationProviders.spark_configuration(),
+                                                       SerializerDeserializerProviders.parquet_dataframe_serializer_deserializer(),
                                                        CallTrackerProviders.stateful_call_tracker())
 
 

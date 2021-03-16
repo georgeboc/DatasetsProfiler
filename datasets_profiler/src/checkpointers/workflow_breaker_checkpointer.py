@@ -10,21 +10,19 @@ LOG = getLogger(__name__)
 class StatefulWorkflowBreakerCheckpointer:
     SWAP_HDFS_PATH = "../temporal/checkpoint"
 
-    def __init__(self, spark_configuration, call_tracker):
-        self._spark_configuration = spark_configuration
+    def __init__(self, dataframe_serializer_deserializer, call_tracker):
+        self._dataframe_serializer_deserializer = dataframe_serializer_deserializer
         self._call_tracker = call_tracker
         self._created_checkpoints = []
 
     @instrument_call
     def checkpoint(self, data_frame):
         checkpoint_name = self._get_filename(data_frame)
-        LOG.info("Saving data frame as parquet file and breaking workflow")
-        data_frame.write.save(checkpoint_name, format="parquet", mode="overwrite")
+        LOG.info("Serializing to a file the data frame and breaking workflow")
+        self._dataframe_serializer_deserializer.serialize(data_frame, checkpoint_name)
         self._created_checkpoints.append(checkpoint_name)
-        LOG.info("Clearing spark cache")
-        self._spark_configuration.get_spark_session().catalog.clearCache()
-        LOG.info("Reading data frame as parquet file")
-        return self._spark_configuration.get_spark_session().read.parquet(checkpoint_name)
+        LOG.info("Deserializing from a file the data frame as resuming workflow")
+        return self._dataframe_serializer_deserializer.deserialize(checkpoint_name)
 
     def clean_all_checkpoints(self):
         for created_checkpoint in self._created_checkpoints:

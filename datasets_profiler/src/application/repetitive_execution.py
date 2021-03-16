@@ -7,7 +7,7 @@ class RepetitiveExecution:
     CYAN_COLOR = "\033[36m"
     RED_COLOR = "\033[0;31m"
     END_COLOR = "\033[0m"
-    DEFAULT_LOG_FOLDER = "/files/DatasetsProfiler/log"
+    DEFAULT_LOG_FOLDER = "/files/datasets_profiler/log"
 
     def __init__(self, application, parameters_reader, interface_providers, log_initializer):
         self._application = application
@@ -27,13 +27,11 @@ class RepetitiveExecution:
 
         self._log_initializer.initialize(log_directory_path if log_directory_path else self.DEFAULT_LOG_FOLDER)
         log = getLogger(__name__)
-
-        data_reader_interface = self._interface_providers.data_reader_interface(parameters_file_path)
         log.info("Datasets evaluation application successfully initialized")
 
         exceptions_raised = []
         log.info("Getting parameters list")
-        parameters = self._parameters_reader.get_parameters(data_reader_interface)
+        parameters = self._parameters_reader.get_parameters(parameters_file_path)
         for parameters in parameters:
             control_writer_interface.write_line(
                 self._paint(f"Running application with input path: {parameters.input_path}", self.BLUE_COLOR))

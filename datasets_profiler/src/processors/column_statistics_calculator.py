@@ -111,7 +111,7 @@ class ColumnStatisticsCalculator:
         max = max2
         if min1 > min2:
             min = min2
-        if max1 > max2:
+        if max1 < max2:
             max = max2
         return min, max
 

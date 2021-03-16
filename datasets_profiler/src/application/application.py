@@ -27,14 +27,13 @@ class Application:
         LOG.info("Parsing input RDD")
         parser_result = parser.parse(input_rdd)
 
-        data_writer_interface = self._get_data_writer_interface(parameters)
-        self._emit_parser_statistics(parser_result.parser_statistics, data_writer_interface)
+        self._emit_parser_statistics(parser_result.parser_statistics, parameters.output_path)
         LOG.info("Checkpointing parsed data frame")
         checkpointed_parsed_data_frame = self._application_initialization.checkpointer.checkpoint(parser_result.parsed_data_frame)
-        self._emit_columnar_statistics(checkpointed_parsed_data_frame, formatters, data_writer_interface)
-        self._emit_table_statistics(checkpointed_parsed_data_frame, data_writer_interface)
+        self._emit_columnar_statistics(checkpointed_parsed_data_frame, formatters, parameters.output_path)
+        self._emit_table_statistics(checkpointed_parsed_data_frame, parameters.output_path)
 
-        self._emit_execution_statistics(data_writer_interface)
+        self._emit_execution_statistics(parameters.output_path)
 
         LOG.info("Cleaning all checkpoints")
         self._application_initialization.checkpointer.clean_all_checkpoints()
@@ -42,9 +41,6 @@ class Application:
         self._application_initialization.spark_configuration.get_spark_session().catalog.clearCache()
         LOG.info("Clearing call tracker state")
         self._call_tracker.clear_state()
-
-    def _get_data_writer_interface(self, parameters):
-        return self._application_initialization.interface_providers.data_writer_interface(parameters.output_path)
 
     def _get_input_rdd(self, parameters):
         spark_session = self._application_initialization.spark_configuration.get_spark_session()
@@ -57,24 +53,25 @@ class Application:
         return self._application_initialization.parser_providers.parser(parameters.parser)
 
     def _get_formatters(self, parameters):
-        return None if parameters.formatters is None else [self._application_initialization.formatter_providers.providers[formatter]()
-                                                           for formatter in parameters.formatters]
+        return None if parameters.formatters is None \
+            else [self._application_initialization.formatter_providers.providers[formatter]()
+                  for formatter in parameters.formatters]
 
-    def _emit_parser_statistics(self, parser_statistics, data_writer_interface):
+    def _emit_parser_statistics(self, parser_statistics, output_file_path):
         LOG.info("Emitting parser statistics")
         result = Result(dictionary=asdict(parser_statistics))
-        self._application_initialization.results_viewer.print_result(result, self.PARSER_STATISTICS, data_writer_interface)
+        self._application_initialization.results_viewer.print_result(result, self.PARSER_STATISTICS, output_file_path)
 
-    def _emit_table_statistics(self, data_frame, data_writer_interface):
+    def _emit_table_statistics(self, data_frame, output_file_path):
         rdd = data_frame.rdd
         LOG.info("Calculating table statistics")
         dataset_results = self._application_initialization.tuple_processor.process(rdd)
         result = Result(dictionary=asdict(dataset_results))
         LOG.info("Sending table statistics to results viewer")
-        self._application_initialization.results_viewer.print_result(result, self.TABLE_RESULTS, data_writer_interface)
+        self._application_initialization.results_viewer.print_result(result, self.TABLE_RESULTS, output_file_path)
 
     @instrument_call
-    def _emit_columnar_statistics(self, data_frame, formatters, data_writer_interface):
+    def _emit_columnar_statistics(self, data_frame, formatters, output_file_path):
         column_types = [type for field_name, type in data_frame.dtypes]
         LOG.info("Calculating columnar statistics")
         LOG.info("Dispatching columns")
@@ -85,12 +82,10 @@ class Application:
         self._application_initialization.results_viewer.print_results(formatted_results,
                                                                       self.STATISTICAL_PROFILE,
                                                                       data_frame.schema.names,
-                                                                      data_writer_interface)
+                                                                      output_file_path)
 
-    def _emit_execution_statistics(self, data_writer_interface):
+    def _emit_execution_statistics(self, output_file_path):
         call_trackers_dictionary = self._call_tracker.get_call_trackers_dictionary()
         result = Result(dictionary=call_trackers_dictionary)
         LOG.info("Sending execution statistics to results viewer")
-        self._application_initialization.results_viewer.print_result(result,
-                                                                     self.EXECUTION_CALL_TRACKER,
-                                                                     data_writer_interface)
+        self._application_initialization.results_viewer.print_result(result, self.EXECUTION_CALL_TRACKER, output_file_path)
