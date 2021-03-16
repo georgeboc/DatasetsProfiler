@@ -52,6 +52,7 @@ from datasets_profiler.src.serializers_deserializers.csv_serializer_deserializer
 from datasets_profiler.src.serializers_deserializers.json_serializer_deserializer import JsonSerializerDeserializer
 from datasets_profiler.src.serializers_deserializers.parquet_dataframe_serializer_deserializer import \
     ParquetDataframeSerializerDeserializer
+from datasets_profiler.src.use_cases.get_description import GetDescription
 from datasets_profiler.src.view.csviewer import CSViewer
 from datasets_profiler.src.view.pretty_table_viewer import PrettyTableViewer
 from datasets_profiler.src.view.results_to_table_rows import ResultsToTableRows
@@ -225,10 +226,18 @@ class ApplicationInitializationProviders(DeclarativeContainer):
                                            interface_providers=InterfaceProviders)
 
 
+class UseCaseProviders(DeclarativeContainer):
+    get_description = Singleton(GetDescription,
+                                ApplicationInitializationProviders.application_initialization(),
+                                CallTrackerProviders.stateful_call_tracker())
+
+    @classmethod
+    def get_use_case(cls, use_case):
+        return cls.providers[use_case]()
+
+
 class ApplicationProviders(DeclarativeContainer):
-    application = Singleton(Application,
-                            ApplicationInitializationProviders.application_initialization(),
-                            CallTrackerProviders.stateful_call_tracker())
+    application = Singleton(Application, UseCaseProviders)
 
 
 class RepetitiveExecutionProviders(DeclarativeContainer):
