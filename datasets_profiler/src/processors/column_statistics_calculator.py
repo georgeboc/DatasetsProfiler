@@ -1,4 +1,4 @@
-import math
+from math import sqrt, log2
 
 from datasets_profiler.src.configuration.execute_if_flag_is_enabled import execute_if_flag_is_enabled
 from datasets_profiler.src.instrumentation.call_tracker import instrument_call
@@ -33,7 +33,7 @@ class ColumnStatisticsCalculator:
     def _calculate_standard_deviation(self, variance):
         if variance is None:
             return None
-        return math.sqrt(variance)
+        return sqrt(variance)
 
     @execute_if_flag_is_enabled("column_statistics_calculate_min_max_is_enabled")
     @instrument_call
@@ -64,7 +64,7 @@ class ColumnStatisticsCalculator:
         if key_value_rdd_cached.isEmpty() or average is None or count is None:
             return None
         squared_deviation_rdd = key_value_rdd_cached.mapValues(lambda value: self._squared_deviation(value, average))
-        added_squared_deviations_rdd = squared_deviation_rdd.reduceByKey(lambda a, b: a + b)
+        added_squared_deviations_rdd = squared_deviation_rdd.reduceByKey(self._sum_reducer)
         variance_rdd = added_squared_deviations_rdd.mapValues(lambda added_squared_deviations:
                                                               added_squared_deviations / count)
         _, variance = variance_rdd.first()
@@ -75,11 +75,17 @@ class ColumnStatisticsCalculator:
     def calculate_entropy(self, key_value_rdd_cached):
         if key_value_rdd_cached.isEmpty():
             return None
-        frequencies = key_value_rdd_cached.countByValue().values()
+        count_by_value_rdd = self.count_by_value_rdd(key_value_rdd_cached)
         rows_count = key_value_rdd_cached.count()
-        probabilites = map(lambda frequency: frequency/rows_count, frequencies)
-        ponderated_information_quantity = map(lambda probability: probability*math.log2(1/probability), probabilites)
-        return sum(ponderated_information_quantity)
+        probabilities_rdd = count_by_value_rdd.map(lambda row: self._map_frequencies_to_probabilities(row, rows_count))
+        ponderated_information_quantity_rdd = probabilities_rdd.map(self._map_probabilities_to_ponderated_information_quantity)
+        _, entropy = ponderated_information_quantity_rdd.reduceByKey(self._sum_reducer).first()
+        return entropy
+
+    @instrument_call
+    def count_by_value_rdd(self, key_value_rdd):
+        map_rdd = key_value_rdd.map(lambda row: (row[1], 1))
+        return map_rdd.reduceByKey(self._sum_reducer)
 
     def _sum_count_combiner(self, sum_count, value):
         sum, count = sum_count
@@ -97,23 +103,25 @@ class ColumnStatisticsCalculator:
     def _min_max_combiner(self, min_max, value):
         if min_max == self.ZERO_PAIR_INITIAL_VALUE:
             return (value, value)
-        min, max = min_max
-        if value < min:
-            min = value
-        if value > max:
-            max = value
-        return min, max
+        min_value, max_value = min_max
+        return min(min_value, value), max(max_value, value)
 
     def _min_max_reducer(self, min_max1, min_max2):
         min1, max1 = min_max1
         min2, max2 = min_max2
-        min = min1
-        max = max2
-        if min1 > min2:
-            min = min2
-        if max1 < max2:
-            max = max2
-        return min, max
+        return min(min1, min2), max(max1, max2)
 
     def _squared_deviation(self, value, average):
         return (value - average) ** 2
+
+    def _sum_reducer(self, value1, value2):
+        return value1 + value2
+
+    def _map_frequencies_to_probabilities(self, value_frequency, rows_count):
+        _, frequency = value_frequency
+        return (frequency / rows_count,)
+
+    def _map_probabilities_to_ponderated_information_quantity(self, probability_row):
+        probability = probability_row[0]
+        return (1, probability * log2(1 / probability))
+
