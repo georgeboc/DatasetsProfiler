@@ -224,7 +224,6 @@ class ResultsFormatterProviders(DeclarativeContainer):
 
 class CheckpointerProviders(DeclarativeContainer):
     persistent_checkpointer = Singleton(PersistentCheckpointer,
-                                        SparkConfigurationProviders.spark_configuration(),
                                         CallTrackerProviders.stateful_call_tracker())
     workflow_breaker_checkpointer = Singleton(WorkflowBreakerCheckpointer,
                                               SerializerDeserializerProviders.parquet_dataframe_serializer_deserializer(),

@@ -7,14 +7,11 @@ LOG = getLogger(__name__)
 
 
 class PersistentCheckpointer:
-    def __init__(self, spark_configuration, call_tracker):
-        self._spark_configuration = spark_configuration
+    def __init__(self, call_tracker):
         self._call_tracker = call_tracker
 
     @instrument_call
     def checkpoint(self, data_frame, preferred_path=None):
-        LOG.info("Clearing spark cache")
-        self._spark_configuration.get_spark_session().catalog.clearCache()
         LOG.info("Persisting data frame in memory and disk")
         data_frame.rdd.persist(StorageLevel.MEMORY_AND_DISK)
         return data_frame

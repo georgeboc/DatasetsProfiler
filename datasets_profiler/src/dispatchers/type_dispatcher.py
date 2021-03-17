@@ -17,6 +17,4 @@ class TypeDispatcher:
         LOG.info(f"Processing column RDD with {column_type} type by {processor.__class__.__name__} processor")
         result = processor.process(column_data_frame.rdd)
         LOG.info(f"Processing of column RDD with {column_type} type by {processor.__class__.__name__} processor has finished")
-        LOG.info("Clearing spark cache")
-        self._spark_configuration.get_spark_session().catalog.clearCache()
         return result
