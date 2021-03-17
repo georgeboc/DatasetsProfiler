@@ -6,7 +6,7 @@ class SparkConfiguration:
         return self.get_spark_session().sparkContext
 
     def get_spark_session(self):
-        return SparkSession.builder\
+        spark_session = SparkSession.builder\
             .master("local[*]") \
             .config("spark.driver.maxResultSize", "10g") \
             .config("spark.executor.memory", "16g") \
@@ -14,3 +14,5 @@ class SparkConfiguration:
             .config("spark.memory.offHeap.enabled", True) \
             .config("spark.memory.offHeap.size", "16g") \
             .getOrCreate()
+        spark_session.sparkContext.setLogLevel("ERROR")
+        return spark_session

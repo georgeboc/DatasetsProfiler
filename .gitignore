@@ -6,6 +6,6 @@ dist/**
 input/**
 output/**
 temporal/**
-scripts/**
+scripts/mount.sh
 parameters/**
 log/**

@@ -8,7 +8,8 @@ setup(
     install_requires=[
         "prettytable>=2.0.0",
         "pyspark>=3.0.1",
-        "dependency-injector>=4.19.0"
+        "dependency-injector>=4.19.0",
+        "numpy>=1.20.1"
     ],
     py_modules=['__main__']
     )

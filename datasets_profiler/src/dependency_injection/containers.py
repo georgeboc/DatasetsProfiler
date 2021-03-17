@@ -4,21 +4,22 @@ from dependency_injector.containers import DeclarativeContainer
 from dependency_injector.providers import Singleton, Factory
 
 from datasets_profiler.src.application.application import Application
-from datasets_profiler.src.application.application_initialization import ApplicationInitialization
 from datasets_profiler.src.application.repetitive_execution import RepetitiveExecution
 from datasets_profiler.src.checkpointers.persistent_checkpointer import PersistentCheckpointer
-from datasets_profiler.src.checkpointers.workflow_breaker_checkpointer import StatefulWorkflowBreakerCheckpointer
+from datasets_profiler.src.checkpointers.workflow_breaker_checkpointer import WorkflowBreakerCheckpointer
 from datasets_profiler.src.configuration.processors_operations_flags import ProcessorsOperationsFlags
 from datasets_profiler.src.configuration.spark_configuration import SparkConfiguration
+from datasets_profiler.src.dispatchers.one_processor_dispatcher import OneProcessorDispatcher
 from datasets_profiler.src.dispatchers.type_dispatcher import TypeDispatcher
 from datasets_profiler.src.dispatchers.column_dispatcher import ColumnDispatcher
 from datasets_profiler.src.instrumentation.call_tracker import StatefulCallTracker
 from datasets_profiler.src.interfaces.readers.argument_reader import ArgumentReader
-from datasets_profiler.src.interfaces.readers.cli_reader import CLIReader
 from datasets_profiler.src.interfaces.readers.file_reader import FileReader
 from datasets_profiler.src.interfaces.writers.cli_writer import CLIWriter
 from datasets_profiler.src.interfaces.writers.file_writer import FileWriter
 from datasets_profiler.src.logs.log_initializer import LogInitializer
+from datasets_profiler.src.parameters.get_described_dataset_parameters import GetDescribedDatasetParameters
+from datasets_profiler.src.parameters.get_description_parameters import GetDescriptionParameters
 from datasets_profiler.src.parameters.parameters_reader import ParametersReader
 from datasets_profiler.src.parsers.android_log_parser_strategy import AndroidLogParserStrategy
 from datasets_profiler.src.parsers.bgl_log_parser_strategy import BGLLogParserStrategy
@@ -39,6 +40,7 @@ from datasets_profiler.src.parsers.ubuntu_dialogue_corpus_log_parser_strategy im
 from datasets_profiler.src.parsers.user_logs_v2_log_parser_strategy import UserLogsV2LogParserStrategy
 from datasets_profiler.src.parsers.windows_log_parser_strategy import WindowsLogParserStrategy
 from datasets_profiler.src.processors.column_statistics_calculator import ColumnStatisticsCalculator
+from datasets_profiler.src.processors.count_values_processor import CountValuesProcessor
 from datasets_profiler.src.processors.numeric_processor import NumericProcessor
 from datasets_profiler.src.processors.string_processor import StringProcessor
 from datasets_profiler.src.processors.timestamp_processor import TimestampProcessor
@@ -52,7 +54,8 @@ from datasets_profiler.src.serializers_deserializers.csv_serializer_deserializer
 from datasets_profiler.src.serializers_deserializers.json_serializer_deserializer import JsonSerializerDeserializer
 from datasets_profiler.src.serializers_deserializers.parquet_dataframe_serializer_deserializer import \
     ParquetDataframeSerializerDeserializer
-from datasets_profiler.src.use_cases.get_description import GetDescription
+from datasets_profiler.src.use_cases.get_described_dataset import GetDescribedDataset, GetDescribedDatasetInitialization
+from datasets_profiler.src.use_cases.get_description import GetDescription, GetDescriptionInitialization
 from datasets_profiler.src.view.csviewer import CSViewer
 from datasets_profiler.src.view.pretty_table_viewer import PrettyTableViewer
 from datasets_profiler.src.view.results_to_table_rows import ResultsToTableRows
@@ -86,7 +89,8 @@ class ParserStrategyProviders(DeclarativeContainer):
 class ParserProviders(DeclarativeContainer):
     @staticmethod
     def parser(parser_strategy):
-        return Singleton(Parser, ParserStrategyProviders.providers[parser_strategy]())()
+        return Singleton(Parser, ParserStrategyProviders.providers[parser_strategy](),
+                         SparkConfigurationProviders.spark_configuration())()
 
 
 class CallTrackerProviders(DeclarativeContainer):
@@ -96,6 +100,10 @@ class CallTrackerProviders(DeclarativeContainer):
 class FormatterProviders(DeclarativeContainer):
     string_formatter = Singleton(StringFormatter)
     no_year_datetime_formatter = Singleton(NoYearDatetimeFormatter)
+
+    @classmethod
+    def get_formatter(cls, formatter):
+        return cls.providers[formatter]()
 
 
 class ProcessorsOperationsFlagsProviders(DeclarativeContainer):
@@ -132,6 +140,11 @@ class ProcessorsProviders(DeclarativeContainer):
                                 CallTrackerProviders.stateful_call_tracker(),
                                 ProcessorsOperationsFlagsProviders.processors_operations_flags())
 
+    count_values_processor = Singleton (CountValuesProcessor,
+                                        ColumnStatisticsCalculatorProviders.column_statistics_calculator(),
+                                        SparkConfigurationProviders.spark_configuration(),
+                                        CallTrackerProviders.stateful_call_tracker())
+
 
 class RDDReaderProviders(DeclarativeContainer):
     rdd_text_reader = Singleton(RDDTextReader)
@@ -145,8 +158,16 @@ class SerializerDeserializerProviders(DeclarativeContainer):
     parquet_dataframe_serializer_deserializer = Singleton(ParquetDataframeSerializerDeserializer, SparkConfigurationProviders.spark_configuration())
 
 
+class ParametersClassesProviders(DeclarativeContainer):
+    parameters_classes = Singleton(dict, {
+        "get_described_dataset": GetDescribedDatasetParameters,
+        "get_description": GetDescriptionParameters
+    })
+
+
 class ParametersReaderProviders(DeclarativeContainer):
     parameters_reader_providers = Singleton(ParametersReader,
+                                            ParametersClassesProviders.parameters_classes(),
                                             SerializerDeserializerProviders.json_serializer_deserializer())
 
 
@@ -170,14 +191,17 @@ class TypeProcessorsProviders(DeclarativeContainer):
     })
 
 
-class TypeDispatcherProviders(DeclarativeContainer):
+class DispatcherProviders(DeclarativeContainer):
     type_dispatcher = Singleton(TypeDispatcher,
                                 TypeProcessorsProviders.type_processors(),
                                 SparkConfigurationProviders.spark_configuration())
+    one_processor_dispatcher = Singleton(OneProcessorDispatcher,
+                                         ProcessorsProviders.count_values_processor())
 
 
 class ColumnDispatcherProviders(DeclarativeContainer):
-    column_dispatcher = Singleton(ColumnDispatcher, TypeDispatcherProviders.type_dispatcher())
+    type_column_dispatcher = Singleton(ColumnDispatcher, DispatcherProviders.type_dispatcher())
+    one_processor_column_dispatcher = Singleton(ColumnDispatcher, DispatcherProviders.one_processor_dispatcher())
 
 
 class ResultsToTableRowsProviders(DeclarativeContainer):
@@ -202,34 +226,43 @@ class CheckpointerProviders(DeclarativeContainer):
     persistent_checkpointer = Singleton(PersistentCheckpointer,
                                         SparkConfigurationProviders.spark_configuration(),
                                         CallTrackerProviders.stateful_call_tracker())
-    stateful_workflow_breaker_checkpointer = Singleton(StatefulWorkflowBreakerCheckpointer,
-                                                       SerializerDeserializerProviders.parquet_dataframe_serializer_deserializer(),
-                                                       CallTrackerProviders.stateful_call_tracker())
+    workflow_breaker_checkpointer = Singleton(WorkflowBreakerCheckpointer,
+                                              SerializerDeserializerProviders.parquet_dataframe_serializer_deserializer(),
+                                              CallTrackerProviders.stateful_call_tracker())
 
 
 class LogProviders(DeclarativeContainer):
     log_initializer = Singleton(LogInitializer)
 
 
-class ApplicationInitializationProviders(DeclarativeContainer):
-    application_initialization = Singleton(ApplicationInitialization,
-                                           spark_configuration=SparkConfigurationProviders.spark_configuration(),
-                                           rdd_reader=RDDReaderProviders.rdd_text_reader(),
-                                           column_dispatcher=ColumnDispatcherProviders.column_dispatcher(),
-                                           tuple_processor=ProcessorsProviders.tuple_processor(),
-                                           column_statistics_calculator=ColumnStatisticsCalculatorProviders.column_statistics_calculator(),
-                                           results_viewer=ResultsViewerProviders.csv_viewer(),
-                                           parser_providers=ParserProviders,
-                                           formatter_providers=FormatterProviders,
-                                           results_formatter=ResultsFormatterProviders.results_formatter(),
-                                           checkpointer=CheckpointerProviders.stateful_workflow_breaker_checkpointer(),
-                                           interface_providers=InterfaceProviders)
+class InitializationProviders(DeclarativeContainer):
+    get_described_dataset_initialization = Singleton(GetDescribedDatasetInitialization,
+                                                     spark_configuration=SparkConfigurationProviders.spark_configuration(),
+                                                     rdd_reader=RDDReaderProviders.rdd_text_reader(),
+                                                     column_dispatcher=ColumnDispatcherProviders.one_processor_column_dispatcher(),
+                                                     parser_providers=ParserProviders,
+                                                     checkpointer=CheckpointerProviders.workflow_breaker_checkpointer(),
+                                                     serializer_deserializer=SerializerDeserializerProviders.avro_dataframe_serializer_deserializer())
+    get_description_initialization = Singleton(GetDescriptionInitialization,
+                                               spark_configuration=SparkConfigurationProviders.spark_configuration(),
+                                               rdd_reader=RDDReaderProviders.rdd_text_reader(),
+                                               column_dispatcher=ColumnDispatcherProviders.type_column_dispatcher(),
+                                               tuple_processor=ProcessorsProviders.tuple_processor(),
+                                               column_statistics_calculator=ColumnStatisticsCalculatorProviders.column_statistics_calculator(),
+                                               results_viewer=ResultsViewerProviders.csv_viewer(),
+                                               parser_providers=ParserProviders,
+                                               formatter_providers=FormatterProviders,
+                                               results_formatter=ResultsFormatterProviders.results_formatter(),
+                                               checkpointer=CheckpointerProviders.workflow_breaker_checkpointer())
 
 
 class UseCaseProviders(DeclarativeContainer):
     get_description = Singleton(GetDescription,
-                                ApplicationInitializationProviders.application_initialization(),
+                                InitializationProviders.get_description_initialization(),
                                 CallTrackerProviders.stateful_call_tracker())
+    get_described_dataset = Singleton(GetDescribedDataset,
+                                      InitializationProviders.get_described_dataset_initialization(),
+                                      CallTrackerProviders.stateful_call_tracker())
 
     @classmethod
     def get_use_case(cls, use_case):

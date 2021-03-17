@@ -12,7 +12,7 @@ class PersistentCheckpointer:
         self._call_tracker = call_tracker
 
     @instrument_call
-    def checkpoint(self, data_frame):
+    def checkpoint(self, data_frame, preferred_path=None):
         LOG.info("Clearing spark cache")
         self._spark_configuration.get_spark_session().catalog.clearCache()
         LOG.info("Persisting data frame in memory and disk")

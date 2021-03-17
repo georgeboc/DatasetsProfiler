@@ -22,8 +22,9 @@ class ParserResult:
 
 
 class Parser:
-    def __init__(self, parser_strategy):
+    def __init__(self, parser_strategy, spark_configuration):
         self._parser_strategy = parser_strategy
+        self._spark_configuration = spark_configuration
 
     def parse(self, source_rdd):
         source_rdd_cached = source_rdd.cache()
@@ -51,8 +52,8 @@ class Parser:
 
     def _assign_schema(self, rdd, columns_params: list):
         schema = StructType([StructField(*column_params) for column_params in columns_params])
-        sqlContext = SparkSession.builder.getOrCreate()
-        return sqlContext.createDataFrame(rdd, schema)
+        spark_session = self._spark_configuration.get_spark_session()
+        return spark_session.createDataFrame(rdd, schema)
 
     def _gather_parser_statistics(self, filter_out_non_parseable_rows_rdd_cached, source_rdd_cached):
         original_rows_count = source_rdd_cached.count()

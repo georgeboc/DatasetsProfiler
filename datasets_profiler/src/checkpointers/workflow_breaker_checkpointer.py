@@ -7,27 +7,24 @@ from logging import getLogger
 LOG = getLogger(__name__)
 
 
-class StatefulWorkflowBreakerCheckpointer:
-    SWAP_HDFS_PATH = "../temporal/checkpoint"
+class WorkflowBreakerCheckpointer:
+    CHECKPOINTS_PATH = "../temporal/"
+    CHECKPOINT_PREFIX = "checkpoint"
 
     def __init__(self, dataframe_serializer_deserializer, call_tracker):
         self._dataframe_serializer_deserializer = dataframe_serializer_deserializer
         self._call_tracker = call_tracker
-        self._created_checkpoints = []
 
     @instrument_call
-    def checkpoint(self, data_frame):
-        checkpoint_name = self._get_filename(data_frame)
+    def checkpoint(self, data_frame, preferred_path=None):
+        checkpoint_name = self._generate_filename(data_frame) if not preferred_path else preferred_path
         LOG.info("Serializing to a file the data frame and breaking workflow")
         self._dataframe_serializer_deserializer.serialize(data_frame, checkpoint_name)
-        self._created_checkpoints.append(checkpoint_name)
         LOG.info("Deserializing from a file the data frame as resuming workflow")
         return self._dataframe_serializer_deserializer.deserialize(checkpoint_name)
 
     def clean_all_checkpoints(self):
-        for created_checkpoint in self._created_checkpoints:
-            shutil.rmtree(created_checkpoint, ignore_errors=True)
-            self._created_checkpoints.remove(created_checkpoint)
+        shutil.rmtree(self.CHECKPOINTS_PATH, ignore_errors=True)
 
-    def _get_filename(self, data_frame):
-        return f"{self.SWAP_HDFS_PATH}_{hash(data_frame)}_{datetime.now()}"
+    def _generate_filename(self, data_frame):
+        return f"{self.CHECKPOINTS_PATH}/{self.CHECKPOINT_PREFIX}_{hash(data_frame)}_{datetime.now()}"
