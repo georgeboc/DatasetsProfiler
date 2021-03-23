@@ -8,5 +8,5 @@ class Application:
         self._use_case_providers = use_case_providers
 
     def run(self, parameters):
-        use_case = self._use_case_providers.get_use_case(parameters.use_case)
+        use_case = self._use_case_providers.get_use_case_by_name(parameters.use_case)
         use_case.execute(parameters)

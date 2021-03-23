@@ -9,5 +9,5 @@ class OneProcessorDispatcher:
         self._processor = processor
 
     def dispatch(self, column_data_frame):
-        LOG.info(f"Processing column RDD by {self._processor.__class__.__name__} processor")
+        LOG.info(f"Processing column by {self._processor.__class__.__name__} processor")
         return self._processor.process(column_data_frame)

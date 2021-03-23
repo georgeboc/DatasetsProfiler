@@ -46,9 +46,9 @@ from datasets_profiler.src.processors.string_processor import StringProcessor
 from datasets_profiler.src.processors.timestamp_processor import TimestampProcessor
 from datasets_profiler.src.processors.tuple_processor import TupleProcessor
 from datasets_profiler.src.rdd_readers.rdd_text_reader import RDDTextReader
-from datasets_profiler.src.results_formatters.formatters.string_formatter import StringFormatter
-from datasets_profiler.src.results_formatters.formatters.no_year_datetime_formatter import NoYearDatetimeFormatter
-from datasets_profiler.src.results_formatters.results_formatter import DictionaryFormatter, ResultsFormatter
+from datasets_profiler.src.formatters.specific_formatters.string_specific_formatter import StringSpecificFormatter
+from datasets_profiler.src.formatters.specific_formatters.no_year_datetime_specific_formatter import NoYearDatetimeSpecificFormatter
+from datasets_profiler.src.formatters.formatter import DictionaryFormatter, Formatter
 from datasets_profiler.src.serializers_deserializers.avro_dataframe_serializer_deserializer import AvroDataFrameSerializerDeserializer
 from datasets_profiler.src.serializers_deserializers.csv_serializer_deserializer import CSVSerializerDeserializer
 from datasets_profiler.src.serializers_deserializers.json_serializer_deserializer import JsonSerializerDeserializer
@@ -56,7 +56,8 @@ from datasets_profiler.src.serializers_deserializers.parquet_dataframe_serialize
     ParquetDataframeSerializerDeserializer
 from datasets_profiler.src.use_cases.get_described_dataset import GetDescribedDataset, GetDescribedDatasetInitialization
 from datasets_profiler.src.use_cases.get_description import GetDescription, GetDescriptionInitialization
-from datasets_profiler.src.view.csviewer import CSViewer
+from datasets_profiler.src.view.avro_viewer import AvroViewer
+from datasets_profiler.src.view.csv_viewer import CSVViewer
 from datasets_profiler.src.view.pretty_table_viewer import PrettyTableViewer
 from datasets_profiler.src.view.results_to_table_rows import ResultsToTableRows
 
@@ -66,30 +67,44 @@ class ParserCommonsProviders(DeclarativeContainer):
 
 
 class ParserStrategyProviders(DeclarativeContainer):
-    android_log_parser_strategy = Singleton(AndroidLogParserStrategy, ParserCommonsProviders.parser_commons())
-    bgl_log_parser_strategy = Singleton(BGLLogParserStrategy, ParserCommonsProviders.parser_commons())
-    edgar_log_parser_strategy = Singleton(EdgarLogParserStrategy, ParserCommonsProviders.parser_commons())
-    hdfs1_log_parser_strategy = Singleton(HDFS1LogParserStrategy, ParserCommonsProviders.parser_commons())
-    hdfs2_log_parser_strategy = Singleton(HDFS2LogParserStrategy, ParserCommonsProviders.parser_commons())
-    spark_log_parser_strategy = Singleton(SparkLogParserStrategy, ParserCommonsProviders.parser_commons())
-    test_log_parser_strategy = Singleton(TestLogParserStrategy, ParserCommonsProviders.parser_commons())
-    thunderbird_log_parser_strategy = Singleton(ThunderbirdLogParserStrategy, ParserCommonsProviders.parser_commons())
-    windows_log_parser_strategy = Singleton(WindowsLogParserStrategy, ParserCommonsProviders.parser_commons())
-    ad_click_on_taobao_log_parser_strategy = Singleton(AdClickOnTaobaoLogParserStrategy, ParserCommonsProviders.parser_commons())
-    mooc_log_parser_strategy = Singleton(MoocLogParserStrategy, ParserCommonsProviders.parser_commons())
-    obama_visitor_log_parser_strategy = Singleton(ObamaVisitorLogParserStrategy, ParserCommonsProviders.parser_commons())
-    recommender_click_logs_sowiport_log_parser_strategy = \
-        Singleton(RecommenderClickLogsSowiportLogParserStrategy, ParserCommonsProviders.parser_commons())
-    seattle_coban_log_parser_strategy = Singleton(SeattleCobanLogParserStreategy, ParserCommonsProviders.parser_commons())
-    ubuntu_dialogue_corpus_log_parser_strategy = \
-        Singleton(UbuntuDialogueCorpusLogParserStrategy, ParserCommonsProviders.parser_commons())
-    user_logs_v2_log_parser_strategy = Singleton(UserLogsV2LogParserStrategy, ParserCommonsProviders.parser_commons())
+    android_log_parser_strategy = Singleton(AndroidLogParserStrategy,
+                                            ParserCommonsProviders.parser_commons())
+    bgl_log_parser_strategy = Singleton(BGLLogParserStrategy,
+                                        ParserCommonsProviders.parser_commons())
+    edgar_log_parser_strategy = Singleton(EdgarLogParserStrategy,
+                                          ParserCommonsProviders.parser_commons())
+    hdfs1_log_parser_strategy = Singleton(HDFS1LogParserStrategy,
+                                          ParserCommonsProviders.parser_commons())
+    hdfs2_log_parser_strategy = Singleton(HDFS2LogParserStrategy,
+                                          ParserCommonsProviders.parser_commons())
+    spark_log_parser_strategy = Singleton(SparkLogParserStrategy,
+                                          ParserCommonsProviders.parser_commons())
+    test_log_parser_strategy = Singleton(TestLogParserStrategy,
+                                         ParserCommonsProviders.parser_commons())
+    thunderbird_log_parser_strategy = Singleton(ThunderbirdLogParserStrategy,
+                                                ParserCommonsProviders.parser_commons())
+    windows_log_parser_strategy = Singleton(WindowsLogParserStrategy,
+                                            ParserCommonsProviders.parser_commons())
+    ad_click_on_taobao_log_parser_strategy = Singleton(AdClickOnTaobaoLogParserStrategy,
+                                                       ParserCommonsProviders.parser_commons())
+    mooc_log_parser_strategy = Singleton(MoocLogParserStrategy,
+                                         ParserCommonsProviders.parser_commons())
+    obama_visitor_log_parser_strategy = Singleton(ObamaVisitorLogParserStrategy,
+                                                  ParserCommonsProviders.parser_commons())
+    recommender_click_logs_sowiport_log_parser_strategy = Singleton(RecommenderClickLogsSowiportLogParserStrategy,
+                                                                    ParserCommonsProviders.parser_commons())
+    seattle_coban_log_parser_strategy = Singleton(SeattleCobanLogParserStreategy,
+                                                  ParserCommonsProviders.parser_commons())
+    ubuntu_dialogue_corpus_log_parser_strategy = Singleton(UbuntuDialogueCorpusLogParserStrategy,
+                                                           ParserCommonsProviders.parser_commons())
+    user_logs_v2_log_parser_strategy = Singleton(UserLogsV2LogParserStrategy,
+                                                 ParserCommonsProviders.parser_commons())
 
 
 class ParserProviders(DeclarativeContainer):
     @staticmethod
-    def parser(parser_strategy):
-        return Singleton(Parser, ParserStrategyProviders.providers[parser_strategy](),
+    def get_parser_by_name(parser_name):
+        return Singleton(Parser, ParserStrategyProviders.providers[parser_name](),
                          SparkConfigurationProviders.spark_configuration())()
 
 
@@ -97,13 +112,13 @@ class CallTrackerProviders(DeclarativeContainer):
     stateful_call_tracker = Singleton(StatefulCallTracker)
 
 
-class FormatterProviders(DeclarativeContainer):
-    string_formatter = Singleton(StringFormatter)
-    no_year_datetime_formatter = Singleton(NoYearDatetimeFormatter)
+class SpecificFormatterProviders(DeclarativeContainer):
+    string_specific_formatter = Singleton(StringSpecificFormatter)
+    no_year_datetime_specific_formatter = Singleton(NoYearDatetimeSpecificFormatter)
 
     @classmethod
-    def get_formatter(cls, formatter):
-        return cls.providers[formatter]()
+    def get_specific_formatter_by_name(cls, specific_formatter_name):
+        return cls.providers[specific_formatter_name]()
 
 
 class ProcessorsOperationsFlagsProviders(DeclarativeContainer):
@@ -147,15 +162,17 @@ class ProcessorsProviders(DeclarativeContainer):
 
 
 class RDDReaderProviders(DeclarativeContainer):
-    rdd_text_reader = Singleton(RDDTextReader)
+    rdd_text_reader = Singleton(RDDTextReader, SparkConfigurationProviders.spark_configuration())
 
 
 class SerializerDeserializerProviders(DeclarativeContainer):
     json_serializer_deserializer = Singleton(JsonSerializerDeserializer)
     csv_serializer_deserializer = Singleton(CSVSerializerDeserializer)
 
-    avro_dataframe_serializer_deserializer = Singleton(AvroDataFrameSerializerDeserializer, SparkConfigurationProviders.spark_configuration())
-    parquet_dataframe_serializer_deserializer = Singleton(ParquetDataframeSerializerDeserializer, SparkConfigurationProviders.spark_configuration())
+    avro_dataframe_serializer_deserializer = Singleton(AvroDataFrameSerializerDeserializer,
+                                                       SparkConfigurationProviders.spark_configuration())
+    parquet_dataframe_serializer_deserializer = Singleton(ParquetDataframeSerializerDeserializer,
+                                                          SparkConfigurationProviders.spark_configuration())
 
 
 class ParametersClassesProviders(DeclarativeContainer):
@@ -208,18 +225,20 @@ class ResultsToTableRowsProviders(DeclarativeContainer):
     results_to_table_rows = Singleton(ResultsToTableRows)
 
 
-class ResultsViewerProviders(DeclarativeContainer):
-    csv_viewer = Singleton(CSViewer, ResultsToTableRowsProviders.results_to_table_rows(),
+class ViewerProviders(DeclarativeContainer):
+    csv_viewer = Singleton(CSVViewer, ResultsToTableRowsProviders.results_to_table_rows(),
                            SerializerDeserializerProviders.csv_serializer_deserializer())
     pretty_table_viewer = Singleton(PrettyTableViewer, ResultsToTableRowsProviders.results_to_table_rows())
+    avro_viewer = Singleton(AvroViewer, ResultsToTableRowsProviders.results_to_table_rows(),
+                            SerializerDeserializerProviders.avro_dataframe_serializer_deserializer())
 
 
 class DictionaryFormatterProviders(DeclarativeContainer):
     dictionary_formatter = Singleton(DictionaryFormatter)
 
 
-class ResultsFormatterProviders(DeclarativeContainer):
-    results_formatter = Singleton(ResultsFormatter, DictionaryFormatterProviders.dictionary_formatter())
+class FormatterProviders(DeclarativeContainer):
+    formatter = Singleton(Formatter, DictionaryFormatterProviders.dictionary_formatter())
 
 
 class CheckpointerProviders(DeclarativeContainer):
@@ -241,17 +260,18 @@ class InitializationProviders(DeclarativeContainer):
                                                      column_dispatcher=ColumnDispatcherProviders.one_processor_column_dispatcher(),
                                                      parser_providers=ParserProviders,
                                                      checkpointer=CheckpointerProviders.workflow_breaker_checkpointer(),
-                                                     serializer_deserializer=SerializerDeserializerProviders.avro_dataframe_serializer_deserializer())
+                                                     formatter=FormatterProviders.formatter(),
+                                                     viewer=ViewerProviders.avro_viewer())
     get_description_initialization = Singleton(GetDescriptionInitialization,
                                                spark_configuration=SparkConfigurationProviders.spark_configuration(),
                                                rdd_reader=RDDReaderProviders.rdd_text_reader(),
                                                column_dispatcher=ColumnDispatcherProviders.type_column_dispatcher(),
                                                tuple_processor=ProcessorsProviders.tuple_processor(),
                                                column_statistics_calculator=ColumnStatisticsCalculatorProviders.column_statistics_calculator(),
-                                               results_viewer=ResultsViewerProviders.csv_viewer(),
+                                               viewer=ViewerProviders.csv_viewer(),
                                                parser_providers=ParserProviders,
-                                               formatter_providers=FormatterProviders,
-                                               results_formatter=ResultsFormatterProviders.results_formatter(),
+                                               specific_formatters_providers=SpecificFormatterProviders,
+                                               formatter=FormatterProviders.formatter(),
                                                checkpointer=CheckpointerProviders.workflow_breaker_checkpointer())
 
 
@@ -260,12 +280,11 @@ class UseCaseProviders(DeclarativeContainer):
                                 InitializationProviders.get_description_initialization(),
                                 CallTrackerProviders.stateful_call_tracker())
     get_described_dataset = Singleton(GetDescribedDataset,
-                                      InitializationProviders.get_described_dataset_initialization(),
-                                      CallTrackerProviders.stateful_call_tracker())
+                                      InitializationProviders.get_described_dataset_initialization())
 
     @classmethod
-    def get_use_case(cls, use_case):
-        return cls.providers[use_case]()
+    def get_use_case_by_name(cls, use_case_name):
+        return cls.providers[use_case_name]()
 
 
 class ApplicationProviders(DeclarativeContainer):

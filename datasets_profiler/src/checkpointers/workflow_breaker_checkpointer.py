@@ -16,8 +16,8 @@ class WorkflowBreakerCheckpointer:
         self._call_tracker = call_tracker
 
     @instrument_call
-    def checkpoint(self, data_frame, preferred_path=None):
-        checkpoint_name = self._generate_filename(data_frame) if not preferred_path else preferred_path
+    def checkpoint(self, data_frame, output_path=None):
+        checkpoint_name = self._generate_filename(data_frame) if not output_path else output_path
         LOG.info("Serializing to a file the data frame and breaking workflow")
         self._dataframe_serializer_deserializer.serialize(data_frame, checkpoint_name)
         LOG.info("Deserializing from a file the data frame as resuming workflow")

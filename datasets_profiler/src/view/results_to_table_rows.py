@@ -1,13 +1,23 @@
 from collections import OrderedDict
+from dataclasses import dataclass
 from functools import reduce
+from typing import Any
+
+
+@dataclass
+class ColumnNameResult:
+    column_name: str
+    result: Any
 
 
 class ResultsToTableRows:
-    WORD_SEPARATOR = '_'
+    SEPARATOR = '_'
     NOT_APPLICABLE = '-'
     SECTION_SEPARATOR = "******"
     EMPTY = ''
     DESCRIPTOR_TITLE_LEN = 1
+    FIRST_LEVEL = True
+    OTHER_LEVEL = False
 
     def get_table_rows(self, results):
         flattened_results = list((result.type, self._flatten_dictionary(result.dictionary)) for result in results)
@@ -16,6 +26,9 @@ class ResultsToTableRows:
                           for type_element, dictionaries in type_multidict.items())
         result_types = [result.type for result in results]
         return self._render_rows_by_types(types_dict, result_types)
+
+    def get_column_names(self, results):
+        return [result.column_name for result in results]
 
     def _create_multidict(self, key_value_iterable):
         type_multidict = OrderedDict()
@@ -26,17 +39,17 @@ class ResultsToTableRows:
     def _flatten_dictionary(self, dictionary, prefix=None):
         result_dictionary = OrderedDict()
         for key, value in dictionary.items():
+            new_prefix = self._add_prefix(prefix, key)
             if type(value) == dict:
-                new_prefix = self._add_prefix(prefix, key)
                 result_dictionary = {**result_dictionary, **self._flatten_dictionary(value, prefix=new_prefix)}
             else:
-                result_dictionary[self._add_prefix(prefix, key)] = value
+                result_dictionary[new_prefix] = value
         return result_dictionary
 
     def _add_prefix(self, prefix, key):
         if prefix is None:
             return key
-        return prefix + self.WORD_SEPARATOR + key
+        return prefix + self.SEPARATOR + key
 
     def _merge_dictionaries(self, dictionaries):
         keys_super_set = self._get_keys_super_set(dictionaries)
@@ -74,4 +87,4 @@ class ResultsToTableRows:
         return row
 
     def _prettify_descriptor(self, descriptor):
-        return descriptor.capitalize().replace(self.WORD_SEPARATOR, ' ')
+        return descriptor.capitalize().replace(self.SEPARATOR, ' ')

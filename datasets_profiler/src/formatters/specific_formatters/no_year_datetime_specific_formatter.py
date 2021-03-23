@@ -1,7 +1,7 @@
 from datetime import datetime
 
 
-class NoYearDatetimeFormatter:
+class NoYearDatetimeSpecificFormatter:
     DATE_TIME_FORMAT = '%m-%d %H:%M:%S.%f'
 
     def format(self, date_time):

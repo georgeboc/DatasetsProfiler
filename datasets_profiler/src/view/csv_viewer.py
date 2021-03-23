@@ -1,4 +1,4 @@
-class CSViewer:
+class CSVViewer:
     BREAK_LINE = '\n'
     EMPTY_CELL = ''
 
@@ -6,13 +6,8 @@ class CSViewer:
         self._results_to_table_rows = results_to_table_rows
         self._serializer_deserializer = serializer_deserializer
 
-    def print_result(self, result, table_name, file_path):
-        self.print_results([result], table_name, ["Value"], file_path)
-
-    def print_results(self, results, table_name, attributes_names, file_path):
-        table = []
-        table.append([table_name])
-        table.append([self.EMPTY_CELL, *attributes_names])
+    def view(self, results, table_name, file_path):
+        table = [[table_name], [self.EMPTY_CELL, *self._results_to_table_rows.get_column_names(results)]]
         table_rows = self._results_to_table_rows.get_table_rows(results)
         table.extend(([str(element) for element in table_row] for table_row in table_rows))
         table.append([])
