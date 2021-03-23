@@ -45,7 +45,7 @@ class GetDescribedDataset:
         LOG.info("Formatting results")
         formatted_results = self._initialization.formatter.format(columnar_statistics)
 
-        LOG.info("Creating a view of the results")
+        LOG.info("Sending results to viewer")
         self._initialization.viewer.view(formatted_results, self.COUNT_VALUES_STATS, parameters.output_directory)
 
     def _checkpoint(self, parameters, parser_result):

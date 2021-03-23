@@ -77,15 +77,15 @@ class GetDescription:
                 for specific_formatter in parameters.specific_formatters] if parameters.specific_formatters else None
 
     def _emit_parser_statistics(self, parser_statistics, output_file_path):
-        LOG.info("Emitting parser statistics")
         result = Result(dictionary=asdict(parser_statistics), column_name="Value")
+        LOG.info("Sending parser statistics to viewer")
         self._initialization.viewer.view([result], self.PARSER_STATISTICS, output_file_path)
 
     def _emit_table_statistics(self, data_frame, output_file_path):
         LOG.info("Calculating table statistics")
         dataset_results = self._initialization.tuple_processor.process(data_frame.rdd)
         result = Result(dictionary=asdict(dataset_results), column_name="Value")
-        LOG.info("Sending table statistics to results viewer")
+        LOG.info("Sending table statistics to viewer")
         self._initialization.viewer.view([result], self.TABLE_RESULTS, output_file_path)
 
     @instrument_call
@@ -94,11 +94,11 @@ class GetDescription:
         columnar_statistics = self._initialization.column_dispatcher.dispatch(data_frame)
         LOG.info("Formatting results")
         formatted_results = self._initialization.formatter.format(columnar_statistics, specific_formatters)
-        LOG.info("Sending results to results viewer")
+        LOG.info("Sending results to viewer")
         self._initialization.viewer.view(formatted_results, self.STATISTICAL_PROFILE, output_file_path)
 
     def _emit_execution_statistics(self, output_file_path):
         call_trackers_dictionary = self._call_tracker.get_call_trackers_dictionary()
         result = Result(dictionary=call_trackers_dictionary, column_name="Value")
-        LOG.info("Sending execution statistics to results viewer")
-        self._initialization.viewer.view(result, self.EXECUTION_CALL_TRACKER, output_file_path)
+        LOG.info("Sending execution statistics to viewer")
+        self._initialization.viewer.view([result], self.EXECUTION_CALL_TRACKER, output_file_path)
