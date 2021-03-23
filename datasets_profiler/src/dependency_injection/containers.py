@@ -56,10 +56,10 @@ from datasets_profiler.src.serializers_deserializers.parquet_dataframe_serialize
     ParquetDataframeSerializerDeserializer
 from datasets_profiler.src.use_cases.get_described_dataset import GetDescribedDataset, GetDescribedDatasetInitialization
 from datasets_profiler.src.use_cases.get_description import GetDescription, GetDescriptionInitialization
-from datasets_profiler.src.view.avro_viewer import AvroViewer
-from datasets_profiler.src.view.csv_viewer import CSVViewer
-from datasets_profiler.src.view.pretty_table_viewer import PrettyTableViewer
-from datasets_profiler.src.view.results_to_table_rows import ResultsToTableRows
+from datasets_profiler.src.viewers.avro_viewer import AvroViewer
+from datasets_profiler.src.viewers.csv_viewer import CSVViewer
+from datasets_profiler.src.viewers.pretty_table_viewer import PrettyTableViewer
+from datasets_profiler.src.viewers.results_to_table_rows import ResultsToTableRows
 
 
 class ParserCommonsProviders(DeclarativeContainer):
