@@ -23,7 +23,7 @@ class CountValuesProcessor:
             .agg(sum(self.COUNT).alias(self.FREQUENCY)) \
             .cache()
         rows_count = values_frequencies_data_frame_cached.count()
-        is_unique = int(rows_count == column_data_frame_cached.count())
+        is_unique = rows_count == column_data_frame_cached.count()
         return CountValuesResults(data_frame=values_frequencies_data_frame_cached.orderBy(self.VALUE),
                                   rows_count=rows_count,
                                   is_unique=is_unique)
