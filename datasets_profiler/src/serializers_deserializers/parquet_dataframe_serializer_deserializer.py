@@ -1,16 +1,14 @@
-from datasets_profiler.src.serializers_deserializers.directories_auxiliary import try_create_directory
-
-
 class ParquetDataframeSerializerDeserializer:
     PARQUET_FORMAT = "parquet"
     OVERWRITE_MODE = "overwrite"
     NO_EAGER_MEMORY_LOAD = False
 
-    def __init__(self, spark_configuration):
+    def __init__(self, spark_configuration, directories_auxiliary):
         self._spark_configuration = spark_configuration
+        self._directories_auxiliary = directories_auxiliary
 
     def serialize(self, data_frame, file_path):
-        try_create_directory(file_path)
+        self._directories_auxiliary.try_create_directory(file_path)
         data_frame.write.save(f"{file_path}.parquet", format=self.PARQUET_FORMAT, mode=self.OVERWRITE_MODE,
                               memory=self.NO_EAGER_MEMORY_LOAD)
 

@@ -1,13 +1,14 @@
 import csv
 
-from datasets_profiler.src.serializers_deserializers.directories_auxiliary import try_create_directory
-
 
 class CSVSerializerDeserializer:
     DELIMITER = ";"
 
+    def __init__(self, directories_auxiliary):
+        self._directories_auxiliary = directories_auxiliary
+
     def serialize(self, object, file_path):
-        try_create_directory(file_path)
+        self._directories_auxiliary.try_create_directory(file_path)
         with open(f"{file_path}.csv", "a") as file_descriptor:
             writer = csv.writer(file_descriptor, delimiter=self.DELIMITER)
             writer.writerows(object)

@@ -1,7 +1,5 @@
 from pyspark.sql.functions import col
 
-from datasets_profiler.src.serializers_deserializers.directories_auxiliary import try_create_directory
-
 
 class AvroDataFrameSerializerDeserializer:
     AVRO_FORMAT = "avro"
@@ -10,11 +8,12 @@ class AvroDataFrameSerializerDeserializer:
     DATA_FRAME = "data_frame"
     METADATA_COLUMN = "Frequency"
 
-    def __init__(self, spark_configuration):
+    def __init__(self, spark_configuration, directories_auxiliary):
         self._spark_configuration = spark_configuration
+        self._directories_auxiliary = directories_auxiliary
 
     def serialize(self, dictionary, file_path):
-        try_create_directory(file_path)
+        self._directories_auxiliary.try_create_directory(file_path)
         data_frame = dictionary[self.DATA_FRAME]
         data_frame.withColumn(self.METADATA_COLUMN, col(self.METADATA_COLUMN)
                               .alias("", metadata=self._get_metadata(dictionary)))

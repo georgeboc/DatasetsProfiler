@@ -12,6 +12,9 @@ from datasets_profiler.src.configuration.spark_configuration import SparkConfigu
 from datasets_profiler.src.dispatchers.one_processor_dispatcher import OneProcessorDispatcher
 from datasets_profiler.src.dispatchers.type_dispatcher import TypeDispatcher
 from datasets_profiler.src.dispatchers.column_dispatcher import ColumnDispatcher
+from datasets_profiler.src.filesystems.directories_auxiliary import DirectoriesAuxiliary
+from datasets_profiler.src.filesystems.hdfs_filesystem import HDFSFileSystem
+from datasets_profiler.src.filesystems.local_filesystem import LocalFileSystem
 from datasets_profiler.src.instrumentation.call_tracker import StatefulCallTracker
 from datasets_profiler.src.interfaces.readers.argument_reader import ArgumentReader
 from datasets_profiler.src.interfaces.readers.file_reader import FileReader
@@ -60,6 +63,9 @@ from datasets_profiler.src.viewers.avro_viewer import AvroViewer
 from datasets_profiler.src.viewers.csv_viewer import CSVViewer
 from datasets_profiler.src.viewers.pretty_table_viewer import PrettyTableViewer
 from datasets_profiler.src.viewers.results_to_table_rows import ResultsToTableRows
+
+
+from pyhdfs import HdfsClient
 
 
 class ParserCommonsProviders(DeclarativeContainer):
@@ -165,14 +171,27 @@ class RDDReaderProviders(DeclarativeContainer):
     rdd_text_reader = Singleton(RDDTextReader, SparkConfigurationProviders.spark_configuration())
 
 
+class FilesystemProviders(DeclarativeContainer):
+    local_filesystem = Singleton(LocalFileSystem)
+
+    ROOT_USER = "root"
+    hdfs_filesystem = Singleton(HDFSFileSystem, HdfsClient(hosts='nn1.example.com:50070', user_name=ROOT_USER))
+
+
+class DirectoriesAuxiliaryProviders(DeclarativeContainer):
+    directories_auxiliary = Singleton(DirectoriesAuxiliary, FilesystemProviders.local_filesystem())
+
+
 class SerializerDeserializerProviders(DeclarativeContainer):
-    json_serializer_deserializer = Singleton(JsonSerializerDeserializer)
-    csv_serializer_deserializer = Singleton(CSVSerializerDeserializer)
+    json_serializer_deserializer = Singleton(JsonSerializerDeserializer, DirectoriesAuxiliaryProviders.directories_auxiliary())
+    csv_serializer_deserializer = Singleton(CSVSerializerDeserializer, DirectoriesAuxiliaryProviders.directories_auxiliary())
 
     avro_dataframe_serializer_deserializer = Singleton(AvroDataFrameSerializerDeserializer,
-                                                       SparkConfigurationProviders.spark_configuration())
+                                                       SparkConfigurationProviders.spark_configuration(),
+                                                       DirectoriesAuxiliaryProviders.directories_auxiliary())
     parquet_dataframe_serializer_deserializer = Singleton(ParquetDataframeSerializerDeserializer,
-                                                          SparkConfigurationProviders.spark_configuration())
+                                                          SparkConfigurationProviders.spark_configuration(),
+                                                          DirectoriesAuxiliaryProviders.directories_auxiliary())
 
 
 class ParametersClassesProviders(DeclarativeContainer):
@@ -250,7 +269,7 @@ class CheckpointerProviders(DeclarativeContainer):
 
 
 class LogProviders(DeclarativeContainer):
-    log_initializer = Singleton(LogInitializer)
+    log_initializer = Singleton(LogInitializer, FilesystemProviders.local_filesystem())
 
 
 class InitializationProviders(DeclarativeContainer):
