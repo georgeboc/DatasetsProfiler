@@ -188,7 +188,8 @@ class SerializerDeserializerProviders(DeclarativeContainer):
 
     avro_dataframe_serializer_deserializer = Singleton(AvroDataFrameSerializerDeserializer,
                                                        SparkConfigurationProviders.spark_configuration(),
-                                                       DirectoriesAuxiliaryProviders.directories_auxiliary())
+                                                       DirectoriesAuxiliaryProviders.directories_auxiliary(),
+                                                       FilesystemProviders.local_filesystem())
     parquet_dataframe_serializer_deserializer = Singleton(ParquetDataframeSerializerDeserializer,
                                                           SparkConfigurationProviders.spark_configuration(),
                                                           DirectoriesAuxiliaryProviders.directories_auxiliary())
