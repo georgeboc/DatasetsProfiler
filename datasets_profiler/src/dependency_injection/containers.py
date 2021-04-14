@@ -57,6 +57,7 @@ from datasets_profiler.src.serializers_deserializers.csv_serializer_deserializer
 from datasets_profiler.src.serializers_deserializers.json_serializer_deserializer import JsonSerializerDeserializer
 from datasets_profiler.src.serializers_deserializers.parquet_dataframe_serializer_deserializer import \
     ParquetDataframeSerializerDeserializer
+from datasets_profiler.src.stringifier.data_frame_stringifier import DataFrameStringifier
 from datasets_profiler.src.use_cases.get_described_dataset import GetDescribedDataset, GetDescribedDatasetInitialization
 from datasets_profiler.src.use_cases.get_description import GetDescription, GetDescriptionInitialization
 from datasets_profiler.src.viewers.avro_viewer import AvroViewer
@@ -273,6 +274,10 @@ class LogProviders(DeclarativeContainer):
     log_initializer = Singleton(LogInitializer, FilesystemProviders.local_filesystem())
 
 
+class StringifierProviders(DeclarativeContainer):
+    data_frame_stringifier = Singleton(DataFrameStringifier)
+
+
 class InitializationProviders(DeclarativeContainer):
     get_described_dataset_initialization = Singleton(GetDescribedDatasetInitialization,
                                                      spark_configuration=SparkConfigurationProviders.spark_configuration(),
@@ -281,7 +286,10 @@ class InitializationProviders(DeclarativeContainer):
                                                      parser_providers=ParserProviders,
                                                      checkpointer=CheckpointerProviders.workflow_breaker_checkpointer(),
                                                      formatter=FormatterProviders.formatter(),
-                                                     viewer=ViewerProviders.avro_viewer())
+                                                     viewer=ViewerProviders.avro_viewer(),
+                                                     data_frame_stringifier=StringifierProviders.data_frame_stringifier(),
+                                                     data_frame_serializer=SerializerDeserializerProviders.parquet_dataframe_serializer_deserializer()
+                                                     )
     get_description_initialization = Singleton(GetDescriptionInitialization,
                                                spark_configuration=SparkConfigurationProviders.spark_configuration(),
                                                rdd_reader=RDDReaderProviders.rdd_text_reader(),

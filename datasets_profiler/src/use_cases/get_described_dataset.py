@@ -14,6 +14,8 @@ class GetDescribedDatasetInitialization:
     checkpointer: Any
     formatter: Any
     viewer: Any
+    data_frame_stringifier: Any
+    data_frame_serializer: Any
 
 
 class GetDescribedDataset:
@@ -37,7 +39,15 @@ class GetDescribedDataset:
         parser_result = parser.parse(input_rdd)
 
         LOG.info("Checkpointing parsed data frame")
-        checkpoint = self._checkpoint(parameters, parser_result)
+        checkpoint = self._initialization.checkpointer.checkpoint(parser_result.parsed_data_frame)
+
+        LOG.info("Stringifying parsed data frame")
+        stringyfied_data_frame = self._initialization.data_frame_stringifier.stringify(checkpoint)
+
+        LOG.info("Serializing stringified data frame")
+        self._initialization.data_frame_serializer.serialize(stringyfied_data_frame,
+                                                             self._get_path(parameters.output_directory,
+                                                                            self.PARSED_DATASET_PREFIX))
 
         LOG.info("Calculating columnar statistics")
         columnar_statistics = self._initialization.column_dispatcher.dispatch(checkpoint)
@@ -47,11 +57,6 @@ class GetDescribedDataset:
 
         LOG.info("Sending results to viewer")
         self._initialization.viewer.view(formatted_results, self.COUNT_VALUES_STATS, parameters.output_directory)
-
-    def _checkpoint(self, parameters, parser_result):
-        return self._initialization.checkpointer.checkpoint(parser_result.parsed_data_frame,
-                                                            output_path= self._get_path(parameters.output_directory,
-                                                                                        self.PARSED_DATASET_PREFIX))
 
     def _get_path(self, output_directory, prefix):
         return output_directory + '/' + prefix

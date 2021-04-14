@@ -11,7 +11,7 @@ class PersistentCheckpointer:
         self._call_tracker = call_tracker
 
     @instrument_call
-    def checkpoint(self, data_frame, preferred_path=None):
+    def checkpoint(self, data_frame):
         LOG.info("Persisting data frame in memory and disk")
         data_frame.rdd.persist(StorageLevel.MEMORY_AND_DISK)
         return data_frame
