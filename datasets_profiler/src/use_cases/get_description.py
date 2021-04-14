@@ -57,8 +57,8 @@ class GetDescription:
         LOG.info("Calculating columnar statistics")
         self._emit_columnar_statistics(checkpoint, specific_formatters, parameters.output_path)
 
-        LOG.info("Calculating table statistics")
-        self._emit_table_statistics(checkpoint, parameters.output_path)
+        LOG.info("Calculating whole dataframe statistics")
+        self._emit_whole_dataframe_statistics(checkpoint, parameters.output_path)
 
         if parameters.disable_execution_metadata:
             LOG.info("Skipping execution statistics emission")
@@ -81,11 +81,11 @@ class GetDescription:
         LOG.info("Sending parser statistics to viewer")
         self._initialization.viewer.view([result], self.PARSER_STATISTICS, output_file_path)
 
-    def _emit_table_statistics(self, data_frame, output_file_path):
-        LOG.info("Calculating table statistics")
+    def _emit_whole_dataframe_statistics(self, data_frame, output_file_path):
+        LOG.info("Calculating whole dataframe statistics")
         dataset_results = self._initialization.tuple_processor.process(data_frame.rdd)
         result = Result(dictionary=asdict(dataset_results), column_name="Value")
-        LOG.info("Sending table statistics to viewer")
+        LOG.info("Sending whole dataframe statistics to viewer")
         self._initialization.viewer.view([result], self.TABLE_RESULTS, output_file_path)
 
     @instrument_call

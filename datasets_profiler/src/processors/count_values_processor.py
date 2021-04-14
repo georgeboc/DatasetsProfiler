@@ -26,13 +26,14 @@ class CountValuesProcessor:
         values_frequencies_data_frame_cached = renamed_data_frame.groupBy(self.VALUE) \
             .agg(sum(self.COUNT).alias(self.FREQUENCY)) \
             .cache()
-        rows_count = values_frequencies_data_frame_cached.count()
-        is_unique = rows_count == column_data_frame_cached.count()
+        distinct_rows_count = values_frequencies_data_frame_cached.count()
+        is_unique = distinct_rows_count == column_data_frame_cached.count()
         unix_timestamps_data_frame = self.cast_timestamp_to_timestamp_in_milliseconds(values_frequencies_data_frame_cached)
         string_casted_data_frame = unix_timestamps_data_frame.withColumn(self.VALUE, col(self.VALUE).cast(StringType()))
         sorted_data_frame = string_casted_data_frame.orderBy(self.VALUE)
         return CountValuesResults(data_frame=sorted_data_frame,
-                                  rows_count=rows_count,
+                                  distinct_rows_count=distinct_rows_count,
+                                  total_rows_count=column_data_frame_cached.count(),
                                   is_unique=is_unique)
 
     def cast_timestamp_to_timestamp_in_milliseconds(self, data_frame):
