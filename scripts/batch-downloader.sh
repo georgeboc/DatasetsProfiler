@@ -1,6 +1,6 @@
 #!/bin/bash
 
-function toGetAllFilenames() {
+function toGetAllFilenames() { # output_filename ($1)
   output_filename=$1
 
   curl https://www.sec.gov/files/EDGAR_LogFileData_thru_Jun2017.html | grep "www" > $output_filename
@@ -27,12 +27,17 @@ function toDownloadBatch() { # file ($1), file index ($2), batch size ($3), outp
   cd ..
 }
 
-function toUploadToGoogleDrive() {
-  rclone copy tmp/* gdrive:DatasetsProfiler/input/Edgar
+function toUploadToGoogleDrive() { # temporal_directory ($1), google_drive_dir ($2)
+  temporal_directory=$1
+  google_drive_dir=$2
+
+  rclone copy $temporal_directory gdrive:$google_drive_dir
 }
 
-function toDeleteFolder() {
-    rm tmp/*
+function toDeleteFolder() { # temporal_directory ($1)
+    temporal_directory=$1
+
+    rm -r $temporal_directory
 }
 
 function toWriteProcessedLinks() { # temporal_state_filename ($1), state_filename ($2)
@@ -52,8 +57,8 @@ for i in $(seq 1 $BATCH_SIZE $lines_count)
 do
   echo [$i/$lines_count] Processing batch...
   toDownloadBatch filenames.txt $i $BATCH_SIZE tmp tmp_filenames.txt
-  toUploadToGoogleDrive
-  toDeleteFolder
+  toUploadToGoogleDrive tmp DatasetsProfiler/input/Edgar
+  toDeleteFolder tmp
   toWriteProcessedLinks tmp_filenames.txt state.txt
   sleep 1
   echo Batch successfully processed
