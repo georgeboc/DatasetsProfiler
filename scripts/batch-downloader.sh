@@ -48,11 +48,13 @@ function toWriteProcessedLinks() { # temporal_state_filename ($1), state_filenam
 export BATCH_SIZE=10
 
 lines_count=$(cat filenames.txt | wc -l)
-for i in $(echo {1..$lines_count..$BATCH_SIZE})
+for i in $(seq 1 $BATCH_SIZE $lines_count)
 do
+  echo [$i/$lines_count] Processing batch...
   toDownloadBatch filenames.txt $i $BATCH_SIZE tmp tmp_filenames.txt
   toUploadToGoogleDrive
   toDeleteFolder
   toWriteProcessedLinks tmp_filenames.txt state.txt
-  wait 1
+  sleep 1
+  echo Batch successfully processed
 done
