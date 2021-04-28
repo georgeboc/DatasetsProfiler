@@ -16,14 +16,17 @@ function toDownloadBatch() { # file ($1), file index ($2), batch size ($3), outp
   mkdir -p $output_directory
   cd $output_directory
 
-  filenames=$(head -n $(($start_index + $batch_size)) ../$file | tail -n $batch_size)
-  readarray -t filenames_array < <(echo $filenames)
-  for link_with_spaces in "${filenames_array[@]}"
+  head -n $(($start_index + $batch_size)) ../$file | tail -n $batch_size > batch.txt
+
+  while read link_with_spaces
   do
     link=$(echo $link_with_spaces | tr -d ' ')
     wget $link
     echo $link >> ../$temporal_state_filename
-  done
+    echo "----------" >> ../$temporal_state_filename
+  done < batch.txt
+
+  rm batch.txt
 
   cd ..
 }
@@ -58,9 +61,9 @@ for i in $(seq 1 $BATCH_SIZE $lines_count)
 do
   echo [$i/$lines_count] Processing batch...
   toDownloadBatch filenames.txt $i $BATCH_SIZE tmp tmp_filenames.txt
-  toUploadToGoogleDrive tmp DatasetsProfiler/input/Edgar
-  toDeleteFolder tmp
-  toWriteProcessedLinks tmp_filenames.txt state.txt
+  #toUploadToGoogleDrive tmp DatasetsProfiler/input/Edgar
+  #toDeleteFolder tmp
+  #toWriteProcessedLinks tmp_filenames.txt state.txt
   sleep 1
   echo Batch successfully processed
 done
