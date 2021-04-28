@@ -20,7 +20,7 @@ function toDownloadBatch() { # file ($1), file index ($2), batch size ($3), outp
 
   while read link_with_spaces
   do
-    link=$(echo $link_with_spaces | tr -d ' ')
+    link=$(echo $link_with_spaces | tr -d ' ' | tr -d '\n')
     wget $link
     echo $link >> ../$temporal_state_filename
     echo "----------" >> ../$temporal_state_filename
