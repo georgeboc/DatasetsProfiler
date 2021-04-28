@@ -18,8 +18,9 @@ function toDownloadBatch() { # file ($1), file index ($2), batch size ($3), outp
 
   filenames=$(head -n $(($start_index + $batch_size)) ../$file | tail -n $batch_size)
   readarray -t filenames_array < <(echo $filenames)
-  for link in "${filenames_array[@]}"
+  for link_with_spaces in "${filenames_array[@]}"
   do
+    link=$(echo $link_with_spaces | tr -d ' ')
     wget $link
     echo $link >> ../$temporal_state_filename
   done
@@ -35,17 +36,17 @@ function toUploadToGoogleDrive() { # temporal_directory ($1), google_drive_dir (
 }
 
 function toDeleteFolder() { # temporal_directory ($1)
-    temporal_directory=$1
+  temporal_directory=$1
 
-    rm -r $temporal_directory
+  rm -r $temporal_directory
 }
 
 function toWriteProcessedLinks() { # temporal_state_filename ($1), state_filename ($2)
-    temporal_state_filename=$1
-    state_filename=$2
+  temporal_state_filename=$1
+  state_filename=$2
 
-    cat $temporal_state_filename >> $state_filename
-    rm $temporal_state_filename
+  cat $temporal_state_filename >> $state_filename
+  rm $temporal_state_filename
 }
 
 #toGetAllFilenames filenames.txt
