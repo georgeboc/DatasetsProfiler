@@ -61,9 +61,9 @@ for i in $(seq 1 $BATCH_SIZE $lines_count)
 do
   echo [$i/$lines_count] Processing batch...
   toDownloadBatch filenames.txt $i $BATCH_SIZE tmp tmp_filenames.txt
-  #toUploadToGoogleDrive tmp DatasetsProfiler/input/Edgar
-  #toDeleteFolder tmp
-  #toWriteProcessedLinks tmp_filenames.txt state.txt
+  toUploadToGoogleDrive tmp DatasetsProfiler/input/Edgar
+  toDeleteFolder tmp
+  toWriteProcessedLinks tmp_filenames.txt state.txt
   sleep 1
   echo Batch successfully processed
 done
