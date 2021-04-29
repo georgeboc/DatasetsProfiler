@@ -7,3 +7,6 @@ class FileSystemInterface(ABC):
 
     def makedirs(self, directory_path):
         pass
+
+    def remove_recursively(self, directory_path):
+        pass

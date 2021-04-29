@@ -7,12 +7,8 @@ class SparkConfiguration:
 
     def get_spark_session(self):
         spark_session = SparkSession.builder\
-            .master("local[*]") \
-            .config("spark.driver.maxResultSize", "10g") \
-            .config("spark.executor.memory", "16g") \
-            .config("spark.driver.memory", "16g") \
+            .master("spark://dtim:7077") \
             .config("spark.memory.offHeap.enabled", True) \
-            .config("spark.memory.offHeap.size", "16g") \
             .config("spark.sql.parquet.outputTimestampType", "TIMESTAMP_MILLIS") \
             .getOrCreate()
         spark_session.sparkContext.setLogLevel("ERROR")

@@ -2,7 +2,7 @@ from datasets_profiler.src.filesystems.filesystem import FileSystemInterface
 
 
 class HDFSFileSystem(FileSystemInterface):
-    ROOT_USER = "root"
+    RECURSIVE = True
 
     def __init__(self, hdfs_client):
         self._hdfs_client = hdfs_client
@@ -12,3 +12,6 @@ class HDFSFileSystem(FileSystemInterface):
 
     def makedirs(self, directory_path):
         self._hdfs_client.mkdirs(directory_path)
+
+    def remove_recursively(self, directory_path):
+        self._hdfs_client.delete(directory_path, self.RECURSIVE)

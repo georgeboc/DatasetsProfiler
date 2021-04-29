@@ -175,12 +175,12 @@ class RDDReaderProviders(DeclarativeContainer):
 class FilesystemProviders(DeclarativeContainer):
     local_filesystem = Singleton(LocalFileSystem)
 
-    ROOT_USER = "root"
-    hdfs_filesystem = Singleton(HDFSFileSystem, HdfsClient(hosts='nn1.example.com:50070', user_name=ROOT_USER))
+    ROOT_USER = "bochileanu"
+    hdfs_filesystem = Singleton(HDFSFileSystem, HdfsClient(hosts='hdfs://dtim:27000', user_name=ROOT_USER))
 
 
 class DirectoriesAuxiliaryProviders(DeclarativeContainer):
-    directories_auxiliary = Singleton(DirectoriesAuxiliary, FilesystemProviders.local_filesystem())
+    directories_auxiliary = Singleton(DirectoriesAuxiliary, FilesystemProviders.hdfs_filesystem())
 
 
 class SerializerDeserializerProviders(DeclarativeContainer):
@@ -190,7 +190,7 @@ class SerializerDeserializerProviders(DeclarativeContainer):
     avro_dataframe_serializer_deserializer = Singleton(AvroDataFrameSerializerDeserializer,
                                                        SparkConfigurationProviders.spark_configuration(),
                                                        DirectoriesAuxiliaryProviders.directories_auxiliary(),
-                                                       FilesystemProviders.local_filesystem())
+                                                       FilesystemProviders.hdfs_filesystem())
     parquet_dataframe_serializer_deserializer = Singleton(ParquetDataframeSerializerDeserializer,
                                                           SparkConfigurationProviders.spark_configuration(),
                                                           DirectoriesAuxiliaryProviders.directories_auxiliary())
@@ -267,6 +267,7 @@ class CheckpointerProviders(DeclarativeContainer):
                                         CallTrackerProviders.stateful_call_tracker())
     workflow_breaker_checkpointer = Singleton(WorkflowBreakerCheckpointer,
                                               SerializerDeserializerProviders.parquet_dataframe_serializer_deserializer(),
+                                              FilesystemProviders.hdfs_filesystem(),
                                               CallTrackerProviders.stateful_call_tracker())
 
 
