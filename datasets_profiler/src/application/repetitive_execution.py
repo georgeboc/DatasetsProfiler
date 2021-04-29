@@ -7,7 +7,7 @@ class RepetitiveExecution:
     CYAN_COLOR = "\033[36m"
     RED_COLOR = "\033[0;31m"
     END_COLOR = "\033[0m"
-    DEFAULT_LOG_FOLDER = "/files/datasets_profiler/log"
+    DEFAULT_LOG_FOLDER = "../log"
 
     def __init__(self, application, parameters_reader, interface_providers, log_initializer):
         self._application = application

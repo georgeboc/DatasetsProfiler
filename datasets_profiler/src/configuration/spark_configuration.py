@@ -9,6 +9,7 @@ class SparkConfiguration:
         spark_session = SparkSession.builder\
             .master("spark://dtim:7077") \
             .config("spark.memory.offHeap.enabled", True) \
+            .config("spark.memory.offHeap.size", "16g") \
             .config("spark.sql.parquet.outputTimestampType", "TIMESTAMP_MILLIS") \
             .getOrCreate()
         spark_session.sparkContext.setLogLevel("ERROR")
