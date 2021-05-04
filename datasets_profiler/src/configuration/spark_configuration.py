@@ -16,10 +16,7 @@ class SparkConfiguration:
         return spark_session
 
     def _get_spark_session_builder(self):
-        return SparkSession.builder \
-            .config("spark.memory.offHeap.enabled", True) \
-            .config("spark.memory.offHeap.size", "16g") \
-            .config("spark.sql.parquet.outputTimestampType", "TIMESTAMP_MILLIS")
+        return SparkSession.builder.config("spark.sql.parquet.outputTimestampType", "TIMESTAMP_MILLIS")
 
     def _add_master(self, spark_session_builder):
         if self._local_execution_checker.is_local_execution():
