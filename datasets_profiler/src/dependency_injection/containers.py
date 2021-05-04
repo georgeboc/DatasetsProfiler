@@ -1,10 +1,12 @@
 import sys
+from argparse import ArgumentParser
 
 from dependency_injector.containers import DeclarativeContainer
 from dependency_injector.providers import Singleton, Factory
 
 from datasets_profiler.src.application.application import Application
 from datasets_profiler.src.application.repetitive_execution import RepetitiveExecution
+from datasets_profiler.src.checkers.local_execution_checker import LocalExecutionChecker
 from datasets_profiler.src.checkpointers.persistent_checkpointer import PersistentCheckpointer
 from datasets_profiler.src.checkpointers.workflow_breaker_checkpointer import WorkflowBreakerCheckpointer
 from datasets_profiler.src.configuration.processors_operations_flags import ProcessorsOperationsFlags
@@ -15,8 +17,9 @@ from datasets_profiler.src.dispatchers.column_dispatcher import ColumnDispatcher
 from datasets_profiler.src.filesystems.directories_auxiliary import DirectoriesAuxiliary
 from datasets_profiler.src.filesystems.hdfs_filesystem import HDFSFileSystem
 from datasets_profiler.src.filesystems.local_filesystem import LocalFileSystem
+from datasets_profiler.src.filesystems.proxy_filesystem import ProxyFilesystem
 from datasets_profiler.src.instrumentation.call_tracker import StatefulCallTracker
-from datasets_profiler.src.interfaces.readers.argument_reader import ArgumentReader
+from datasets_profiler.src.arguments_parser.arguments_parser import ArgumentsParser
 from datasets_profiler.src.interfaces.readers.file_reader import FileReader
 from datasets_profiler.src.interfaces.writers.cli_writer import CLIWriter
 from datasets_profiler.src.interfaces.writers.file_writer import FileWriter
@@ -138,8 +141,16 @@ class ColumnStatisticsCalculatorProviders(DeclarativeContainer):
                                              ProcessorsOperationsFlagsProviders.processors_operations_flags())
 
 
+class ArgumentsParserProviders(DeclarativeContainer):
+    arguments_parser = Singleton(ArgumentsParser, ArgumentParser())
+
+
+class LocalExecutionCheckerProvider(DeclarativeContainer):
+    local_execution_checker = Singleton(LocalExecutionChecker, ArgumentsParserProviders.arguments_parser())
+
+
 class SparkConfigurationProviders(DeclarativeContainer):
-    spark_configuration = Singleton(SparkConfiguration)
+    spark_configuration = Singleton(SparkConfiguration, LocalExecutionCheckerProvider.local_execution_checker())
 
 
 class ProcessorsProviders(DeclarativeContainer):
@@ -173,14 +184,15 @@ class RDDReaderProviders(DeclarativeContainer):
 
 
 class FilesystemProviders(DeclarativeContainer):
-    local_filesystem = Singleton(LocalFileSystem)
-
     ROOT_USER = "bochileanu"
+
+    local_filesystem = Singleton(LocalFileSystem)
     hdfs_filesystem = Singleton(HDFSFileSystem, HdfsClient(hosts='hdfs://dtim:27000', user_name=ROOT_USER))
+    proxy_filesystem = Singleton(ProxyFilesystem, local_filesystem, hdfs_filesystem, LocalExecutionCheckerProvider.local_execution_checker())
 
 
 class DirectoriesAuxiliaryProviders(DeclarativeContainer):
-    directories_auxiliary = Singleton(DirectoriesAuxiliary, FilesystemProviders.hdfs_filesystem())
+    directories_auxiliary = Singleton(DirectoriesAuxiliary, FilesystemProviders.proxy_filesystem())
 
 
 class SerializerDeserializerProviders(DeclarativeContainer):
@@ -190,7 +202,7 @@ class SerializerDeserializerProviders(DeclarativeContainer):
     avro_dataframe_serializer_deserializer = Singleton(AvroDataFrameSerializerDeserializer,
                                                        SparkConfigurationProviders.spark_configuration(),
                                                        DirectoriesAuxiliaryProviders.directories_auxiliary(),
-                                                       FilesystemProviders.hdfs_filesystem())
+                                                       FilesystemProviders.proxy_filesystem())
     parquet_dataframe_serializer_deserializer = Singleton(ParquetDataframeSerializerDeserializer,
                                                           SparkConfigurationProviders.spark_configuration(),
                                                           DirectoriesAuxiliaryProviders.directories_auxiliary())
@@ -210,7 +222,6 @@ class ParametersReaderProviders(DeclarativeContainer):
 
 
 class InterfaceProviders(DeclarativeContainer):
-    control_reader_interface = Factory(ArgumentReader)
     # control_reader_interface = Factory(CLIReader, sys.stdin)
     control_writer_interface = Factory(CLIWriter, sys.stderr)
     data_reader_interface = Factory(FileReader)
@@ -267,7 +278,7 @@ class CheckpointerProviders(DeclarativeContainer):
                                         CallTrackerProviders.stateful_call_tracker())
     workflow_breaker_checkpointer = Singleton(WorkflowBreakerCheckpointer,
                                               SerializerDeserializerProviders.parquet_dataframe_serializer_deserializer(),
-                                              FilesystemProviders.hdfs_filesystem(),
+                                              FilesystemProviders.proxy_filesystem(),
                                               CallTrackerProviders.stateful_call_tracker())
 
 
@@ -325,4 +336,5 @@ class RepetitiveExecutionProviders(DeclarativeContainer):
                                      ApplicationProviders.application(),
                                      ParametersReaderProviders.parameters_reader_providers(),
                                      InterfaceProviders,
-                                     LogProviders.log_initializer())
+                                     LogProviders.log_initializer(),
+                                     ArgumentsParserProviders.arguments_parser())

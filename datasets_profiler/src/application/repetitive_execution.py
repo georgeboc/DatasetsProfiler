@@ -7,31 +7,26 @@ class RepetitiveExecution:
     CYAN_COLOR = "\033[36m"
     RED_COLOR = "\033[0;31m"
     END_COLOR = "\033[0m"
-    DEFAULT_LOG_FOLDER = "../log"
 
-    def __init__(self, application, parameters_reader, interface_providers, log_initializer):
+    def __init__(self, application, parameters_reader, interface_providers, log_initializer, arguments_parser):
         self._application = application
         self._parameters_reader = parameters_reader
         self._interface_providers = interface_providers
         self._log_initializer = log_initializer
+        self._arguments_parser = arguments_parser
 
     def run(self):
         control_writer_interface = self._interface_providers.control_writer_interface()
-        control_reader_interface = self._interface_providers.control_reader_interface()
+        self._arguments_parser.initialize()
+        parsed_arguments = self._arguments_parser.parse_arguments()
 
-        control_writer_interface.write_line(f"Introduce path of parameters file: ")
-        parameters_file_path = control_reader_interface.read_line()
-
-        control_writer_interface.write_line(f"Introduce path of log directory (default is {self.DEFAULT_LOG_FOLDER}): ")
-        log_directory_path = control_reader_interface.read_line()
-
-        self._log_initializer.initialize(log_directory_path if log_directory_path else self.DEFAULT_LOG_FOLDER)
+        self._log_initializer.initialize(parsed_arguments.log_directory_path)
         log = getLogger(__name__)
         log.info("Datasets evaluation application successfully initialized")
 
         exceptions_raised = []
         log.info("Getting parameters list")
-        parameters = self._parameters_reader.get_parameters(parameters_file_path)
+        parameters = self._parameters_reader.get_parameters(parsed_arguments.parameters_path)
         for parameters in parameters:
             control_writer_interface.write_line(
                 self._paint(f"Running application with input path: {parameters.input_path}", self.BLUE_COLOR))
