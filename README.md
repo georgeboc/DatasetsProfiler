@@ -71,4 +71,5 @@ An example of a local execution of the Datasets Profiler is shown as follows:
 $ scripts/run-local.sh parameters/parameters_integration_test
 ```
 
+[comment]: # (TODO: Add link)
 For more information, check the thesis associated to this project.
