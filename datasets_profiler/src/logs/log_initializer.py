@@ -1,9 +1,10 @@
-import logging
+import logging, logging.config
 from datetime import datetime
 
 
 class LogInitializer:
-    FORMAT = '%(asctime)-15s [%(levelname)s] line %(lineno)d in %(filename)s %(module)s: %(message)s'
+    LOG_FILENAME_KEY = "logfilename"
+    FILE_CONFIG_PATH = "resources/logging.conf"
     FILENAME_PREFIX = "DatasetsProfiler"
     COLON = ':'
     HYPHEN = '-'
@@ -19,4 +20,4 @@ class LogInitializer:
         timestamp = datetime.now().isoformat()
         timestamp_string = timestamp.replace(self.COLON, self.HYPHEN)
         filename = f"{self.FILENAME_PREFIX}_{timestamp_string}.log"
-        logging.basicConfig(format=self.FORMAT, filename=f"{log_folder}/{filename}", level=logging.INFO)
+        logging.config.fileConfig(self.FILE_CONFIG_PATH, defaults={self.LOG_FILENAME_KEY: f"{log_folder}/{filename}"})

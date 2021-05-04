@@ -1,8 +1,7 @@
-import sys
 from argparse import ArgumentParser
 
 from dependency_injector.containers import DeclarativeContainer
-from dependency_injector.providers import Singleton, Factory
+from dependency_injector.providers import Singleton
 
 from datasets_profiler.src.application.application import Application
 from datasets_profiler.src.application.repetitive_execution import RepetitiveExecution
@@ -20,9 +19,6 @@ from datasets_profiler.src.filesystems.local_filesystem import LocalFileSystem
 from datasets_profiler.src.filesystems.proxy_filesystem import ProxyFilesystem
 from datasets_profiler.src.instrumentation.call_tracker import StatefulCallTracker
 from datasets_profiler.src.arguments_parser.arguments_parser import ArgumentsParser
-from datasets_profiler.src.interfaces.readers.file_reader import FileReader
-from datasets_profiler.src.interfaces.writers.cli_writer import CLIWriter
-from datasets_profiler.src.interfaces.writers.file_writer import FileWriter
 from datasets_profiler.src.logs.log_initializer import LogInitializer
 from datasets_profiler.src.parameters.get_described_dataset_parameters import GetDescribedDatasetParameters
 from datasets_profiler.src.parameters.get_description_parameters import GetDescriptionParameters
@@ -221,14 +217,6 @@ class ParametersReaderProviders(DeclarativeContainer):
                                             SerializerDeserializerProviders.json_serializer_deserializer())
 
 
-class InterfaceProviders(DeclarativeContainer):
-    # control_reader_interface = Factory(CLIReader, sys.stdin)
-    control_writer_interface = Factory(CLIWriter, sys.stderr)
-    data_reader_interface = Factory(FileReader)
-    data_writer_interface = Factory(FileWriter)
-    # data_writer_interface = Factory(CLIWriter, sys.stdout)
-
-
 class TypeProcessorsProviders(DeclarativeContainer):
     type_processors = Singleton(dict, {
         "int": ProcessorsProviders.numeric_processor(),
@@ -335,6 +323,5 @@ class RepetitiveExecutionProviders(DeclarativeContainer):
     repetitive_execution = Singleton(RepetitiveExecution,
                                      ApplicationProviders.application(),
                                      ParametersReaderProviders.parameters_reader_providers(),
-                                     InterfaceProviders,
                                      LogProviders.log_initializer(),
                                      ArgumentsParserProviders.arguments_parser())
