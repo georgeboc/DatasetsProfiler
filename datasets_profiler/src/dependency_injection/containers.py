@@ -180,10 +180,10 @@ class RDDReaderProviders(DeclarativeContainer):
 
 
 class FilesystemProviders(DeclarativeContainer):
-    ROOT_USER = "bochileanu"
+    USER_NAME = "bochileanu"
 
     local_filesystem = Singleton(LocalFileSystem)
-    hdfs_filesystem = Singleton(HDFSFileSystem, HdfsClient(hosts='hdfs://dtim:9870', user_name=ROOT_USER))
+    hdfs_filesystem = Singleton(HDFSFileSystem, HdfsClient(hosts='dtim:9870', user_name=USER_NAME))
     proxy_filesystem = Singleton(ProxyFilesystem, local_filesystem, hdfs_filesystem, LocalExecutionCheckerProvider.local_execution_checker())
 
 

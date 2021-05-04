@@ -49,26 +49,26 @@ The `inputs` are files whose path is defined in the `parameters` file with the k
 To run the Dataset Profiler with the integration tests, execute the following command from within the root of 
 the project `DatasetsProfiler/`:
 ```
-$ scripts/check_tests.sh
+$ bash scripts/check_tests.sh
 ```
 
 You also have the option to run the Datasets Profiler either locally or in a cluster, using Yarn.
 - If you want to run the Datasets Profiler locally, execute the following script:
   ```
-  $ scripts/run-local.sh PATH_TO_PARAMETERS_FILE
+  $ bash scripts/run-local.sh PATH_TO_PARAMETERS_FILE
   ```
   Where `PATH_TO_PARAMETERS_FILE` is the path which points to the parameters file.
 
 
 - If you want to run the Datasets Profiler in a cluster, execute the following script:
   ```
-  $ scripts/run-cluster.sh PATH_TO_PARAMETERS_FILE
+  $ bash scripts/run-cluster.sh PATH_TO_PARAMETERS_FILE
   ```
   Where `PATH_TO_PARAMETERS_FILE` is the path which points to the parameters file.
 
 An example of a local execution of the Datasets Profiler is shown as follows:
 ```
-$ scripts/run-local.sh parameters/parameters_integration_test
+$ bash scripts/run-local.sh parameters/parameters_integration_test
 ```
 
 [comment]: # (TODO: Add link)

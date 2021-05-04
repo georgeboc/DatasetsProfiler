@@ -19,7 +19,7 @@ class HDFSFileSystem(FileSystemInterface):
 
     def read_file(self, file_path):
         with self._hdfs_client.open(file_path) as file:
-            return '\n'.join(file.readlines())
+            return ''.join(file.readlines())
 
     def write_file(self, contents, file_path):
         self._hdfs_client.create(file_path, contents, overwrite=self.NO_OVERWRITE)

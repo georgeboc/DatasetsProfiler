@@ -18,7 +18,7 @@ class LocalFileSystem(FileSystemInterface):
 
     def read_file(self, file_path):
         with open(file_path, 'r') as file:
-            return '\n'.join(file.readlines())
+            return ''.join(file.readlines())
 
     def write_file(self, contents, file_path):
         with open(file_path, 'a+') as file:
