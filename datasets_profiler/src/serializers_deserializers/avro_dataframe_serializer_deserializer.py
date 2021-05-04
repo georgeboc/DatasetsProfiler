@@ -20,13 +20,12 @@ class AvroDataFrameSerializerDeserializer:
     def serialize(self, dictionary, file_path):
         self._directories_auxiliary.try_create_directory(file_path)
         data_frame = dictionary[self.DATA_FRAME]
-        directory_path = f"{file_path}.avro"
-        data_frame.write.save(directory_path, format=self.AVRO, mode=self.OVERWRITE, memory=self.NO_EAGER_MEMORY_LOAD)
-        self._write_metadata(dictionary, directory_path)
+        data_frame.write.save(file_path, format=self.AVRO, mode=self.OVERWRITE, memory=self.NO_EAGER_MEMORY_LOAD)
+        self._write_metadata(dictionary, file_path)
 
     def deserialize(self, file_path):
         spark_session = self._spark_configuration.get_spark_session()
-        return spark_session.read.load(f"{file_path}.avro", format=self.AVRO, memory=self.NO_EAGER_MEMORY_LOAD)
+        return spark_session.read.load(file_path, format=self.AVRO, memory=self.NO_EAGER_MEMORY_LOAD)
 
     def _write_metadata(self, dictionary, directory_path):
         metadata = self._get_metadata(dictionary)

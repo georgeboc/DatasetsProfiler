@@ -192,8 +192,8 @@ class DirectoriesAuxiliaryProviders(DeclarativeContainer):
 
 
 class SerializerDeserializerProviders(DeclarativeContainer):
-    json_serializer_deserializer = Singleton(JsonSerializerDeserializer, DirectoriesAuxiliaryProviders.directories_auxiliary())
-    csv_serializer_deserializer = Singleton(CSVSerializerDeserializer, DirectoriesAuxiliaryProviders.directories_auxiliary())
+    json_serializer_deserializer = Singleton(JsonSerializerDeserializer, DirectoriesAuxiliaryProviders.directories_auxiliary(), FilesystemProviders.proxy_filesystem())
+    csv_serializer_deserializer = Singleton(CSVSerializerDeserializer, DirectoriesAuxiliaryProviders.directories_auxiliary(), FilesystemProviders.proxy_filesystem())
 
     avro_dataframe_serializer_deserializer = Singleton(AvroDataFrameSerializerDeserializer,
                                                        SparkConfigurationProviders.spark_configuration(),

@@ -15,3 +15,11 @@ class LocalFileSystem(FileSystemInterface):
 
     def remove_recursively(self, directory_path):
         shutil.rmtree(directory_path, ignore_errors=self.IGNORE_ERRORS)
+
+    def read_file(self, file_path):
+        with open(file_path, 'r') as file:
+            return '\n'.join(file.readlines())
+
+    def write_file(self, contents, file_path):
+        with open(file_path, 'a+') as file:
+            file.write(contents)

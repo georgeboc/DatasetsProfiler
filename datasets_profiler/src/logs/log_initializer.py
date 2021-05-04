@@ -1,13 +1,17 @@
 import logging, logging.config
 from datetime import datetime
+from pkgutil import get_data
+from io import StringIO
 
 
 class LogInitializer:
     LOG_FILENAME_KEY = "logfilename"
-    FILE_CONFIG_PATH = "resources/logging.conf"
+    CONFIG_FILENAME = "logging.conf"
+    RESOURCES_MODULE = "datasets_profiler.resources"
     FILENAME_PREFIX = "DatasetsProfiler"
     COLON = ':'
     HYPHEN = '-'
+    UTF8 = "utf-8"
 
     def __init__(self, filesystem):
         self._filesystem = filesystem
@@ -20,4 +24,6 @@ class LogInitializer:
         timestamp = datetime.now().isoformat()
         timestamp_string = timestamp.replace(self.COLON, self.HYPHEN)
         filename = f"{self.FILENAME_PREFIX}_{timestamp_string}.log"
-        logging.config.fileConfig(self.FILE_CONFIG_PATH, defaults={self.LOG_FILENAME_KEY: f"{log_folder}/{filename}"})
+        logging_configuration = get_data(self.RESOURCES_MODULE, self.CONFIG_FILENAME).decode(self.UTF8)
+        with StringIO(logging_configuration) as file:
+            logging.config.fileConfig(file, defaults={self.LOG_FILENAME_KEY: f"{log_folder}/{filename}"})
