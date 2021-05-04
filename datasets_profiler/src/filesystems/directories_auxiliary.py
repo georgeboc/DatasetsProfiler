@@ -7,6 +7,6 @@ class DirectoriesAuxiliary:
 
     def try_create_directory(self, file_path):
         try:
-            self._filesystem.makedirs(Path(file_path).parent)
+            self._filesystem.makedirs(str(Path(file_path).parent))
         except OSError:
             pass
