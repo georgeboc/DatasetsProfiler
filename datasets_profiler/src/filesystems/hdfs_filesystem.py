@@ -16,7 +16,7 @@ class HDFSFileSystem(FileSystemInterface):
         self._hdfs_client.mkdirs(directory_path)
 
     def remove_recursively(self, directory_path):
-        self._hdfs_client.delete(directory_path, self.RECURSIVE)
+        self._hdfs_client.delete(directory_path, recursive=self.RECURSIVE)
 
     def read_file(self, file_path):
         with self._hdfs_client.open(file_path) as file:
