@@ -3,6 +3,7 @@ from datasets_profiler.src.filesystems.filesystem import FileSystemInterface
 
 class HDFSFileSystem(FileSystemInterface):
     RECURSIVE = True
+    NO_OVERWRITE = False
 
     def __init__(self, hdfs_client):
         self._hdfs_client = hdfs_client
@@ -17,8 +18,8 @@ class HDFSFileSystem(FileSystemInterface):
         self._hdfs_client.delete(directory_path, self.RECURSIVE)
 
     def read_file(self, file_path):
-        with self._hdfs_client.read(file_path) as reader:
-            return reader.read()
+        with self._hdfs_client.open(file_path) as file:
+            return '\n'.join(file.readlines())
 
     def write_file(self, contents, file_path):
-        self._hdfs_client.write(file_path, data=contents)
+        self._hdfs_client.create(file_path, contents, overwrite=self.NO_OVERWRITE)
