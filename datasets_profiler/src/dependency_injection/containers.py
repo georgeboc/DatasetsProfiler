@@ -267,7 +267,8 @@ class CheckpointerProviders(DeclarativeContainer):
     workflow_breaker_checkpointer = Singleton(WorkflowBreakerCheckpointer,
                                               SerializerDeserializerProviders.parquet_dataframe_serializer_deserializer(),
                                               FilesystemProviders.proxy_filesystem(),
-                                              CallTrackerProviders.stateful_call_tracker())
+                                              CallTrackerProviders.stateful_call_tracker(),
+                                              LocalExecutionCheckerProvider.local_execution_checker())
 
 
 class LogProviders(DeclarativeContainer):
