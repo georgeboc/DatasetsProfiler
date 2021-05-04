@@ -183,7 +183,7 @@ class FilesystemProviders(DeclarativeContainer):
     ROOT_USER = "bochileanu"
 
     local_filesystem = Singleton(LocalFileSystem)
-    hdfs_filesystem = Singleton(HDFSFileSystem, HdfsClient(hosts='hdfs://dtim:27000', user_name=ROOT_USER))
+    hdfs_filesystem = Singleton(HDFSFileSystem, HdfsClient(hosts='hdfs://dtim:9870', user_name=ROOT_USER))
     proxy_filesystem = Singleton(ProxyFilesystem, local_filesystem, hdfs_filesystem, LocalExecutionCheckerProvider.local_execution_checker())
 
 
