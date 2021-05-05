@@ -6,7 +6,7 @@ export DATASETS_PROFILER_WHEEL_PATH="dist/DatasetsProfiler-1.*-py3-none-any.whl"
 pip3 install --force-reinstall $DATASETS_PROFILER_WHEEL_PATH
 spark-submit \
 --master yarn \
---deploy-mode cluster \
+--deploy-mode client \
 --conf spark.driver.memory 2526 \
 --conf spark.yarn.driver.memoryOverhead 512 \
 --conf spark.executor.memory 2526 \
