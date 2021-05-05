@@ -7,9 +7,9 @@ spark = SparkSession \
     .appName("Python Spark SQL basic example") \
     .config("master", "client") \
     .config("spark.driver.memory", "2526M") \
-    .config("spark.yarn.driver.memoryOverhead", "512M") \
+    .config("spark.driver.memoryOverhead", "512M") \
     .config("spark.executor.memory", "2526M") \
-    .config("spark.yarn.executor.memoryOverhead", "512M") \
+    .config("spark.executor.memoryOverhead", "512M") \
     .config("spark.driver.cores", 1) \
     .config("spark.executor.cores", 1) \
     .config("spark.executor.instances", 23) \
