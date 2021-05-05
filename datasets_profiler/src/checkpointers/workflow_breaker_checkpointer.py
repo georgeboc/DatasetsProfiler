@@ -3,6 +3,8 @@ from datasets_profiler.src.instrumentation.call_tracker import instrument_call
 
 from logging import getLogger
 
+from datasets_profiler.src.utils.timestamp_utils import TimestampUtils
+
 LOG = getLogger(__name__)
 
 
@@ -29,7 +31,7 @@ class WorkflowBreakerCheckpointer:
         self._filesystem.remove_recursively(self._get_checkpoints_path())
 
     def _generate_filename(self, data_frame):
-        return f"{self._get_checkpoints_path()}/{self.CHECKPOINT_PREFIX}_{hash(data_frame)}_{datetime.now()}"
+        return f"{self._get_checkpoints_path()}/{self.CHECKPOINT_PREFIX}_{hash(data_frame)}_{TimestampUtils.get_file_name_from_now()}"
 
     def _get_checkpoints_path(self):
         if self._local_execution_checker.is_local_execution():
