@@ -1,3 +1,5 @@
+from io import BytesIO
+
 from avro.datafile import DataFileWriter
 from avro.io import DatumWriter
 from avro.schema import make_avsc_object
@@ -30,9 +32,10 @@ class AvroDataFrameSerializerDeserializer:
     def _write_metadata(self, dictionary, directory_path):
         metadata = self._get_metadata(dictionary)
         full_file_path = self._get_metadata_full_file_path(directory_path)
-        with open(full_file_path, 'wb+') as file:
+        with BytesIO() as file:
             with DataFileWriter(file, DatumWriter(), self._get_schema(metadata)) as writer:
                 writer.append(metadata)
+                self._filesystem.write(file.getvalue(), full_file_path)
 
     def _get_metadata(self, dictionary):
         return {key: str(value) for key, value in dictionary.items() if key != self.DATA_FRAME}

@@ -4,7 +4,6 @@ from datasets_profiler.src.filesystems.filesystem import FileSystemInterface
 class HDFSFileSystem(FileSystemInterface):
     RECURSIVE = True
     NO_OVERWRITE = False
-    UTF8 = "utf-8"
 
     def __init__(self, hdfs_client):
         self._hdfs_client = hdfs_client
@@ -18,9 +17,9 @@ class HDFSFileSystem(FileSystemInterface):
     def remove_recursively(self, directory_path):
         self._hdfs_client.delete(directory_path, recursive=self.RECURSIVE)
 
-    def read_file(self, file_path):
+    def read(self, file_path):
         with self._hdfs_client.open(file_path) as file:
-            return ''.join([line.decode(self.UTF8) for line in file.readlines()])
+            return file.read()
 
-    def write_file(self, contents, file_path):
+    def write(self, contents, file_path):
         self._hdfs_client.create(file_path, contents, overwrite=self.NO_OVERWRITE)

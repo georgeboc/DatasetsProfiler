@@ -16,11 +16,11 @@ class ProxyFilesystem(FileSystemInterface):
     def remove_recursively(self, directory_path):
         self._get_filesystem().remove_recursively(directory_path)
 
-    def read_file(self, file_path):
-        return self._get_filesystem().read_file(file_path)
+    def read(self, file_path):
+        return self._get_filesystem().read(file_path)
 
-    def write_file(self, contents, file_path):
-        self._get_filesystem().write_file(contents, file_path)
+    def write(self, contents, file_path):
+        self._get_filesystem().write(contents, file_path)
 
     def _get_filesystem(self):
         if self._local_execution_checker.is_local_execution():
