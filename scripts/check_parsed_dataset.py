@@ -6,13 +6,13 @@ spark = SparkSession \
     .builder \
     .appName("Python Spark SQL basic example") \
     .config("master", "client") \
-    .config("spark.driver.memory", "2526M") \
-    .config("spark.driver.memoryOverhead", "512M") \
-    .config("spark.executor.memory", "2526M") \
-    .config("spark.executor.memoryOverhead", "512M") \
-    .config("spark.driver.cores", 1) \
-    .config("spark.executor.cores", 1) \
-    .config("spark.executor.instances", 23) \
+    .config("spark.driver.memory", "22602M") \
+    .config("spark.driver.memoryOverhead", "1702M") \
+    .config("spark.executor.memory", "22602M") \
+    .config("spark.executor.memoryOverhead", "1702M") \
+    .config("spark.driver.cores", "8") \
+    .config("spark.executor.cores", "8") \
+    .config("spark.executor.instances", "3") \
     .getOrCreate()
 
 parquetFile = spark.read.parquet(parquet_path)
