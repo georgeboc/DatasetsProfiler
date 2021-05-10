@@ -15,7 +15,7 @@ class CSVSerializerDeserializer:
         with StringIO() as file:
             writer = csv.writer(file, delimiter=self.DELIMITER)
             writer.writerows(object)
-            self._filesystem.write_string(file.getvalue(), file_path)
+            self._filesystem.write(file.getvalue().encode(self.UTF8), file_path)
 
     def deserialize(self, file_path):
         value = self._filesystem.read(file_path).decode(self.UTF8)
