@@ -57,7 +57,7 @@ You also have the option to run the Datasets Profiler either locally or in a clu
   ```
   $ bash scripts/run-local.sh PATH_TO_PARAMETERS_FILE
   ```
-  Where `PATH_TO_PARAMETERS_FILE` is the path which points to the parameters file.
+  Where `PATH_TO_PARAMETERS_FILE` is the absolute path which points to the parameters file (in case of HDFS), or it can be the relative path (in case of local filesystem).
 
 
 - If you want to run the Datasets Profiler in a cluster, execute the following script:
@@ -66,9 +66,10 @@ You also have the option to run the Datasets Profiler either locally or in a clu
   ```
   Where `PATH_TO_PARAMETERS_FILE` is the path which points to the parameters file.
 
-An example of a local execution of the Datasets Profiler is shown as follows:
+An example of each execution type of the Datasets Profiler is shown below:
 ```
-$ bash scripts/run-local.sh parameters/parameters_integration_test
+$ bash scripts/run-local.sh parameters/parameters_integration_test.json
+$ bash scripts/run-cluster.sh /user/bochileanu/datasets_profiler_parameters/parameters_ad_click_on_taobao_log_parser_strategy.json
 ```
 
 [comment]: # (TODO: Add link)

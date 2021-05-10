@@ -3,7 +3,7 @@ from pyspark.sql import SparkSession
 
 class SparkConfiguration:
     COMPRESSION_CODEC_CONFIG = "spark.sql.parquet.compression.codec"
-    UNCOMPRESSED = "uncompressed"
+    NONE = "none"
 
     def __init__(self, local_execution_checker):
         self._local_execution_checker = local_execution_checker
@@ -13,7 +13,7 @@ class SparkConfiguration:
 
     def get_spark_session(self):
         spark_session_builder = self._get_spark_session_builder()
-        spark_session_builder.config(self.COMPRESSION_CODEC_CONFIG, self.UNCOMPRESSED)
+        spark_session_builder.config(self.COMPRESSION_CODEC_CONFIG, self.NONE)
         spark_session_builder_with_master = self._add_master(spark_session_builder)
         spark_session = spark_session_builder_with_master.getOrCreate()
         spark_session.sparkContext.setLogLevel("ERROR")
