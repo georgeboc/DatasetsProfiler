@@ -35,6 +35,7 @@ class AvroDataFrameSerializerDeserializer:
         with BytesIO() as file:
             with DataFileWriter(file, DatumWriter(), self._get_schema(metadata)) as writer:
                 writer.append(metadata)
+                writer.flush()
                 self._filesystem.write(file.getvalue(), full_file_path)
 
     def _get_metadata(self, dictionary):
