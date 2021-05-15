@@ -23,6 +23,10 @@ from datasets_profiler.src.logs.log_initializer import LogInitializer
 from datasets_profiler.src.parameters.get_described_dataset_parameters import GetDescribedDatasetParameters
 from datasets_profiler.src.parameters.get_description_parameters import GetDescriptionParameters
 from datasets_profiler.src.parameters.parameters_reader import ParametersReader
+from datasets_profiler.src.parsers.ad_click_on_taobao_ad_feature_log_parser_strategy import \
+    AdClickOnTaobaoAdFeatureLogParserStrategy
+from datasets_profiler.src.parsers.ad_click_on_taobao_user_profile_log_parser_strategy import \
+    AdClickOnTaobaoUserProfileLogParserStrategy
 from datasets_profiler.src.parsers.android_log_parser_strategy import AndroidLogParserStrategy
 from datasets_profiler.src.parsers.bgl_log_parser_strategy import BGLLogParserStrategy
 from datasets_profiler.src.parsers.edgar_log_parser_strategy import EdgarLogParserStrategy
@@ -93,6 +97,10 @@ class ParserStrategyProviders(DeclarativeContainer):
                                             ParserCommonsProviders.parser_commons())
     ad_click_on_taobao_log_parser_strategy = Singleton(AdClickOnTaobaoLogParserStrategy,
                                                        ParserCommonsProviders.parser_commons())
+    ad_click_on_taobao_ad_feature_log_parser_strategy = Singleton(AdClickOnTaobaoAdFeatureLogParserStrategy,
+                                                                  ParserCommonsProviders.parser_commons())
+    ad_click_on_taobao_user_profile_log_parser_strategy = Singleton(AdClickOnTaobaoUserProfileLogParserStrategy,
+                                                                    ParserCommonsProviders.parser_commons())
     mooc_log_parser_strategy = Singleton(MoocLogParserStrategy,
                                          ParserCommonsProviders.parser_commons())
     obama_visitor_log_parser_strategy = Singleton(ObamaVisitorLogParserStrategy,
