@@ -61,7 +61,7 @@ print(json.dumps(increased_size_percentage, indent=4))
 print("Estimated output size:")
 estimated_output_size = {}
 for column_name, output_rows_count in results.items():
-    estimated_output_size[column_name] = str(Quantity(output_rows_count * dataset_size / dataset_rows_count, "B"))
+    estimated_output_size[column_name] = str(Quantity(output_rows_count * dataset_size / dataset_rows_count * 2**20, "B"))
 print(json.dumps(estimated_output_size, indent=4))
 
 print("Dataset rows count:")
