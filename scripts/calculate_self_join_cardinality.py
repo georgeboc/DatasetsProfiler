@@ -1,3 +1,4 @@
+# Execute from Dataset Profiler root directory
 import re
 import json
 
@@ -22,7 +23,7 @@ spark = SparkSession \
     .config("spark.driver.cores", "8") \
     .config("spark.executor.cores", "8") \
     .config("spark.executor.instances", "3") \
-    .config("spark.jars", "spark-avro_2.12-3.1.1.jar") \
+    .config("spark.jars", "scripts/spark-avro_2.12-3.1.1.jar") \
     .getOrCreate()
 
 filesystem = FilesystemProviders.hdfs_filesystem()

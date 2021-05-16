@@ -1,3 +1,4 @@
+# Execute from Dataset Profiler root directory
 from pyspark.sql import SparkSession
 
 parquet_path = input("Insert path to parquet file (use prefix file:/// or hdfs://host:port/): ")
