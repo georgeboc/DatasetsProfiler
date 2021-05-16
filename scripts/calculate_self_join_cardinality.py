@@ -1,6 +1,8 @@
 # Execute from Dataset Profiler root directory
 import re
 import json
+from decimal import Decimal
+from quantiphy import Quantity
 
 from pyspark.sql import SparkSession
 from pyspark.sql.functions import col, sum, pow
@@ -59,7 +61,7 @@ print(json.dumps(increased_size_percentage, indent=4))
 print("Estimated output size:")
 estimated_output_size = {}
 for column_name, output_rows_count in results.items():
-    estimated_output_size[column_name] = f"{str((output_rows_count * dataset_size / dataset_rows_count))} MB"
+    estimated_output_size[column_name] = str(Quantity(output_rows_count * dataset_size / dataset_rows_count, "B"))
 print(json.dumps(estimated_output_size, indent=4))
 
 print("Dataset rows count:")
