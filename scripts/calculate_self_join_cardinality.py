@@ -11,7 +11,7 @@ FIRST_ELEMENT = 0
 
 # Input example: /user/bochileanu/described_datasets/Ad_click_on_taobao_1g
 dataset_path = input("Insert described dataset path (use without prefix hdfs://host:port): ")
-dataset_size = int(input("Introduce dataset size in MB: "))
+dataset_size = float(input("Introduce dataset size in MB: "))
 
 spark = SparkSession \
     .builder \
