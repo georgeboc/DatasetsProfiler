@@ -14,12 +14,12 @@ class AdClickOnTaobaoAdFeatureLogParserStrategy(ParserStrategy):
         row_string = row[0]
         adgroup_id_s, category_id_s, campaign_id_s, customer_s, brand_s, price_s = \
             self._parser_commons.nullify_missing_fields(row_string.split(','))
-        adgroup_id = int(adgroup_id_s) if adgroup_id_s else None
-        category_id = int(category_id_s) if adgroup_id_s else None
-        campaign_id = int(campaign_id_s) if adgroup_id_s else None
-        customer = int(customer_s) if adgroup_id_s else None
-        brand = int(brand_s) if adgroup_id_s else None
-        price = float(price_s) if adgroup_id_s else None
+        adgroup_id = int(adgroup_id_s) if adgroup_id_s != "NULL" else None
+        category_id = int(category_id_s) if category_id_s != "NULL" else None
+        campaign_id = int(campaign_id_s) if campaign_id_s != "NULL" else None
+        customer = int(customer_s) if customer_s != "NULL" else None
+        brand = int(brand_s) if brand_s != "NULL" else None
+        price = float(price_s) if price_s != "NULL" else None
         return adgroup_id, category_id, campaign_id, customer, brand, price
 
     def get_schema(self):

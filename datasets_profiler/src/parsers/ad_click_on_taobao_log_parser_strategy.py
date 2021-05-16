@@ -25,7 +25,7 @@ class AdClickOnTaobaoLogParserStrategy(ParserStrategy):
         return [
             ("User", IntegerType(), NULLABLE),
             ("DateTime", TimestampType(), NULLABLE),
-            ("AdGroupId", IntegerType(), NULLABLE),
+            ("gs", IntegerType(), NULLABLE),
             ("PID", StringType(), NULLABLE),
             ("NonClk", IntegerType(), NULLABLE),
             ("Clk", IntegerType(), NULLABLE)
