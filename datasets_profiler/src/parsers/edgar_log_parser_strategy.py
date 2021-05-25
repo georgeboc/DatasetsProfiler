@@ -11,8 +11,9 @@ class EdgarLogParserStrategy(ParserStrategy):
 
     def parse(self, row):
         row_string = row[0]
+        split_row = self._parser_commons.split_by_comma_outside_quotes(row_string)
         ip_s, date_s, time_s, zone_s, cik_s, accession_s, extention_s, code_s, size_s, idx_s, norefer_s, \
-        noagent_s, find_s, crawler_s, browser_s = self._parser_commons.nullify_missing_fields(row_string.split(','))
+        noagent_s, find_s, crawler_s, browser_s = self._parser_commons.nullify_missing_fields(split_row)
         date_time = datetime.strptime(f"{date_s} {time_s}", '%Y-%m-%d %H:%M:%S') if date_s and time_s else None
         zone = float(zone_s) if zone_s else None
         cik = float(cik_s) if cik_s else None
@@ -23,9 +24,8 @@ class EdgarLogParserStrategy(ParserStrategy):
         noagent = float(noagent_s) if noagent_s else None
         find = float(find_s) if find_s else None
         crawler = float(crawler_s) if crawler_s else None
-        browser = float(browser_s) if browser_s else None
         return ip_s, date_time, zone, cik, accession_s, extention_s, code, size, idx, norefer, noagent, find, \
-               crawler, browser
+               crawler, browser_s
 
     def get_schema(self):
         return [
