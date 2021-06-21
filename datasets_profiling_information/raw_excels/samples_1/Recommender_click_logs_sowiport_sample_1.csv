@@ -1,0 +1,49 @@
+Parser Statistics
+;Value
+Filtered out rows count;1
+Lost rows percentage;100.0
+Original rows count;1
+
+Statistical profile
+;recommendation_id;recommendation_class;cbf_feature_type;cbf_feature_count;category;clicked;request_received;response_delivered;processingTime
+NumericResults;******;******;******;******;******;******;******;******;******
+Count distinct;0;-;-;0;-;-;-;-;0
+Count not null;0;-;-;0;-;-;-;-;0
+Count null;0;-;-;0;-;-;-;-;0
+Entropy;None;-;-;None;-;-;-;-;None
+Number statistics;None;-;-;None;-;-;-;-;None
+StringResults;******;******;******;******;******;******;******;******;******
+Characters entropy;-;None;None;-;None;None;-;-;-
+Count blank spaces statistics;-;None;None;-;None;None;-;-;-
+Count distinct characters;-;0;0;-;0;0;-;-;-
+Count distinct messages;-;0;0;-;0;0;-;-;-
+Count distinct words;-;0;0;-;0;0;-;-;-
+Count not null;-;0;0;-;0;0;-;-;-
+Count null;-;0;0;-;0;0;-;-;-
+Message length statistics;-;None;None;-;None;None;-;-;-
+Messages entropy;-;None;None;-;None;None;-;-;-
+Words entropy;-;None;None;-;None;None;-;-;-
+Words length statistics;-;None;None;-;None;None;-;-;-
+TimestampResults;******;******;******;******;******;******;******;******;******
+Count distinct;-;-;-;-;-;-;0;0;-
+Count not null;-;-;-;-;-;-;0;0;-
+Count null;-;-;-;-;-;-;0;0;-
+Delta time in seconds entropy;-;-;-;-;-;-;None;None;-
+Delta time in seconds statistics;-;-;-;-;-;-;None;None;-
+Newest date;-;-;-;-;-;-;None;None;-
+Oldest date;-;-;-;-;-;-;None;None;-
+Timestamp entropy;-;-;-;-;-;-;None;None;-
+
+Table Results
+;Value
+Entropy;None
+
+Execution call tracker
+;Value
+Application. emit columnar statistics;CallStatistics(execution_times=[datetime.timedelta(seconds=1, microseconds=300682)], call_count=1)
+Numericprocessor.process;CallStatistics(execution_times=[datetime.timedelta(microseconds=107063), datetime.timedelta(microseconds=107020), datetime.timedelta(microseconds=116626)], call_count=3)
+Statefulworkflowbreakercheckpointer.checkpoint;CallStatistics(execution_times=[datetime.timedelta(microseconds=265937)], call_count=1)
+Stringprocessor.process;CallStatistics(execution_times=[datetime.timedelta(microseconds=105014), datetime.timedelta(microseconds=104750), datetime.timedelta(microseconds=105613), datetime.timedelta(microseconds=106987)], call_count=4)
+Timestampprocessor.process;CallStatistics(execution_times=[datetime.timedelta(microseconds=106600), datetime.timedelta(microseconds=107230)], call_count=2)
+Tupleprocessor.process;CallStatistics(execution_times=[datetime.timedelta(microseconds=317)], call_count=1)
+

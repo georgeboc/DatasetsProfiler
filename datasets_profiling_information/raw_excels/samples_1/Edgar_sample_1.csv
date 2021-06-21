@@ -1,0 +1,49 @@
+Parser Statistics
+;Value
+Filtered out rows count;1
+Lost rows percentage;100.0
+Original rows count;1
+
+Statistical profile
+;IP;DateTime;Zone;CIK;Accession;Extention;Code;Size;IDX;NoRefer;NoAgent;Find;Crawler;Browser
+StringResults;******;******;******;******;******;******;******;******;******;******;******;******;******;******
+Characters entropy;None;-;-;-;None;None;-;-;-;-;-;-;-;None
+Count blank spaces statistics;None;-;-;-;None;None;-;-;-;-;-;-;-;None
+Count distinct characters;0;-;-;-;0;0;-;-;-;-;-;-;-;0
+Count distinct messages;0;-;-;-;0;0;-;-;-;-;-;-;-;0
+Count distinct words;0;-;-;-;0;0;-;-;-;-;-;-;-;0
+Count not null;0;-;-;-;0;0;-;-;-;-;-;-;-;0
+Count null;0;-;-;-;0;0;-;-;-;-;-;-;-;0
+Message length statistics;None;-;-;-;None;None;-;-;-;-;-;-;-;None
+Messages entropy;None;-;-;-;None;None;-;-;-;-;-;-;-;None
+Words entropy;None;-;-;-;None;None;-;-;-;-;-;-;-;None
+Words length statistics;None;-;-;-;None;None;-;-;-;-;-;-;-;None
+TimestampResults;******;******;******;******;******;******;******;******;******;******;******;******;******;******
+Count distinct;-;0;-;-;-;-;-;-;-;-;-;-;-;-
+Count not null;-;0;-;-;-;-;-;-;-;-;-;-;-;-
+Count null;-;0;-;-;-;-;-;-;-;-;-;-;-;-
+Delta time in seconds entropy;-;None;-;-;-;-;-;-;-;-;-;-;-;-
+Delta time in seconds statistics;-;None;-;-;-;-;-;-;-;-;-;-;-;-
+Newest date;-;None;-;-;-;-;-;-;-;-;-;-;-;-
+Oldest date;-;None;-;-;-;-;-;-;-;-;-;-;-;-
+Timestamp entropy;-;None;-;-;-;-;-;-;-;-;-;-;-;-
+NumericResults;******;******;******;******;******;******;******;******;******;******;******;******;******;******
+Count distinct;-;-;0;0;-;-;0;0;0;0;0;0;0;-
+Count not null;-;-;0;0;-;-;0;0;0;0;0;0;0;-
+Count null;-;-;0;0;-;-;0;0;0;0;0;0;0;-
+Entropy;-;-;None;None;-;-;None;None;None;None;None;None;None;-
+Number statistics;-;-;None;None;-;-;None;None;None;None;None;None;None;-
+
+Table Results
+;Value
+Entropy;None
+
+Execution call tracker
+;Value
+Application. emit columnar statistics;CallStatistics(execution_times=[datetime.timedelta(seconds=2, microseconds=191753)], call_count=1)
+Numericprocessor.process;CallStatistics(execution_times=[datetime.timedelta(microseconds=114334), datetime.timedelta(microseconds=119025), datetime.timedelta(microseconds=112632), datetime.timedelta(microseconds=113141), datetime.timedelta(microseconds=118731), datetime.timedelta(microseconds=113334), datetime.timedelta(microseconds=110059), datetime.timedelta(microseconds=111420), datetime.timedelta(microseconds=110642)], call_count=9)
+Statefulworkflowbreakercheckpointer.checkpoint;CallStatistics(execution_times=[datetime.timedelta(microseconds=252038)], call_count=1)
+Stringprocessor.process;CallStatistics(execution_times=[datetime.timedelta(microseconds=111094), datetime.timedelta(microseconds=111952), datetime.timedelta(microseconds=111904), datetime.timedelta(microseconds=114800)], call_count=4)
+Timestampprocessor.process;CallStatistics(execution_times=[datetime.timedelta(microseconds=110493)], call_count=1)
+Tupleprocessor.process;CallStatistics(execution_times=[datetime.timedelta(microseconds=238)], call_count=1)
+

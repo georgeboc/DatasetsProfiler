@@ -1,0 +1,94 @@
+[
+  {
+    "use_case": "get_description",
+    "input_path": "input/Ad_click_on_taobao/Ad_click_on_taobao.csv",
+    "output_path": "output/whole_datasets/Ad_click_on_taobao.csv",
+    "parser": "ad_click_on_taobao_log_parser_strategy"
+  },
+  {
+    "use_case": "get_description",
+    "input_path": "input/Android/Android.log",
+    "output_path": "output/whole_datasets/Android.csv",
+    "parser": "android_log_parser_strategy",
+    "specific_formatters": [
+      "no_year_datetime_specific_formatter",
+      "string_specific_formatter",
+      "string_specific_formatter",
+      "string_specific_formatter",
+      "string_specific_formatter",
+      "string_specific_formatter"
+    ]
+  },
+  {
+    "use_case": "get_description",
+    "input_path": "input/BGL/BGL.log",
+    "output_path": "output/whole_datasets/BGL.csv",
+    "parser": "bgl_log_parser_strategy"
+  },
+  {
+    "use_case": "get_description",  
+    "input_path": "input/Edgar/Edgar.csv",
+    "output_path": "output/whole_datasets/Edgar.csv",
+    "parser": "edgar_log_parser_strategy"
+  },
+  {
+    "use_case": "get_description",  
+    "input_path": "input/HDFS_1/HDFS_1.log",
+    "output_path": "output/whole_datasets/HDFS_1.csv",
+    "parser": "hdfs1_log_parser_strategy"
+  },
+  {
+    "use_case": "get_description",  
+    "input_path": "input/HDFS_2/HDFS_2.log",
+    "output_path": "output/whole_datasets/HDFS_2.csv",
+    "parser": "hdfs2_log_parser_strategy"
+  },
+  {
+    "use_case": "get_description",
+    "input_path": "input/Obama_visitor_logs/Obama_visitor_logs.csv",
+    "output_path": "output/whole_datasets/Obama_visitor_logs.csv",
+    "parser": "obama_visitor_log_parser_strategy"
+  },
+  {
+    "use_case": "get_description",
+    "input_path": "input/Recommender_click_logs_sowiport/Recommender_click_logs_sowiport.csv",
+    "output_path": "output/whole_datasets/Recommender_click_logs_sowiport.csv",
+    "parser": "recommender_click_logs_sowiport_log_parser_strategy"
+  },
+  {
+    "use_case": "get_description",
+    "input_path": "input/Seattle_coban_logs/Seattle_coban_logs.csv",
+    "output_path": "output/whole_datasets/Seattle_coban_logs.csv",
+    "parser": "seattle_coban_log_parser_strategy"
+  },
+  {
+    "use_case": "get_description",
+    "input_path": "input/Spark/Spark.log",
+    "output_path": "output/whole_datasets/Spark.csv",
+    "parser": "spark_log_parser_strategy"
+  },
+  {
+    "use_case": "get_description",
+    "input_path": "input/Thunderbird/Thunderbird.log",
+    "output_path": "output/whole_datasets/Thunderbird.csv",
+    "parser": "thunderbird_log_parser_strategy"
+  },
+  {
+    "use_case": "get_description",
+    "input_path": "input/Ubuntu_dialogue_corpus/Ubuntu_dialogue_corpus.csv",
+    "output_path": "output/whole_datasets/Ubuntu_dialogue_corpus.csv",
+    "parser": "ubuntu_dialogue_corpus_log_parser_strategy"
+  },
+  {
+    "use_case": "get_description",
+    "input_path": "input/User_logs_v2/User_logs_v2.csv",
+    "output_path": "output/whole_datasets/User_logs_v2.csv",
+    "parser": "user_logs_v2_log_parser_strategy"
+  },
+  {
+    "use_case": "get_description",
+    "input_path": "input/Windows/Windows.log",
+    "output_path": "output/whole_datasets/Windows.csv",
+    "parser": "windows_log_parser_strategy"
+  }
+]

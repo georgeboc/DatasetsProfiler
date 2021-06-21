@@ -1,0 +1,39 @@
+Parser Statistics
+;Value
+Filtered out rows count;1
+Lost rows percentage;0.00011808996565943799
+Original rows count;846812
+
+Statistical profile
+;AdGroupId;CategoryId;CampaignId;Customer;Brand;Price
+NumericResults;******;******;******;******;******;******
+Count distinct;846811;6769;423436;255875;99814;14861
+Count not null;846811;846811;846811;846811;600481;846811
+Count null;0;0;0;0;246330;0
+Entropy;19.691680484421365;9.530377255125455;17.738749205622263;16.723857293484052;14.569466311576232;9.541548096754836
+Number statistics average;423406.0;5868.593464185043;206552.60428005777;113180.40600559038;229254.4225962187;1838.867108130995
+Number statistics max;846811;12960;423436;255875;461497;100000000.0
+Number statistics min;1;1;1;1;2;0.009999999776482582
+Number statistics standard deviation;244453.27940119762;2705.1696060480135;125192.26698767616;73435.79158948337;132288.73948045692;310887.51660638885
+Number statistics variance;59757405809.99999;7317942.597485964;15673103713.51359;5392815486.374036;17500310593.328197;96651047981.68771
+
+Table Results
+;Value
+Entropy;None
+
+Execution call tracker
+;Value
+Columnstatisticscalculator. calculate standard deviation;CallStatistics(execution_times=[datetime.timedelta(microseconds=5), datetime.timedelta(microseconds=5), datetime.timedelta(microseconds=3), datetime.timedelta(microseconds=5), datetime.timedelta(microseconds=3), datetime.timedelta(microseconds=5)], call_count=6)
+Columnstatisticscalculator.calculate average count;CallStatistics(execution_times=[datetime.timedelta(seconds=1, microseconds=122110), datetime.timedelta(microseconds=732053), datetime.timedelta(microseconds=733411), datetime.timedelta(microseconds=657055), datetime.timedelta(microseconds=620256), datetime.timedelta(microseconds=640927)], call_count=6)
+Columnstatisticscalculator.calculate entropy;CallStatistics(execution_times=[datetime.timedelta(microseconds=959824), datetime.timedelta(microseconds=519256), datetime.timedelta(microseconds=575224), datetime.timedelta(microseconds=468226), datetime.timedelta(microseconds=512101), datetime.timedelta(microseconds=507804)], call_count=6)
+Columnstatisticscalculator.calculate min max;CallStatistics(execution_times=[datetime.timedelta(microseconds=386193), datetime.timedelta(microseconds=384779), datetime.timedelta(microseconds=324447), datetime.timedelta(microseconds=326866), datetime.timedelta(microseconds=276944), datetime.timedelta(microseconds=306891)], call_count=6)
+Columnstatisticscalculator.calculate number statistics;CallStatistics(execution_times=[datetime.timedelta(seconds=1, microseconds=987285), datetime.timedelta(seconds=1, microseconds=577170), datetime.timedelta(seconds=1, microseconds=440476), datetime.timedelta(seconds=1, microseconds=483366), datetime.timedelta(seconds=1, microseconds=291489), datetime.timedelta(seconds=1, microseconds=388351)], call_count=6)
+Columnstatisticscalculator.calculate variance;CallStatistics(execution_times=[datetime.timedelta(microseconds=368192), datetime.timedelta(microseconds=374939), datetime.timedelta(microseconds=288883), datetime.timedelta(microseconds=406911), datetime.timedelta(microseconds=306670), datetime.timedelta(microseconds=348626)], call_count=6)
+Getdescription. emit columnar statistics;CallStatistics(execution_times=[datetime.timedelta(seconds=18, microseconds=386579)], call_count=1)
+Numericprocessor. calculate distinct rows count;CallStatistics(execution_times=[datetime.timedelta(seconds=1, microseconds=15386), datetime.timedelta(microseconds=315554), datetime.timedelta(microseconds=529342), datetime.timedelta(microseconds=435827), datetime.timedelta(microseconds=312295), datetime.timedelta(microseconds=293936)], call_count=6)
+Numericprocessor. calculate not null rows count;CallStatistics(execution_times=[datetime.timedelta(microseconds=67665), datetime.timedelta(microseconds=59275), datetime.timedelta(microseconds=41527), datetime.timedelta(microseconds=42486), datetime.timedelta(microseconds=49087), datetime.timedelta(microseconds=69105)], call_count=6)
+Numericprocessor. calculate null rows count;CallStatistics(execution_times=[datetime.timedelta(microseconds=109835), datetime.timedelta(microseconds=111147), datetime.timedelta(microseconds=103410), datetime.timedelta(microseconds=110756), datetime.timedelta(microseconds=102628), datetime.timedelta(microseconds=100649)], call_count=6)
+Numericprocessor.process;CallStatistics(execution_times=[datetime.timedelta(seconds=4, microseconds=547218), datetime.timedelta(seconds=2, microseconds=779323), datetime.timedelta(seconds=2, microseconds=998712), datetime.timedelta(seconds=2, microseconds=780660), datetime.timedelta(seconds=2, microseconds=473868), datetime.timedelta(seconds=2, microseconds=585323)], call_count=6)
+Tupleprocessor.process;CallStatistics(execution_times=[datetime.timedelta(microseconds=159)], call_count=1)
+Workflowbreakercheckpointer.checkpoint;CallStatistics(execution_times=[datetime.timedelta(seconds=1, microseconds=612221)], call_count=1)
+

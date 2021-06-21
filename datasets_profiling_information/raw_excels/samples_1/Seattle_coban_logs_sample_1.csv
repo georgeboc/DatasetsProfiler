@@ -1,0 +1,49 @@
+Parser Statistics
+;Value
+Filtered out rows count;1
+Lost rows percentage;100.0
+Original rows count;1
+
+Statistical profile
+;fileName;logTime;userID;actCode;ID;sent
+StringResults;******;******;******;******;******;******
+Characters entropy;None;-;None;None;-;-
+Count blank spaces statistics;None;-;None;None;-;-
+Count distinct characters;0;-;0;0;-;-
+Count distinct messages;0;-;0;0;-;-
+Count distinct words;0;-;0;0;-;-
+Count not null;0;-;0;0;-;-
+Count null;0;-;0;0;-;-
+Message length statistics;None;-;None;None;-;-
+Messages entropy;None;-;None;None;-;-
+Words entropy;None;-;None;None;-;-
+Words length statistics;None;-;None;None;-;-
+TimestampResults;******;******;******;******;******;******
+Count distinct;-;0;-;-;-;-
+Count not null;-;0;-;-;-;-
+Count null;-;0;-;-;-;-
+Delta time in seconds entropy;-;None;-;-;-;-
+Delta time in seconds statistics;-;None;-;-;-;-
+Newest date;-;None;-;-;-;-
+Oldest date;-;None;-;-;-;-
+Timestamp entropy;-;None;-;-;-;-
+NumericResults;******;******;******;******;******;******
+Count distinct;-;-;-;-;0;0
+Count not null;-;-;-;-;0;0
+Count null;-;-;-;-;0;0
+Entropy;-;-;-;-;None;None
+Number statistics;-;-;-;-;None;None
+
+Table Results
+;Value
+Entropy;None
+
+Execution call tracker
+;Value
+Application. emit columnar statistics;CallStatistics(execution_times=[datetime.timedelta(microseconds=917953)], call_count=1)
+Numericprocessor.process;CallStatistics(execution_times=[datetime.timedelta(microseconds=112383), datetime.timedelta(microseconds=112093)], call_count=2)
+Statefulworkflowbreakercheckpointer.checkpoint;CallStatistics(execution_times=[datetime.timedelta(microseconds=236246)], call_count=1)
+Stringprocessor.process;CallStatistics(execution_times=[datetime.timedelta(microseconds=110483), datetime.timedelta(microseconds=112932), datetime.timedelta(microseconds=114899)], call_count=3)
+Timestampprocessor.process;CallStatistics(execution_times=[datetime.timedelta(microseconds=111222)], call_count=1)
+Tupleprocessor.process;CallStatistics(execution_times=[datetime.timedelta(microseconds=302)], call_count=1)
+

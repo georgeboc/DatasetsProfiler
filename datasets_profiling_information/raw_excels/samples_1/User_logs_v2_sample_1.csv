@@ -1,0 +1,49 @@
+Parser Statistics
+;Value
+Filtered out rows count;1
+Lost rows percentage;100.0
+Original rows count;1
+
+Statistical profile
+;msno;date;num_25;num_50;num_75;num_985;num_100;num_unq;total_secs
+StringResults;******;******;******;******;******;******;******;******;******
+Characters entropy;None;-;-;-;-;-;-;-;-
+Count blank spaces statistics;None;-;-;-;-;-;-;-;-
+Count distinct characters;0;-;-;-;-;-;-;-;-
+Count distinct messages;0;-;-;-;-;-;-;-;-
+Count distinct words;0;-;-;-;-;-;-;-;-
+Count not null;0;-;-;-;-;-;-;-;-
+Count null;0;-;-;-;-;-;-;-;-
+Message length statistics;None;-;-;-;-;-;-;-;-
+Messages entropy;None;-;-;-;-;-;-;-;-
+Words entropy;None;-;-;-;-;-;-;-;-
+Words length statistics;None;-;-;-;-;-;-;-;-
+TimestampResults;******;******;******;******;******;******;******;******;******
+Count distinct;-;0;-;-;-;-;-;-;-
+Count not null;-;0;-;-;-;-;-;-;-
+Count null;-;0;-;-;-;-;-;-;-
+Delta time in seconds entropy;-;None;-;-;-;-;-;-;-
+Delta time in seconds statistics;-;None;-;-;-;-;-;-;-
+Newest date;-;None;-;-;-;-;-;-;-
+Oldest date;-;None;-;-;-;-;-;-;-
+Timestamp entropy;-;None;-;-;-;-;-;-;-
+NumericResults;******;******;******;******;******;******;******;******;******
+Count distinct;-;-;0;0;0;0;0;0;0
+Count not null;-;-;0;0;0;0;0;0;0
+Count null;-;-;0;0;0;0;0;0;0
+Entropy;-;-;None;None;None;None;None;None;None
+Number statistics;-;-;None;None;None;None;None;None;None
+
+Table Results
+;Value
+Entropy;None
+
+Execution call tracker
+;Value
+Application. emit columnar statistics;CallStatistics(execution_times=[datetime.timedelta(seconds=1, microseconds=395887)], call_count=1)
+Numericprocessor.process;CallStatistics(execution_times=[datetime.timedelta(microseconds=118815), datetime.timedelta(microseconds=115062), datetime.timedelta(microseconds=111342), datetime.timedelta(microseconds=111656), datetime.timedelta(microseconds=110965), datetime.timedelta(microseconds=112546), datetime.timedelta(microseconds=116222)], call_count=7)
+Statefulworkflowbreakercheckpointer.checkpoint;CallStatistics(execution_times=[datetime.timedelta(microseconds=224979)], call_count=1)
+Stringprocessor.process;CallStatistics(execution_times=[datetime.timedelta(microseconds=108072)], call_count=1)
+Timestampprocessor.process;CallStatistics(execution_times=[datetime.timedelta(microseconds=110422)], call_count=1)
+Tupleprocessor.process;CallStatistics(execution_times=[datetime.timedelta(microseconds=284)], call_count=1)
+

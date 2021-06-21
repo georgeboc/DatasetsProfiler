@@ -1,0 +1,108 @@
+[
+  {
+    "use_case": "get_description",
+    "input_path": "input/Ad_click_on_taobao/Ad_click_on_taobao.csv",
+    "output_path": "output/samples_1000/Ad_click_on_taobao_sample_1000.csv",
+    "parser": "ad_click_on_taobao_log_parser_strategy",
+    "limit": 1000
+  },
+  {
+    "use_case": "get_description",
+    "input_path": "input/Android/Android.log",
+    "output_path": "output/samples_1000/Android_sample_1000.csv",
+    "parser": "android_log_parser_strategy",
+    "specific_formatters": [
+      "no_year_datetime_specific_formatter",
+      "string_specific_formatter",
+      "string_specific_formatter",
+      "string_specific_formatter",
+      "string_specific_formatter",
+      "string_specific_formatter"
+    ],
+    "limit": 1000
+  },
+  {
+    "use_case": "get_description",
+    "input_path": "input/BGL/BGL.log",
+    "output_path": "output/samples_1000/BGL_sample_1000.csv",
+    "parser": "bgl_log_parser_strategy",
+    "limit": 1000
+  },
+  {
+    "use_case": "get_description",  
+    "input_path": "input/Edgar/Edgar.csv",
+    "output_path": "output/samples_1000/Edgar_sample_1000.csv",
+    "parser": "edgar_log_parser_strategy",
+    "limit": 1000
+  },
+  {
+    "use_case": "get_description",  
+    "input_path": "input/HDFS_1/HDFS_1.log",
+    "output_path": "output/samples_1000/HDFS_1_sample_1000.csv",
+    "parser": "hdfs1_log_parser_strategy",
+    "limit": 1000
+  },
+  {
+    "use_case": "get_description",  
+    "input_path": "input/HDFS_2/HDFS_2.log",
+    "output_path": "output/samples_1000/HDFS_2_sample_1000.csv",
+    "parser": "hdfs2_log_parser_strategy",
+    "limit": 1000
+  },
+  {
+    "use_case": "get_description",
+    "input_path": "input/Obama_visitor_logs/Obama_visitor_logs.csv",
+    "output_path": "output/samples_1000/Obama_visitor_logs_sample_1000.csv",
+    "parser": "obama_visitor_log_parser_strategy",
+    "limit": 1000
+  },
+  {
+    "use_case": "get_description",
+    "input_path": "input/Recommender_click_logs_sowiport/Recommender_click_logs_sowiport.csv",
+    "output_path": "output/samples_1000/Recommender_click_logs_sowiport_sample_1000.csv",
+    "parser": "recommender_click_logs_sowiport_log_parser_strategy",
+    "limit": 1000
+  },
+  {
+    "use_case": "get_description",
+    "input_path": "input/Seattle_coban_logs/Seattle_coban_logs.csv",
+    "output_path": "output/samples_1000/Seattle_coban_logs_sample_1000.csv",
+    "parser": "seattle_coban_log_parser_strategy",
+    "limit": 1000
+  },
+  {
+    "use_case": "get_description",
+    "input_path": "input/Spark/Spark.log",
+    "output_path": "output/samples_1000/Spark_sample_1000.csv",
+    "parser": "spark_log_parser_strategy",
+    "limit": 1000
+  },
+  {
+    "use_case": "get_description",
+    "input_path": "input/Thunderbird/Thunderbird.log",
+    "output_path": "output/samples_1000/Thunderbird_sample_1000.csv",
+    "parser": "thunderbird_log_parser_strategy",
+    "limit": 1000
+  },
+  {
+    "use_case": "get_description",
+    "input_path": "input/Ubuntu_dialogue_corpus/Ubuntu_dialogue_corpus.csv",
+    "output_path": "output/samples_1000/Ubuntu_dialogue_corpus_sample_1000.csv",
+    "parser": "ubuntu_dialogue_corpus_log_parser_strategy",
+    "limit": 1000
+  },
+  {
+    "use_case": "get_description",
+    "input_path": "input/User_logs_v2/User_logs_v2.csv",
+    "output_path": "output/samples_1000/User_logs_v2_sample_1000.csv",
+    "parser": "user_logs_v2_log_parser_strategy",
+    "limit": 1000
+  },
+  {
+    "use_case": "get_description",
+    "input_path": "input/Windows/Windows.log",
+    "output_path": "output/samples_1000/Windows_sample_1000.csv",
+    "parser": "windows_log_parser_strategy",
+    "limit": 1000
+  }
+]

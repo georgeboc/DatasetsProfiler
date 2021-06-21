@@ -1,0 +1,20 @@
+[
+  {
+    "use_case": "get_described_dataset",
+    "input_path": "input/Ad_click_on_taobao/Ad_click_on_taobao.csv",
+    "output_directory": "output/described_datasets/Ad_click_on_taobao_1g",
+    "parser": "ad_click_on_taobao_log_parser_strategy"
+  },
+  {
+    "use_case": "get_described_dataset",
+    "input_path": "input/Obama_visitor_logs/Obama_visitor_logs.csv",
+    "output_directory": "output/described_datasets/Obama_visitor_logs_1g",
+    "parser": "obama_visitor_log_parser_strategy"
+  },
+  {
+    "use_case": "get_described_dataset",
+    "input_path": "input/Thunderbird/Thunderbird.log",
+    "output_directory": "output/described_datasets/Thunderbird_30g",
+    "parser": "thunderbird_log_parser_strategy"
+  }
+]

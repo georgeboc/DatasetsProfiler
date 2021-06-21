@@ -1,0 +1,78 @@
+Parser Statistics
+;Value
+Filtered out rows count;139
+Lost rows percentage;0.0139
+Original rows count;1000000
+Statistical profile
+;DateTime;Level;Component;Content
+TimestampResults;******;******;******;******
+Count distinct;1269;-;-;-
+Count not null;999861;-;-;-
+Count null;0;-;-;-
+Delta time in seconds entropy;0.01620384885096274;-;-;-
+Delta time in seconds statistics average;1.324028363970956;-;-;-
+Delta time in seconds statistics max;76264.0;-;-;-
+Delta time in seconds statistics min;0.0;-;-;-
+Delta time in seconds statistics standard deviation;262.1256057248307;-;-;-
+Delta time in seconds statistics variance;68709.83317660939;-;-;-
+Newest date;2016-10-13 12:14:33;-;-;-
+Oldest date;2016-09-28 04:30:30;-;-;-
+Timestamp entropy;6.396074007550783;-;-;-
+StringResults;******;******;******;******
+Characters entropy;-;2.0;1.5886228046335409;5.290612209273349
+Count blank spaces statistics average;-;0.0;0.0;9.125517446925123
+Count blank spaces statistics max;-;0;0;43
+Count blank spaces statistics min;-;0;0;1
+Count blank spaces statistics standard deviation;-;0.0;0.0;4.025164795616691
+Count blank spaces statistics variance;-;0.0;0.0;16.201951631871957
+Count distinct characters;-;4;7;86
+Count distinct messages;-;1;3;123634
+Count distinct words;-;1;3;38681
+Count not null;-;999861;999861;999861
+Count null;-;0;0;0
+Message length statistics average;-;4.0;3.0;190.16753628754398
+Message length statistics max;-;4;3;464
+Message length statistics min;-;4;3;16
+Message length statistics standard deviation;-;0.0;0.0;48.83096037150196
+Message length statistics variance;-;0.0;0.0;2384.4626908031946
+Messages entropy;-;0.0;0.01048897581296019;14.561294066928696
+Words entropy;-;0.0;0.01048897581296019;6.961426659413707
+Words length statistics average;-;4.0;3.0;190.16753628754398
+Words length statistics max;-;4;3;464
+Words length statistics min;-;4;3;16
+Words length statistics standard deviation;-;0.0;0.0;48.83096037150196
+Words length statistics variance;-;0.0;0.0;2384.4626908031946
+Table Results
+;Value
+Entropy;15.630043972028577
+Execution call tracker
+;Value
+Application. emit columnar statistics;CallStatistics(execution_times=[datetime.timedelta(seconds=461, microseconds=738798)], call_count=1)
+Columnstatisticscalculator. calculate standard deviation;CallStatistics(execution_times=[datetime.timedelta(microseconds=5), datetime.timedelta(microseconds=5), datetime.timedelta(microseconds=5), datetime.timedelta(microseconds=6), datetime.timedelta(microseconds=6), datetime.timedelta(microseconds=9), datetime.timedelta(microseconds=8), datetime.timedelta(microseconds=5), datetime.timedelta(microseconds=5), datetime.timedelta(microseconds=7)], call_count=10)
+Columnstatisticscalculator.calculate average count;CallStatistics(execution_times=[datetime.timedelta(microseconds=693294), datetime.timedelta(microseconds=871474), datetime.timedelta(microseconds=888173), datetime.timedelta(seconds=1, microseconds=830542), datetime.timedelta(microseconds=879009), datetime.timedelta(seconds=4, microseconds=139128), datetime.timedelta(microseconds=895667), datetime.timedelta(microseconds=907539), datetime.timedelta(microseconds=855130), datetime.timedelta(seconds=1, microseconds=343697)], call_count=10)
+Columnstatisticscalculator.calculate entropy;CallStatistics(execution_times=[datetime.timedelta(seconds=2, microseconds=382785), datetime.timedelta(microseconds=499459), datetime.timedelta(seconds=2, microseconds=992744), datetime.timedelta(microseconds=597108), datetime.timedelta(seconds=1, microseconds=609116), datetime.timedelta(seconds=1, microseconds=123458), datetime.timedelta(seconds=2, microseconds=173686), datetime.timedelta(seconds=2, microseconds=65840), datetime.timedelta(seconds=6, microseconds=176402), datetime.timedelta(seconds=12, microseconds=696606), datetime.timedelta(seconds=118, microseconds=603963), datetime.timedelta(seconds=28, microseconds=910133)], call_count=12)
+Columnstatisticscalculator.calculate min max;CallStatistics(execution_times=[datetime.timedelta(seconds=1, microseconds=372665), datetime.timedelta(microseconds=720914), datetime.timedelta(microseconds=908406), datetime.timedelta(microseconds=845550), datetime.timedelta(microseconds=925382), datetime.timedelta(seconds=3, microseconds=928911), datetime.timedelta(microseconds=855886), datetime.timedelta(microseconds=959944), datetime.timedelta(microseconds=995527), datetime.timedelta(seconds=1, microseconds=300751), datetime.timedelta(microseconds=979154)], call_count=11)
+Columnstatisticscalculator.calculate number statistics;CallStatistics(execution_times=[datetime.timedelta(seconds=21, microseconds=11606), datetime.timedelta(seconds=4, microseconds=243214), datetime.timedelta(seconds=3, microseconds=703032), datetime.timedelta(seconds=5, microseconds=24330), datetime.timedelta(seconds=7, microseconds=252110), datetime.timedelta(seconds=7, microseconds=32711), datetime.timedelta(seconds=3, microseconds=893868), datetime.timedelta(seconds=4, microseconds=540025), datetime.timedelta(seconds=4, microseconds=501866), datetime.timedelta(seconds=4, microseconds=807067)], call_count=10)
+Columnstatisticscalculator.calculate variance;CallStatistics(execution_times=[datetime.timedelta(seconds=1, microseconds=162613), datetime.timedelta(seconds=1, microseconds=228345), datetime.timedelta(seconds=1, microseconds=221795), datetime.timedelta(seconds=1, microseconds=277586), datetime.timedelta(seconds=1, microseconds=239319), datetime.timedelta(seconds=1, microseconds=293825), datetime.timedelta(seconds=1, microseconds=228570), datetime.timedelta(seconds=1, microseconds=287587), datetime.timedelta(seconds=1, microseconds=283974), datetime.timedelta(seconds=1, microseconds=288906)], call_count=10)
+Statefulworkflowbreakercheckpointer.checkpoint;CallStatistics(execution_times=[datetime.timedelta(seconds=15, microseconds=795944)], call_count=1)
+Stringprocessor. calculate characters entropy;CallStatistics(execution_times=[datetime.timedelta(seconds=1, microseconds=609149), datetime.timedelta(seconds=2, microseconds=65873), datetime.timedelta(seconds=118, microseconds=604010)], call_count=3)
+Stringprocessor. calculate distinct characters count;CallStatistics(execution_times=[datetime.timedelta(seconds=6, microseconds=28582), datetime.timedelta(seconds=3, microseconds=518624), datetime.timedelta(seconds=177, microseconds=941570)], call_count=3)
+Stringprocessor. calculate distinct messages count;CallStatistics(execution_times=[datetime.timedelta(seconds=8, microseconds=533658), datetime.timedelta(seconds=1, microseconds=87390), datetime.timedelta(seconds=5, microseconds=740852)], call_count=3)
+Stringprocessor. calculate distinct words count;CallStatistics(execution_times=[datetime.timedelta(seconds=2, microseconds=715636), datetime.timedelta(seconds=2, microseconds=808552), datetime.timedelta(seconds=14, microseconds=450309)], call_count=3)
+Stringprocessor. calculate messages entropy;CallStatistics(execution_times=[datetime.timedelta(seconds=2, microseconds=992775), datetime.timedelta(seconds=1, microseconds=123493), datetime.timedelta(seconds=6, microseconds=176430)], call_count=3)
+Stringprocessor. calculate not null rows count;CallStatistics(execution_times=[datetime.timedelta(microseconds=181513), datetime.timedelta(microseconds=203224), datetime.timedelta(microseconds=196388)], call_count=3)
+Stringprocessor. calculate null rows count;CallStatistics(execution_times=[datetime.timedelta(microseconds=516522), datetime.timedelta(microseconds=616355), datetime.timedelta(seconds=8, microseconds=239007)], call_count=3)
+Stringprocessor. calculate words entropy;CallStatistics(execution_times=[datetime.timedelta(microseconds=597142), datetime.timedelta(seconds=2, microseconds=173721), datetime.timedelta(seconds=12, microseconds=696646)], call_count=3)
+Stringprocessor. get count blank spaces statistics;CallStatistics(execution_times=[datetime.timedelta(seconds=3, microseconds=714291), datetime.timedelta(seconds=7, microseconds=45067), datetime.timedelta(seconds=4, microseconds=512448)], call_count=3)
+Stringprocessor. get message length statistics;CallStatistics(execution_times=[datetime.timedelta(seconds=4, microseconds=253269), datetime.timedelta(seconds=7, microseconds=261122), datetime.timedelta(seconds=4, microseconds=549396)], call_count=3)
+Stringprocessor. get words length statistics;CallStatistics(execution_times=[datetime.timedelta(seconds=5, microseconds=37935), datetime.timedelta(seconds=3, microseconds=905619), datetime.timedelta(seconds=4, microseconds=819418)], call_count=3)
+Stringprocessor.process;CallStatistics(execution_times=[datetime.timedelta(seconds=37, microseconds=676133), datetime.timedelta(seconds=32, microseconds=840688), datetime.timedelta(seconds=359, microseconds=452145)], call_count=3)
+Timestampprocessor. calculate delta time in seconds entropy;CallStatistics(execution_times=[datetime.timedelta(microseconds=499490)], call_count=1)
+Timestampprocessor. calculate distinct rows count;CallStatistics(execution_times=[datetime.timedelta(microseconds=852596)], call_count=1)
+Timestampprocessor. calculate not null rows count;CallStatistics(execution_times=[datetime.timedelta(seconds=1, microseconds=556376)], call_count=1)
+Timestampprocessor. calculate null rows count;CallStatistics(execution_times=[datetime.timedelta(seconds=2, microseconds=991165)], call_count=1)
+Timestampprocessor. calculate timestamp entropy;CallStatistics(execution_times=[datetime.timedelta(seconds=2, microseconds=382817)], call_count=1)
+Timestampprocessor. get delta time in seconds statistics;CallStatistics(execution_times=[datetime.timedelta(seconds=21, microseconds=11618)], call_count=1)
+Timestampprocessor.process;CallStatistics(execution_times=[datetime.timedelta(seconds=31, microseconds=648155)], call_count=1)
+Tupleprocessor. calculate tuple entropy;CallStatistics(execution_times=[datetime.timedelta(seconds=28, microseconds=910167)], call_count=1)
+Tupleprocessor.process;CallStatistics(execution_times=[datetime.timedelta(seconds=28, microseconds=911910)], call_count=1)

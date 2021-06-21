@@ -1,0 +1,49 @@
+Parser Statistics
+;Value
+Filtered out rows count;1
+Lost rows percentage;100.0
+Original rows count;1
+
+Statistical profile
+;User;DateTime;AdGroupId;PID;NonClk;Clk
+NumericResults;******;******;******;******;******;******
+Count distinct;0;-;0;-;0;0
+Count not null;0;-;0;-;0;0
+Count null;0;-;0;-;0;0
+Entropy;None;-;None;-;None;None
+Number statistics;None;-;None;-;None;None
+TimestampResults;******;******;******;******;******;******
+Count distinct;-;0;-;-;-;-
+Count not null;-;0;-;-;-;-
+Count null;-;0;-;-;-;-
+Delta time in seconds entropy;-;None;-;-;-;-
+Delta time in seconds statistics;-;None;-;-;-;-
+Newest date;-;None;-;-;-;-
+Oldest date;-;None;-;-;-;-
+Timestamp entropy;-;None;-;-;-;-
+StringResults;******;******;******;******;******;******
+Characters entropy;-;-;-;None;-;-
+Count blank spaces statistics;-;-;-;None;-;-
+Count distinct characters;-;-;-;0;-;-
+Count distinct messages;-;-;-;0;-;-
+Count distinct words;-;-;-;0;-;-
+Count not null;-;-;-;0;-;-
+Count null;-;-;-;0;-;-
+Message length statistics;-;-;-;None;-;-
+Messages entropy;-;-;-;None;-;-
+Words entropy;-;-;-;None;-;-
+Words length statistics;-;-;-;None;-;-
+
+Table Results
+;Value
+Entropy;None
+
+Execution call tracker
+;Value
+Application. emit columnar statistics;CallStatistics(execution_times=[datetime.timedelta(seconds=1, microseconds=240595)], call_count=1)
+Numericprocessor.process;CallStatistics(execution_times=[datetime.timedelta(microseconds=159961), datetime.timedelta(microseconds=132657), datetime.timedelta(microseconds=134587), datetime.timedelta(microseconds=135862)], call_count=4)
+Statefulworkflowbreakercheckpointer.checkpoint;CallStatistics(execution_times=[datetime.timedelta(microseconds=891067)], call_count=1)
+Stringprocessor.process;CallStatistics(execution_times=[datetime.timedelta(microseconds=134450)], call_count=1)
+Timestampprocessor.process;CallStatistics(execution_times=[datetime.timedelta(microseconds=133369)], call_count=1)
+Tupleprocessor.process;CallStatistics(execution_times=[datetime.timedelta(microseconds=320)], call_count=1)
+

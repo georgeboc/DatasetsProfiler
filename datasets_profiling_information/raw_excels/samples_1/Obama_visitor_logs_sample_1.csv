@@ -1,0 +1,49 @@
+Parser Statistics
+;Value
+Filtered out rows count;1
+Lost rows percentage;100.0
+Original rows count;1
+
+Statistical profile
+;NAMELAST;NAMEFIRST;NAMEMID;UIN;BDGNBR;TYPE_OF_ACCESS;TOA;POA;TOD;POD;APPT_MADE_DATE;APPT_START_DATE;APPT_END_DATE;APPT_CANCEL_DATE;Total_People;LAST_UPDATEDBY;POST;LastEntryDate;TERMINAL_SUFFIX;visitee_namelast;visitee_namefirst;MEETING_LOC;MEETING_ROOM;CALLER_NAME_LAST;CALLER_NAME_FIRST;CALLER_ROOM;Description;RELEASE_DATE
+StringResults;******;******;******;******;******;******;******;******;******;******;******;******;******;******;******;******;******;******;******;******;******;******;******;******;******;******;******;******
+Characters entropy;None;None;None;None;-;None;-;None;-;None;-;-;-;-;-;None;None;-;None;None;None;None;None;None;None;None;None;-
+Count blank spaces statistics;None;None;None;None;-;None;-;None;-;None;-;-;-;-;-;None;None;-;None;None;None;None;None;None;None;None;None;-
+Count distinct characters;0;0;0;0;-;0;-;0;-;0;-;-;-;-;-;0;0;-;0;0;0;0;0;0;0;0;0;-
+Count distinct messages;0;0;0;0;-;0;-;0;-;0;-;-;-;-;-;0;0;-;0;0;0;0;0;0;0;0;0;-
+Count distinct words;0;0;0;0;-;0;-;0;-;0;-;-;-;-;-;0;0;-;0;0;0;0;0;0;0;0;0;-
+Count not null;0;0;0;0;-;0;-;0;-;0;-;-;-;-;-;0;0;-;0;0;0;0;0;0;0;0;0;-
+Count null;0;0;0;0;-;0;-;0;-;0;-;-;-;-;-;0;0;-;0;0;0;0;0;0;0;0;0;-
+Message length statistics;None;None;None;None;-;None;-;None;-;None;-;-;-;-;-;None;None;-;None;None;None;None;None;None;None;None;None;-
+Messages entropy;None;None;None;None;-;None;-;None;-;None;-;-;-;-;-;None;None;-;None;None;None;None;None;None;None;None;None;-
+Words entropy;None;None;None;None;-;None;-;None;-;None;-;-;-;-;-;None;None;-;None;None;None;None;None;None;None;None;None;-
+Words length statistics;None;None;None;None;-;None;-;None;-;None;-;-;-;-;-;None;None;-;None;None;None;None;None;None;None;None;None;-
+NumericResults;******;******;******;******;******;******;******;******;******;******;******;******;******;******;******;******;******;******;******;******;******;******;******;******;******;******;******;******
+Count distinct;-;-;-;-;0;-;-;-;-;-;-;-;-;-;0;-;-;-;-;-;-;-;-;-;-;-;-;-
+Count not null;-;-;-;-;0;-;-;-;-;-;-;-;-;-;0;-;-;-;-;-;-;-;-;-;-;-;-;-
+Count null;-;-;-;-;0;-;-;-;-;-;-;-;-;-;0;-;-;-;-;-;-;-;-;-;-;-;-;-
+Entropy;-;-;-;-;None;-;-;-;-;-;-;-;-;-;None;-;-;-;-;-;-;-;-;-;-;-;-;-
+Number statistics;-;-;-;-;None;-;-;-;-;-;-;-;-;-;None;-;-;-;-;-;-;-;-;-;-;-;-;-
+TimestampResults;******;******;******;******;******;******;******;******;******;******;******;******;******;******;******;******;******;******;******;******;******;******;******;******;******;******;******;******
+Count distinct;-;-;-;-;-;-;0;-;0;-;0;0;0;0;-;-;-;0;-;-;-;-;-;-;-;-;-;0
+Count not null;-;-;-;-;-;-;0;-;0;-;0;0;0;0;-;-;-;0;-;-;-;-;-;-;-;-;-;0
+Count null;-;-;-;-;-;-;0;-;0;-;0;0;0;0;-;-;-;0;-;-;-;-;-;-;-;-;-;0
+Delta time in seconds entropy;-;-;-;-;-;-;None;-;None;-;None;None;None;None;-;-;-;None;-;-;-;-;-;-;-;-;-;None
+Delta time in seconds statistics;-;-;-;-;-;-;None;-;None;-;None;None;None;None;-;-;-;None;-;-;-;-;-;-;-;-;-;None
+Newest date;-;-;-;-;-;-;None;-;None;-;None;None;None;None;-;-;-;None;-;-;-;-;-;-;-;-;-;None
+Oldest date;-;-;-;-;-;-;None;-;None;-;None;None;None;None;-;-;-;None;-;-;-;-;-;-;-;-;-;None
+Timestamp entropy;-;-;-;-;-;-;None;-;None;-;None;None;None;None;-;-;-;None;-;-;-;-;-;-;-;-;-;None
+
+Table Results
+;Value
+Entropy;None
+
+Execution call tracker
+;Value
+Application. emit columnar statistics;CallStatistics(execution_times=[datetime.timedelta(seconds=4, microseconds=258814)], call_count=1)
+Numericprocessor.process;CallStatistics(execution_times=[datetime.timedelta(microseconds=111791), datetime.timedelta(microseconds=112031)], call_count=2)
+Statefulworkflowbreakercheckpointer.checkpoint;CallStatistics(execution_times=[datetime.timedelta(microseconds=256781)], call_count=1)
+Stringprocessor.process;CallStatistics(execution_times=[datetime.timedelta(microseconds=107357), datetime.timedelta(microseconds=108626), datetime.timedelta(microseconds=111011), datetime.timedelta(microseconds=114489), datetime.timedelta(microseconds=116004), datetime.timedelta(microseconds=110539), datetime.timedelta(microseconds=109938), datetime.timedelta(microseconds=116536), datetime.timedelta(microseconds=112159), datetime.timedelta(microseconds=113338), datetime.timedelta(microseconds=113729), datetime.timedelta(microseconds=115400), datetime.timedelta(microseconds=111508), datetime.timedelta(microseconds=113514), datetime.timedelta(microseconds=112363), datetime.timedelta(microseconds=113841), datetime.timedelta(microseconds=115946), datetime.timedelta(microseconds=111714)], call_count=18)
+Timestampprocessor.process;CallStatistics(execution_times=[datetime.timedelta(microseconds=111393), datetime.timedelta(microseconds=119683), datetime.timedelta(microseconds=113479), datetime.timedelta(microseconds=110437), datetime.timedelta(microseconds=114262), datetime.timedelta(microseconds=110810), datetime.timedelta(microseconds=112824), datetime.timedelta(microseconds=108766)], call_count=8)
+Tupleprocessor.process;CallStatistics(execution_times=[datetime.timedelta(microseconds=311)], call_count=1)
+
