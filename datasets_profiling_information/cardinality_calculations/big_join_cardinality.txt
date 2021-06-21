@@ -1,0 +1,248 @@
+$ hdfs dfs -du -s -v -h described_datasets/*
+SIZE     DISK_SPACE_CONSUMED_WITH_ALL_REPLICAS  FULL_PATH_NAME
+385.5 M  1.1 G                                  described_datasets/Ad_click_on_taobao_512m
+385.5 M  1.1 G                                  described_datasets/Ad_click_on_taobao_512m_copy
+719.6 M  2.1 G                                  described_datasets/Ad_click_on_taobao_1g
+719.6 M  2.1 G                                  described_datasets/Ad_click_on_taobao_1g_copy
+181.0 M  543.1 M                                described_datasets/Obama_visitor_logs_1g
+181.0 M  543.1 M                                described_datasets/Obama_visitor_logs_1g_copy
+20070.4 M   58.9 G                                 described_datasets/Thunderbird_30g
+20070.4 M   58.9 G                                 described_datasets/Thunderbird_30g_copy
+
+/user/bochileanu/described_datasets/Ad_click_on_taobao_512m
+
+Summary:
+{
+    "AdGroupId": 16570267522,
+    "Clk": 159232220041000,
+    "DateTime": 363984816,
+    "NonClk": 159232220041000,
+    "PID": 93503508278650,
+    "User": 1379172178
+}
+Increased size percentage:
+{
+    "AdGroupId": "3545995.8312111315%",
+    "Clk": "34076257928.556633%",
+    "DateTime": "77794.0374334984%",
+    "NonClk": "34076257928.556633%",
+    "PID": "20010081238.17481%",
+    "User": "295047.7219323663%"
+}
+Estimated output size:
+{
+    "AdGroupId": "14.334 TB",
+    "Clk": "137.75 PB",
+    "DateTime": "314.87 GB",
+    "NonClk": "137.75 PB",
+    "PID": "80.886 PB",
+    "User": "1.1931 TB"
+}
+Dataset rows count:
+467282
+
+/user/bochileanu/described_datasets/Ad_click_on_taobao_1g
+
+Summary:
+{
+    "AdGroupId": 34852532963,
+    "Clk": 636498186524161,
+    "DateTime": 1423410393,
+    "NonClk": 636498186524161,
+    "PID": 373064864232373,
+    "User": 5500007285
+}
+Increased size percentage:
+{
+    "AdGroupId": "4115639.2810202045%",
+    "Clk": "75164137650.23718%",
+    "DateTime": "167990.68292688686%",
+    "NonClk": "75164137650.23718%",
+    "PID": "44055268930.79589%",
+    "User": "649396.4384024298%"
+}
+Estimated output size:
+{
+    "AdGroupId": "31.056 TB",
+    "Clk": "567.15 PB",
+    "DateTime": "1.2683 TB",
+    "NonClk": "567.15 PB",
+    "PID": "332.42 PB",
+    "User": "4.9008 TB"
+}
+Dataset rows count:
+846811
+
+/user/bochileanu/described_datasets/Obama_visitor_logs_1g
+
+Summary:
+{
+    "APPT_CANCEL_DATE": 34320065200226,
+    "APPT_END_DATE": 21541632296,
+    "APPT_MADE_DATE": 18761977422,
+    "APPT_START_DATE": 2173922722,
+    "BDGNBR": 20279483913082,
+    "CALLER_NAME_FIRST": 10664194342162,
+    "CALLER_NAME_LAST": 10849992315124,
+    "CALLER_ROOM": 34387900730654,
+    "Description": 7009724680824,
+    "LAST_UPDATEDBY": 754996779928,
+    "LastEntryDate": 4100891962,
+    "MEETING_LOC": 21968413844136,
+    "MEETING_ROOM": 7954386283382,
+    "NAMEFIRST": 44075884328,
+    "NAMELAST": 7871997318,
+    "NAMEMID": 2712896383136,
+    "POA": 20347442978464,
+    "POD": 28328029189474,
+    "POST": 34230369189826,
+    "RELEASE_DATE": 466965456514,
+    "TERMINAL_SUFFIX": 758203412618,
+    "TOA": 20105229649026,
+    "TOD": 25474332182840,
+    "TYPE_OF_ACCESS": 33670028864530,
+    "Total_People": 358925103186,
+    "UIN": 2756018884,
+    "visitee_namefirst": 10515244125754,
+    "visitee_namelast": 10621248884218
+}
+Increased size percentage:
+{
+    "APPT_CANCEL_DATE": "848666300597.9723%",
+    "APPT_END_DATE": "532681212.9574679%",
+    "APPT_MADE_DATE": "463945929.22848666%",
+    "APPT_START_DATE": "53756643.86745796%",
+    "BDGNBR": "501470917631.99805%",
+    "CALLER_NAME_FIRST": "263704113207.66568%",
+    "CALLER_NAME_LAST": "268298524012.85852%",
+    "CALLER_ROOM": "850343737057.6162%",
+    "Description": "173336416339.7626%",
+    "LAST_UPDATEDBY": "18669554299.802174%",
+    "LastEntryDate": "101406723.98615232%",
+    "MEETING_LOC": "543234763602.67065%",
+    "MEETING_ROOM": "196696000972.74976%",
+    "NAMEFIRST": "1089908018.892186%",
+    "NAMELAST": "194658587.38872403%",
+    "NAMEMID": "67084480195.153305%",
+    "POA": "503151408863.0069%",
+    "POD": "700495281538.823%",
+    "POST": "846448298362.5618%",
+    "RELEASE_DATE": "11547118013.600395%",
+    "TERMINAL_SUFFIX": "18748847887.586548%",
+    "TOA": "497161959569.28784%",
+    "TOD": "629929084539.9604%",
+    "TYPE_OF_ACCESS": "832592207232.5916%",
+    "Total_People": "8875497011.424334%",
+    "UIN": "68150713.1552918%",
+    "visitee_namefirst": "260020873434.96536%",
+    "visitee_namelast": "262642158263.452%"
+}
+Estimated output size:
+{
+    "APPT_CANCEL_DATE": "1.6107 EB",
+    "APPT_END_DATE": "1.011 PB",
+    "APPT_MADE_DATE": "880.53 TB",
+    "APPT_START_DATE": "102.03 TB",
+    "BDGNBR": "951.75 PB",
+    "CALLER_NAME_FIRST": "500.49 PB",
+    "CALLER_NAME_LAST": "509.21 PB",
+    "CALLER_ROOM": "1.6139 EB",
+    "Description": "328.98 PB",
+    "LAST_UPDATEDBY": "35.433 PB",
+    "LastEntryDate": "192.46 TB",
+    "MEETING_LOC": "1.031 EB",
+    "MEETING_ROOM": "373.31 PB",
+    "NAMEFIRST": "2.0686 PB",
+    "NAMELAST": "369.45 TB",
+    "NAMEMID": "127.32 PB",
+    "POA": "954.94 PB",
+    "POD": "1.3295 EB",
+    "POST": "1.6065 EB",
+    "RELEASE_DATE": "21.916 PB",
+    "TERMINAL_SUFFIX": "35.584 PB",
+    "TOA": "943.57 PB",
+    "TOD": "1.1956 EB",
+    "TYPE_OF_ACCESS": "1.5802 EB",
+    "Total_People": "16.845 PB",
+    "UIN": "129.34 TB",
+    "visitee_namefirst": "493.5 PB",
+    "visitee_namelast": "498.47 PB"
+}
+Dataset rows count:
+4044
+
+/user/bochileanu/described_datasets/Thunderbird_30g
+
+Summary:
+{
+    "Content": 98731479405526,
+    "Date": 354802601847012,
+    "DateTime": 144565444166,
+    "IsAlertMessage?": 43259042296201296,
+    "Node": 481265606320610,
+    "Timestamp": 144565319582,
+    "URI": 331225989400220
+}
+Increased size percentage:
+{
+    "Content": "428730822.0986613%",
+    "Date": "1540692367.7800362%",
+    "DateTime": "627660.0270357411%",
+    "IsAlertMessage?": "187847778586.45334%",
+    "Node": "2089844480.6197248%",
+    "Timestamp": "627659.4860430049%",
+    "URI": "1438313442.0803757%"
+}
+Estimated output size:
+{
+    "Content": "90.228 PB",
+    "Date": "324.24 PB",
+    "DateTime": "132.11 TB",
+    "IsAlertMessage?": "39.533 EB",
+    "Node": "439.81 PB",
+    "Timestamp": "132.11 TB",
+    "URI": "302.7 PB"
+}
+Dataset rows count:
+23028775
+
+
+
+Decisions:
+
+Dataset: Ad_click_on_taobao_512m
+--------------------------------
+"DateTime": 363984816,
+"User": 1379172178
+
+Es va trigar un temps raonable per a fer l'execució (Al voltant de 2 h d'execució en total)
+
+Seleccionarem datasets del mateix ordre de magnitud, com a màxim 5.500.007.285 = 5 bilions de files
+"User": "1.1931 TB" processat aproximadament
+
+"AdGroupId": "14.334 TB", -> ha trigat més de 11 hores, ho descartem per a aquest dataset
+"DateTime": "314.87 GB",
+"User": "1.1931 TB"
+
+Columnes per a fer la join: "User" i "DateTime"
+-----------------------------------------------
+
+
+Dataset: Ad_click_on_taobao_1g
+------------------------------
+"DateTime": 1423410393, 
+"User": 5500007285
+
+Es va trigar un temps raonable per a fer l'execució (Al voltant de 2 h d'execució en total)
+
+Seleccionarem datasets del mateix ordre de magnitud, com a màxim 5.500.007.285 = 5 bilions de files
+"User": "4.9008 TB" processats aproximadament
+
+"AdGroupId": "31.056 TB",
+"DateTime": "1.2683 TB",
+"User": "4.9008 TB"
+
+Columnes per a fer la join: "User" i "DateTime"
+-----------------------------------------------
+
+

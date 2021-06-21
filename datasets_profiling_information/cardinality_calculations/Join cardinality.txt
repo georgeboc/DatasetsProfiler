@@ -1,0 +1,100 @@
+$ hdfs dfs -du -s -v -h described_datasets/*
+SIZE     DISK_SPACE_CONSUMED_WITH_ALL_REPLICAS  FULL_PATH_NAME
+719.6 M  2.1 G                                  described_datasets/Ad_click_on_taobao_1g
+719.6 M  2.1 G                                  described_datasets/Ad_click_on_taobao_1g_copy
+385.5 M  1.1 G                                  described_datasets/Ad_click_on_taobao_512m
+385.5 M  1.1 G                                  described_datasets/Ad_click_on_taobao_512m_copy
+29.7 M   89.1 M                                 described_datasets/Ad_click_on_taobao_Ad_feature
+17.3 M   51.8 M                                 described_datasets/Ad_click_on_taobao_User_profile
+181.0 M  543.1 M                                described_datasets/Obama_visitor_logs_1g
+181.0 M  543.1 M                                described_datasets/Obama_visitor_logs_1g_copy
+20070.4 M   58.9 G                                 described_datasets/Thunderbird_30g
+20070.4 M   58.9 G                                 described_datasets/Thunderbird_30g_copy
+
+/user/bochileanu/described_datasets/Ad_click_on_taobao_512m
+/user/bochileanu/described_datasets/Ad_click_on_taobao_Ad_feature
+AdGroupId
+AdGroupId
+385.5
+
+Summary
+13278980
+
+Increased size percentage:
+2741.7486656879573%
+
+Estimated output size:
+11.487 GB
+
+Left dataset rows count:
+467282
+
+/user/bochileanu/described_datasets/Ad_click_on_taobao_1g
+/user/bochileanu/described_datasets/Ad_click_on_taobao_Ad_feature
+AdGroupId
+AdGroupId
+719.6
+
+Summary
+26557961
+
+Increased size percentage:
+3036.2324060504648%
+
+Estimated output size:
+23.665 GB
+
+Left dataset rows count:
+846811
+
+/user/bochileanu/described_datasets/Ad_click_on_taobao_512m
+/user/bochileanu/described_datasets/Ad_click_on_taobao_User_profile
+User
+UserId
+385.5
+
+Summary
+12506896
+
+Increased size percentage:
+1065.3585508323993%
+
+Estimated output size:
+4.7107 GB
+
+Left dataset rows count:
+1073223
+
+/user/bochileanu/described_datasets/Ad_click_on_taobao_1g
+/user/bochileanu/described_datasets/Ad_click_on_taobao_User_profile
+User
+UserId
+719.6
+
+Summary
+25029435
+
+Increased size percentage:
+2092.2395769924387%
+
+Estimated output size:
+16.542 GB
+
+Left dataset rows count:
+1141729
+
+
+Decisions:
+
+Dataset: Ad_click_on_taobao_512m
+--------------------------------
+Tots els experiments acceptats
+
+
+Dataset: Ad_click_on_taobao_1g
+------------------------------
+
+Columnes per a fer la join: "User" i "DateTime"
+-----------------------------------------------
+Tots els experiments acceptats
+

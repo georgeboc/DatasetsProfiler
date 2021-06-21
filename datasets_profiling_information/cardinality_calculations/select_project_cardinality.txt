@@ -1,0 +1,32 @@
+Actualment, tenim:
+SELECTIVITY_FACTOR_PERCENTAGES = [1, 3, 5, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100]
+
+"Ad_click_on_taobao_512m": DatasetInformation(column_selectivity_factor_percentages=
+                                                [16.67, 33.34, 50, 66.67, 83.34, 100],
+                                                columns_count=6,
+                                                selection_column_name="DateTime"),
+"Ad_click_on_taobao_1g": DatasetInformation(column_selectivity_factor_percentages=
+                                            [16.67, 33.34, 50, 66.67, 83.34, 100],
+                                            columns_count=6,
+                                            selection_column_name="DateTime"),
+"Obama_visitor_logs_1g": DatasetInformation(column_selectivity_factor_percentages=
+                                            [3.58, 7.15, 10.72, 17.86, 35.72, 53.58, 71.43, 89.29, 100],
+                                            columns_count=28,
+                                            selection_column_name="NAMELAST"),
+"Thunderbird_30g": DatasetInformation(column_selectivity_factor_percentages=
+                                        [14.29, 28.58, 42.86, 57.15, 71.43, 85.72, 100],
+                                        columns_count=7,
+                                        selection_column_name="Content")
+                                        
+En total, són 13 * (6 + 6 + 9 + 7) = 364 experiments
+
+364 experiments * 15 minuts de mitjana/experiment = 5460 min = 91h -> 3.791666667 dies
+
+Per a retallar, en la selecció, podem utilitzar escala logarítmica a 5:
+
+SELECTIVITY_FACTOR_PERCENTAGES = [1, 5, 20, 50, 100]
+
+En total, són 5 * (6 + 6 + 9 + 7) = 140 experiments
+
+140 experiments * 15 minuts de mitjana/experiment = 2100 min = 35h, és raonable
+

@@ -1,5 +1,6 @@
 In this directory, we have put the followign subdirectories:
 
+- cardinality_calculations: here we put the estimations of big join, join and select-project operations and the file distribution we had in HDFS.
 - parameters: here we have all parameters used as inputs for our Datasets Profiler to generate both descriptions with excels and the input for the Testbed (in https://github.com/georgeboc/Testbed)
 - raw_excels: these are the .csv files obtained as output from our Datasets Profiler by executing all parameters in the parameters folder but parameters_list_get_testbed_input.json. We didn't include the result of this last execution because of GithHub's size restrictions.
 - processed_excels: we collected the raw excels an gave them a form to be better interpretable in this folder
